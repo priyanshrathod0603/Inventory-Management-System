@@ -5,6 +5,7 @@ import { PasswordService } from './services/password.service';
 import { SessionService } from './services/session.service';
 import { EmailVerificationService } from './services/email-verification.service';
 import { GoogleOAuthService } from './services/google-oauth.service';
+import { MailService } from './services/mail.service';
 import { PrismaModule } from '../../prisma/prisma.module';
 import { RolesModule } from '../roles/roles.module';
 import { ConfigModule } from '@nestjs/config';
@@ -18,7 +19,8 @@ import { ConfigModule } from '@nestjs/config';
     SessionService,
     EmailVerificationService,
     GoogleOAuthService,
+    MailService,
   ],
-  exports: [AuthService, SessionService, PasswordService],
+  exports: [AuthService, SessionService, PasswordService, MailService],
 })
 export class AuthModule {}

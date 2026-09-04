@@ -4,10 +4,10 @@
 Stock Management System (SMS)
 
 ## Stage:
-Phase 6 Authentication + RBAC Completed (Ready for Phase 7 Frontend / Next.js)
+Phase 7 Frontend / Next.js Completed (Ready for Phase 8 UI Design System)
 
 ## Application Status:
-Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), and full production-grade Authentication & RBAC implementation across backend and frontend.
+Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), full production-grade Authentication & RBAC foundation, and complete desktop-first Next.js App Router layout shell with Top Navigation, More Mega-Menu, Command Palette (⌘K), Notification Drawer, and 34 static page shells.
 
 ## Documentation Status:
 Complete: Authoritative Project Brain in `.ai/` + Human-readable engineering/product documentation in `docs/` (Requirements, Architecture, API, Database, Security, Design, Testing, Deployment, Infrastructure, User Guides).
@@ -27,20 +27,20 @@ Finalized, Migrated & Extended: Comprehensive PostgreSQL relational schema (26 e
 ## Backend Foundation & Auth:
 Operational & Standardized: Common backend infrastructure (`apps/api/src/common/`), standard API response contracts, request ID middleware, logging with sensitive data redaction, global exception filter, SessionAuthGuard (`sms_session` cookie verification), PermissionsGuard (RBAC authorization), Argon2id password hashing, high-entropy 64-byte session token management, Google OAuth token verification, email verification service (tokens & 6-digit OTP), password reset workflow, roles seeding, and user profile management with strict IDOR protection.
 
-## Frontend Foundation & Auth:
-Operational: Typed API client (`lib/api-client.ts`) with credentials inclusion, `AuthContext` React provider (`lib/auth/auth-context.tsx`), and complete auth UI pages (`/login`, `/register`, `/verify-email`, `/forgot-password`) built with Tailwind CSS design tokens.
+## Frontend Foundation, Layout & Shells:
+Operational: Typed API client (`lib/api-client.ts`) with credentials inclusion, `AuthContext` React provider (`lib/auth/auth-context.tsx`), Next.js App Router structure (`(auth)` public routes and `(app)` authenticated routes), fixed 64px Top Navigation bar (`AppHeader`), 4-column More Mega-Menu (`MoreMenu`), global Command Palette (`⌘K` / `Ctrl+K`), slide-over Notification Drawer (`NotificationsDrawer`), User Menu with role badge & logout (`UserMenu`), reusable `PageHeader` with breadcrumbs, and 26 modular page shells with empty states across Master Data, Inventory, Transactions, Administration, POS, Dashboard, and Reports.
 
 ## Testing Status:
-Operational: All backend unit and security test suites passing (`jest` 14/14 suites, 61/61 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@sms/api` and `@sms/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 8 static routes).
+Operational: All backend unit and security test suites passing (`jest` 14/14 suites, 65/65 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@sms/api` and `@sms/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
 
 ## Deployment & Docker:
 Configured: Local development infrastructure in `docker-compose.yml` (`postgres:16-alpine` on port 5432 with health check, `redis:7-alpine` on port 6379 with health check, named persistent volumes `postgres_data` and `redis_data`, bridge network `sms-network`, `.dockerignore`).
 
 ## Current Work:
-Completed Phase 6 — Authentication, Session Security, Email Verification, Google Auth & RBAC.
+Completed Phase 7 — Frontend / Next.js.
 
 ## Next Major Step:
-PHASE 7 — Frontend / Next.js (App router structure, global state/providers, CareOps layout shell, global search `⌘K`). [Awaiting user authorization].
+PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, dialogs, drawers, form elements, status indicators, and toast system). [Awaiting user authorization].
 
 ---
 
@@ -253,3 +253,95 @@ PHASE 7 — Frontend / Next.js (App router structure, global state/providers, Ca
 * **Tests**: `jest` (14/14 suites pass, 65/65 tests pass), `nest build` (PASS), `next build` (PASS), `tsc --noEmit` (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Ready for Phase 7 — Frontend / Next.js.
+
+### Entry 13
+* **Date**: 2026-09-05
+* **Task**: Phase 7 Frontend / Next.js
+* **Completed**:
+  1. **Google Brand Asset Integration**:
+     - Embedded provided Google logo asset into `apps/web/public/icons/google.png`.
+     - Integrated `next/image` with optimized dimensioning (`width={18}`, `height={18}`) across `/login` and `/register` views.
+  2. **Core Layout Shell Components (`apps/web/src/components/layout/`)**:
+     - `AppHeader`: Fixed 64px (`h-16`) desktop-first top navigation bar featuring SMS brand mark, primary navigation links with active route indicators, More Mega-Menu button, Command Palette trigger (`⌘K`), Notifications trigger with unread indicator, User Profile dropdown, and `+ New Sale` shortcut button.
+     - `UserMenu`: Authenticated user profile dropdown showing user avatar, name, email, role badge (`Admin`, `Manager`, `Cashier`), profile/settings links, and session logout wired to Phase 6 `POST /api/v1/auth/logout`.
+     - `MoreMenu`: 4-column mega-menu covering Master Data, Inventory, Transactions, and Administration with route-aware active state highlighting and liquid glass backdrop.
+     - `CommandPalette`: Keyboard-accessible modal dialog (`⌘K` / `Ctrl+K`, `Esc` to close, `↑`/`↓`/`Enter` navigation) featuring quick actions and system navigation shortcuts with zero mock/fake data.
+     - `NotificationsDrawer`: Slide-over notification drawer with category filter tabs and empty state illustration.
+     - `PageHeader`: Standardized page header component supporting title, subtitle/description, breadcrumbs navigation trail, and contextual action button slots.
+  3. **App Router Structure & Route Shells (`apps/web/src/app/(app)/`)**:
+     - Client-side auth protection in `(app)/layout.tsx` leveraging `useAuth()` with loading skeleton and redirect to `/login`.
+     - Global keyboard shortcut listeners (`⌘K` for search, `F2` for POS quick navigation).
+     - Implemented 26 modular page shells with empty states, search filters, and action triggers across:
+       - Primary: `/dashboard`, `/pos`, `/inventory`, `/sales`, `/purchases`, `/reports`.
+       - Master Data: `/products`, `/categories`, `/brands`, `/customers`, `/suppliers`, `/warehouses`.
+       - Inventory Operations: `/stock-movements`, `/stock-adjustments`, `/stock-transfers`, `/batches`.
+       - Transactions & Accounts: `/sales-returns`, `/purchase-returns`, `/payments`, `/invoices`, `/ledger`.
+       - Administration: `/users`, `/roles`, `/audit-logs`, `/notifications`, `/settings`.
+     - Updated root `/` route to automatically route authenticated users to `/dashboard` or unauthenticated users to `/login`.
+  4. **Quality Gates & Verification**:
+     - Verified Next.js production build (`next build`) generating 34 static routes with 0 errors.
+     - Verified TypeScript typechecks (`tsc --noEmit`) across `@sms/web` and `@sms/api`.
+     - Verified all NestJS backend unit and security test suites (`jest` 14/14 suites, 65/65 tests passing).
+     - Verified NestJS production build (`nest build`).
+* **Changed**: `apps/web/public/icons/google.png`, `apps/web/src/app/(auth)/*`, `apps/web/src/app/page.tsx`, `apps/web/src/app/(app)/*`, `apps/web/src/components/layout/*`, `.ai/CURRENT_STATE.md`, `.ai/TASKS.md`, `.ai/CHANGELOG.md`, `.ai/SESSION_STATE.md`, `.ai/FILE_MAP.md`
+* **Tests**: `next build` (PASS, 34 static routes), `tsc --noEmit` on `@sms/web` & `@sms/api` (PASS), `jest` (14/14 suites, 65/65 tests PASS), `nest build` (PASS).
+* **Known Issues**: None.
+* **Next Steps**: Await user authorization for Phase 8 — UI Design System.
+
+### Entry 14
+* **Date**: 2026-09-05
+* **Task**: Real Email Delivery via Resend SMTP with Nodemailer
+* **Completed**:
+  1. **Dependencies**:
+     - Added `nodemailer` and `@types/nodemailer` to `@sms/api`.
+  2. **Mail Service (`apps/api/src/modules/auth/services/mail.service.ts`)**:
+     - Implemented `MailService` using `nodemailer.createTransport` reading `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`, `FRONTEND_URL` from `ConfigService`.
+     - Structured official verification email template with SMS branding, recipient email context, high-visibility 6-digit OTP box, existing verification link (`/verify-email?token=<token>&email=<email>`), 15-minute expiration notice, and security instructions.
+     - Implemented resilient error handling and development-mode fallback without credential leakage.
+  3. **Service Integration**:
+     - Updated `EmailVerificationService` to inject `MailService` and dispatch real verification emails on registration and resend requests.
+     - Preserved exact token/OTP generation, 15-minute expiration, and database verification contracts.
+  4. **Configuration & Documentation**:
+     - Updated `.env.example` to document SMTP configuration variables without exposing secrets.
+  5. **Automated Testing**:
+     - Added `mail.service.spec.ts` testing environment variable reading, OTP & link injection, recipient matching, and safe SMTP error handling.
+     - Updated `email-verification.service.spec.ts` testing `MailService` integration.
+     - All 15 test suites and 69 tests passing.
+* **Changed**: `apps/api/package.json`, `apps/api/src/modules/auth/auth.module.ts`, `apps/api/src/modules/auth/services/mail.service.ts`, `apps/api/src/modules/auth/services/mail.service.spec.ts`, `apps/api/src/modules/auth/services/email-verification.service.ts`, `apps/api/src/modules/auth/services/email-verification.service.spec.ts`, `.env.example`, `.ai/CURRENT_STATE.md`, `.ai/CHANGELOG.md`, `.ai/FILE_MAP.md`, `.ai/SESSION_STATE.md`
+* **Tests**: `npm run typecheck` (PASS), `npm run build` (PASS), `jest --runInBand` (15/15 suites, 69/69 tests PASS).
+* **Known Issues**: None.
+* **Next Steps**: Await user authorization for Phase 8 — UI Design System.
+
+### Entry 15
+* **Date**: 2026-09-05
+* **Task**: Full Repair + Security Audit (Remove Fake Google OAuth, Fix Registration Validation, Remove Profile Avatar, UI Repair)
+* **Completed**:
+  1. **Fake Google OAuth Removal**:
+     - Removed mock token bypass (`mock-google-token-`) in backend `GoogleOAuthService`.
+     - Added mandatory `GOOGLE_CLIENT_ID` configuration check throwing `ServiceUnavailableException`.
+     - Updated `google-oauth.service.spec.ts` testing configuration check and mock token rejection.
+     - Removed hardcoded fake tokens from frontend `/login` and `/register` handlers.
+     - Added `NEXT_PUBLIC_GOOGLE_CLIENT_ID` check in frontend to render honest disabled/not-configured state with helpful messages.
+  2. **Registration HTTP 400 Root Cause Fix & Error Mapping**:
+     - Added comprehensive client-side form validation (`validateForm()`) covering full name length, email format, username alphanumeric+underscore regex (`/^[a-zA-Z0-9_]+$/`), and password length.
+     - Added field-level error state (`fieldErrors`) and real-time error clearing on input.
+     - Added error response parser mapping backend validation `details[]` array to specific form fields.
+     - Added refined error messages for HTTP 401, 403, 409 (Conflict/Duplicate), 429 (Rate Limit), and network errors across `/login` and `/register`.
+  3. **Profile Avatar Removal from Application Header (DECISION-013)**:
+     - Completely removed profile avatar `<div>`, `<img>`, and initials fallback from `UserMenu`.
+     - Rebuilt user area trigger to display exclusively User Full Name, Role Badge, and Dropdown Chevron.
+     - Preserved all dropdown menu items (Profile & Account, Store Settings, Sign Out).
+     - Recorded DECISION-013 in `DECISIONS.md` and updated `UI_RULES.md`.
+  4. **UI Repair & Spacing Alignment**:
+     - Fixed invalid Tailwind CSS class `py-0.2` to `py-0.5` in `app-header.tsx`, `user-menu.tsx`, and `dashboard/page.tsx`.
+     - Preserved locked SMS color theme (Indigo, Emerald, Amber, Rose) and typography (Plus Jakarta Sans, IBM Plex Mono).
+     - Verified zero mock business data across all page shells.
+  5. **Automated Testing & Build Verification**:
+     - All 15 backend test suites and 70 tests pass (`jest`).
+     - TypeScript typechecks pass across `@sms/api` and `@sms/web` (0 errors).
+     - NestJS API build passes (`nest build`).
+     - Next.js Web build passes generating 34 static routes with 0 errors (`next build`).
+* **Changed**: `apps/api/src/modules/auth/services/google-oauth.service.ts`, `apps/api/src/modules/auth/services/google-oauth.service.spec.ts`, `apps/web/src/app/(auth)/login/page.tsx`, `apps/web/src/app/(auth)/register/page.tsx`, `apps/web/src/components/layout/user-menu.tsx`, `apps/web/src/components/layout/app-header.tsx`, `apps/web/src/app/(app)/dashboard/page.tsx`, `.ai/DECISIONS.md`, `.ai/UI_RULES.md`, `.ai/BUGS.md`, `.ai/CURRENT_STATE.md`, `.ai/SESSION_STATE.md`, `.ai/CHANGELOG.md`
+* **Tests**: `jest` (15/15 suites, 70/70 tests PASS), `tsc --noEmit` on `@sms/api` & `@sms/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
+* **Known Issues**: None.
+* **Next Steps**: Await user authorization for Phase 8 — UI Design System.

@@ -1,5 +1,6 @@
 import { Injectable, Logger, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { MailService } from './mail.service';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -7,7 +8,10 @@ export class EmailVerificationService {
   private readonly logger = new Logger(EmailVerificationService.name);
   private readonly TOKEN_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mailService: MailService,
+  ) {}
 
   /**
    * Generates a verification link token (hex) and a 6-digit OTP code.
@@ -16,6 +20,8 @@ export class EmailVerificationService {
     userId: string,
     email: string,
   ): Promise<{ token: string; otpCode: string }> {
+    const normalizedEmail = email.toLowerCase().trim();
+
     // Invalidate prior unused tokens for this user
     await this.prisma.emailVerificationToken.updateMany({
       where: {
@@ -34,14 +40,19 @@ export class EmailVerificationService {
     await this.prisma.emailVerificationToken.create({
       data: {
         userId,
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         token,
         otpCode,
         expiresAt,
       },
     });
 
-    this.sendVerificationEmail(email, token, otpCode);
+    // Dispatch verification email via Nodemailer SMTP
+    await this.mailService.sendVerificationEmail({
+      to: normalizedEmail,
+      token,
+      otpCode,
+    });
 
     return { token, otpCode };
   }
@@ -184,17 +195,5 @@ export class EmailVerificationService {
       sent: true,
       message: 'If an account exists with this email, a verification link has been sent.',
     };
-  }
-
-  /**
-   * Mock / log email sender dispatch. Ready for integration with SMTP / SendGrid / Resend.
-   */
-  private sendVerificationEmail(email: string, token: string, otpCode: string): void {
-    const isDev = process.env.NODE_ENV !== 'production';
-    if (isDev) {
-      this.logger.log(
-        `[EMAIL DISPATCH] To: ${email} | Verify Link Token: ${token.substring(0, 16)}... | 6-Digit OTP: ${otpCode}`,
-      );
-    }
   }
 }

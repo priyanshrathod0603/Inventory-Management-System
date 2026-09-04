@@ -134,3 +134,17 @@
   4. **Strict Decoupling of Authentication vs. Authorization**: Authentication answers *"Who is this user?"* (universal, role-agnostic). Authorization answers *"What is this user permitted to do?"* (handled downstream via RBAC, role assignments, and granular backend permission guards).
 * **Reason**: Eliminates redundant login workflows, reduces attack surfaces, simplifies credential lifecycle management, provides a seamless modern user experience, and strictly adheres to standard software engineering principles separating identity from authorization.
 * **Impact**: All documentation, architecture diagrams, API contracts, and future Phase 6 implementation contracts adhere strictly to this single common entry point. Roles exist purely as authorization constructs, not authentication portals. Phase 6 implementation is deferred to its designated phase.
+
+---
+
+## DECISION-013
+* **Title**: Profile Avatar Removal from Application Header
+* **Status**: Accepted
+* **Context**: User Interface Design and User Menu Representation
+* **Decision**: Profile avatars (whether user photos, initials circles, Google avatar URLs, generated avatars, or image placeholders) must NOT exist in the authenticated application header or top navigation bar. The user menu trigger area consists exclusively of:
+  1. User Full Name (`text-xs font-semibold text-slate-800`)
+  2. Role Badge (`px-1.5 py-0.5 text-[10px] font-semibold rounded border uppercase`)
+  3. Dropdown Chevron (`ChevronDown`)
+  All dropdown menu actions (Profile & Account, Store Settings, Sign Out) remain fully accessible and functional.
+* **Reason**: User explicitly required the removal of the profile avatar from the application header to ensure a clean, modern, distraction-free desktop SaaS layout, eliminating broken avatar image loads and redundant circular icons.
+* **Impact**: Overrides the earlier specification in `UI_RULES.md` that suggested a 36×36px avatar in the top navigation. The header user area is clean, text-and-badge-only, with zero profile avatar elements. Future AI agents and developers must NOT reintroduce an avatar to the application header.

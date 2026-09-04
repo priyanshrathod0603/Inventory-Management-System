@@ -164,3 +164,72 @@ Enforced strict HttpOnly session cookie transport across all protected routes:
 - **SessionAuthGuard Hardening**: Removed `Authorization: Bearer <token>` fallback extraction. The guard strictly extracts session IDs from `request.cookies.sms_session`.
 - **Swagger Documentation**: Aligned `@ApiCookieAuth('sms_session')` on protected controllers (`UsersController`).
 - **Automated Security Verification**: Added tests in `session-auth.guard.spec.ts` and `security.spec.ts` proving that valid database session tokens presented via `Authorization: Bearer` without cookies are strictly rejected with `401 Unauthorized` without database lookups.
+
+## Phase 7 Frontend / Next.js Milestone
+Established complete Next.js App Router layout shell, navigation architecture, and modular page shells:
+- **Asset Integration**: Embedded Google brand asset into `apps/web/public/icons/google.png` and integrated with `next/image` in `/login` and `/register`.
+- **Application Layout Architecture**:
+  - `AppHeader`: Fixed 64px (`h-16`) desktop-first top navigation bar (NO sidebars) with SMS brand mark, primary route navigation (`/dashboard`, `/pos`, `/inventory`, `/sales`, `/purchases`, `/reports`), active state indicators, More Mega-Menu trigger, Command Palette trigger (`⌘K`), Notifications trigger with unread badge, User profile menu, and `+ New Sale` shortcut.
+  - `UserMenu`: User avatar initials, name, email, role badge (`Admin`, `Manager`, `Cashier`), profile/settings navigation, and Phase 6 session logout integration.
+  - `MoreMenu`: 4-column mega-menu covering Master Data, Inventory, Transactions, and Administration with route-aware active state highlighting and liquid glass backdrop.
+  - `CommandPalette`: Keyboard-accessible modal dialog (`⌘K` / `Ctrl+K`, `Esc` to close, `↑`/`↓`/`Enter` navigation) featuring quick actions and system navigation shortcuts with zero fake business data.
+  - `NotificationsDrawer`: Slide-over notification drawer with category filter tabs and empty state illustration.
+  - `PageHeader`: Standardized page header component supporting title, subtitle/description, breadcrumbs navigation trail, and contextual action button slots.
+- **Route Shells & App Structure**:
+  - Client-side auth guard in `apps/web/src/app/(app)/layout.tsx` leveraging `useAuth()` with loading skeleton and login redirect.
+  - Global keyboard shortcut listeners (`⌘K` for search, `F2` for POS quick navigation).
+  - 26 modular page shells with empty states, search filters, and action triggers across all Master Data, Inventory, Transactions, Administration, POS, Dashboard, and Reports modules.
+  - Root `/` route client-side router directing authenticated users to `/dashboard` or unauthenticated users to `/login`.
+- **Quality Gates**:
+  - `next build` passing with 34 static routes generated.
+  - `tsc --noEmit` passing across `@sms/web` and `@sms/api`.
+  - Backend unit and security test suites passing (`jest` 14/14 suites, 65/65 tests).
+  - NestJS production build passing (`nest build`).
+
+## Real Email Delivery via Resend SMTP Milestone
+Integrated outbound SMTP mail delivery with Nodemailer for email verification and OTP codes:
+- **Dependencies**: Added `nodemailer` and `@types/nodemailer` to `@sms/api`.
+- **Mail Service (`apps/api/src/modules/auth/services/mail.service.ts`)**:
+  - Implemented `MailService` using `nodemailer.createTransport` reading `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`, `FRONTEND_URL` from `ConfigService`.
+  - Created structured HTML and plain text email templates containing SMS branding, recipient email context, 6-digit OTP code, verification link (`/verify-email?token=<token>&email=<email>`), 15-minute expiration notice, and security instructions.
+  - Implemented safe error handling and dev-mode fallback without credential leakage.
+- **Service Integration**:
+  - Connected `EmailVerificationService` to `MailService` for user registration and resend verification flows.
+  - Preserved exact token/OTP generation, 15-minute expiration, and database verification contracts.
+- **Documentation**:
+  - Updated root `.env.example` with SMTP configuration variables.
+- **Automated Testing**:
+  - Added unit test suite `mail.service.spec.ts` (4 tests) and updated `email-verification.service.spec.ts`.
+  - All 15 test suites and 69 tests passing.
+
+---
+
+## [2026-09-05] — Full Repair, Security Audit & Profile Avatar Removal Milestone
+
+Comprehensive repository audit, security hardening, validation repair, and UI alignment across backend and frontend:
+- **Fake Google OAuth Removal**:
+  - Eliminated mock token bypass (`mock-google-token-`) in backend `GoogleOAuthService` to prevent unauthorized auto-login of demo accounts.
+  - Implemented `GOOGLE_CLIENT_ID` configuration validation throwing `ServiceUnavailableException` when unconfigured.
+  - Updated `google-oauth.service.spec.ts` to assert that mock tokens and missing configuration are rejected.
+  - Removed hardcoded fake tokens in frontend `login` and `register` pages.
+  - Connected buttons to `NEXT_PUBLIC_GOOGLE_CLIENT_ID` to render an honest, disabled/not-configured state with user-friendly explanations.
+- **Registration HTTP 400 Root Cause Fix & Field Error Mapping**:
+  - Identified root cause: Backend `RegisterDto` strictly enforces username regex `/^[a-zA-Z0-9_]+$/` (no spaces allowed) with `forbidNonWhitelisted: true`, while the frontend lacked client-side validation and failed to parse backend error details.
+  - Implemented `validateForm()` in `register/page.tsx` validating full name, email format, username alphanumeric regex, and password min-length before API dispatch.
+  - Implemented field-level error mapping (`fieldErrors`) parsing backend `ApiError.details` arrays to display inline field errors.
+  - Added real-time error clearing on input change across all form fields.
+  - Added specialized error messaging for HTTP 401, 403, 409 (conflict), 429 (rate-limit), and network errors.
+- **Profile Avatar Removal from Application Header (DECISION-013)**:
+  - Formally recorded DECISION-013 in `DECISIONS.md` and updated `UI_RULES.md` Section 39.
+  - Removed all avatar rendering (`<div>`, `<img>`, initials circle fallback) from `UserMenu` in `apps/web/src/components/layout/user-menu.tsx`.
+  - Rebuilt user menu trigger to display exclusively User Full Name, Role Badge, and Dropdown Chevron.
+  - Preserved all user menu actions (Profile & Account, Store Settings, Sign Out).
+- **UI Repairs & Tailwind CSS Bug Fixes**:
+  - Fixed invalid Tailwind class `py-0.2` to `py-0.5` across `app-header.tsx`, `user-menu.tsx`, and `dashboard/page.tsx`.
+  - Maintained frozen SMS color palette (Indigo, Emerald, Amber, Rose) and typography system (Plus Jakarta Sans + IBM Plex Mono).
+  - Verified zero mock business data across all 26 page shells.
+- **Quality Gate Results**:
+  - Backend tests: 15/15 test suites passed (70/70 tests).
+  - TypeScript typechecks: 0 errors across `@sms/api` and `@sms/web`.
+  - NestJS build: PASS.
+  - Next.js build: PASS (34 static routes).

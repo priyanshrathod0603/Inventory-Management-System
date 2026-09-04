@@ -1,4 +1,4 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 export interface VerifiedGoogleUser {
@@ -23,16 +23,11 @@ export class GoogleOAuthService {
       throw new UnauthorizedException('Google ID token is required');
     }
 
-    // Support mock tokens in non-production environments for automated security testing
-    if (process.env.NODE_ENV !== 'production' && idToken.startsWith('mock-google-token-')) {
-      const email = idToken.replace('mock-google-token-', '');
-      return {
-        googleId: `google-sub-${email}`,
-        email: email.toLowerCase().trim(),
-        fullName: 'Google Test User',
-        avatarUrl: 'https://lh3.googleusercontent.com/test-avatar',
-        emailVerified: true,
-      };
+    // Verify Google OAuth is configured
+    const clientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
+    if (!clientId) {
+      this.logger.warn('Google OAuth attempted but GOOGLE_CLIENT_ID is not configured');
+      throw new ServiceUnavailableException('Google authentication is not configured. Please set GOOGLE_CLIENT_ID environment variable.');
     }
 
     try {
@@ -52,9 +47,8 @@ export class GoogleOAuthService {
         throw new UnauthorizedException('Malformed Google OAuth payload');
       }
 
-      const expectedClientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
-      if (expectedClientId && payload.aud !== expectedClientId) {
-        this.logger.warn(`Google OAuth token audience mismatch: ${payload.aud} vs ${expectedClientId}`);
+      if (payload.aud !== clientId) {
+        this.logger.warn(`Google OAuth token audience mismatch: ${payload.aud} vs ${clientId}`);
         throw new UnauthorizedException('Google OAuth client ID mismatch');
       }
 

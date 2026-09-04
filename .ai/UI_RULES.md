@@ -1039,3 +1039,16 @@ To prevent scope creep and maintain development focus, strict boundaries are enf
 * **DO NOT** rely solely on color to communicate status (always pair color with clear text and icon indicators).
 * **DO NOT** expose raw database errors or stack traces to the user.
 * **DO NOT** invent unrelated features (such as HR, payroll, hospital workflows, or manufacturing pipelines).
+
+---
+
+## 39. Header User Area Specification Update (DECISION-013)
+
+Per user approval in **DECISION-013**, the authenticated application header user area has been updated:
+* **No Profile Avatar**: The top navigation bar MUST NOT render any profile avatar (photos, initials circles, Google avatar images, generated avatars, or broken image placeholders).
+* **Header User Structure**: The user menu trigger is composed solely of:
+  1. User Full Name (`text-xs font-semibold text-slate-800`)
+  2. Role Badge (`px-1.5 py-0.5 text-[10px] font-semibold rounded border uppercase`)
+  3. Dropdown Chevron (`ChevronDown`)
+* **Menu Actions**: Full dropdown functionality remains intact (Profile & Account, Store Settings, Sign Out).
+* *Historical Note*: Earlier draft specifications in this document mentioning a 36×36px avatar in the header are superseded by DECISION-013.

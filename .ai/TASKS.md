@@ -1,12 +1,11 @@
 # Project Tasks
 
 ## In Progress
-*None* — Phase 6 Authentication + RBAC is complete. Ready for Phase 7 Frontend / Next.js.
+*None* — Phase 7 Frontend / Next.js is complete. Ready for Phase 8 UI Design System.
 
 ---
 
 ## Pending Phases (Master Roadmap)
-- [ ] **PHASE 7** → Frontend / Next.js (App router, providers, layout shell, global search `⌘K`)
 - [ ] **PHASE 8** → UI Design System (CareOps theme, Tailwind tokens, shadcn/ui components, typography, palette)
 - [ ] **PHASE 9** → API Integration (TanStack Query client, API client, error handling, loading states)
 - [ ] **PHASE 10** → Products + Inventory (Master data, stock movements, adjustments, inter-warehouse transfers, batches)
@@ -29,3 +28,4 @@
 - [x] **PHASE 4** → Database + Prisma (Prisma 6 schema validation, `@prisma/client` generation, baseline migration `20260904000000_init`, PrismaService & PrismaModule integration)
 - [x] **PHASE 5** → Backend / NestJS (Common infrastructure, standard API envelopes, request ID middleware, response transformer, logging with redaction, global exception filter, decorators, readiness check, unit test suites)
 - [x] **PHASE 6** → Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification link + 6-digit OTP, Password Reset, Argon2id hashing, 64-byte session cookies, SessionAuthGuard, PermissionsGuard, IDOR protection, Roles/Users modules, security test suites)
+- [x] **PHASE 7** → Frontend / Next.js (App router architecture, `(auth)` and `(app)` separation, 64px Top Navigation bar, 4-column More Mega-Menu, Command Palette `⌘K`, Notification slide-over drawer, PageHeader with breadcrumbs, and 26 modular page shells with empty states)

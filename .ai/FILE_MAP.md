@@ -91,7 +91,9 @@ apps/
 │   │       │   ├── auth.module.ts
 │   │       │   ├── security.spec.ts
 │   │       │   ├── dto/          # Login, Register, Google, Verify, Reset DTOs
-│   │       │   └── services/     # PasswordService, SessionService, EmailVerificationService, GoogleOAuthService, AuthService
+│   │       │   └── services/     # PasswordService, SessionService, EmailVerificationService, GoogleOAuthService, AuthService, MailService
+│   │       │       ├── mail.service.ts
+│   │       │       └── mail.service.spec.ts
 │   │       ├── roles/            # Roles & permissions module
 │   │       │   ├── roles.service.ts
 │   │       │   └── roles.module.ts
@@ -110,27 +112,66 @@ apps/
     ├── postcss.config.mjs
     ├── tailwind.config.ts        # Locked UI design system tokens
     ├── tsconfig.json
+    ├── public/
+    │   └── icons/
+    │       └── google.png        # Official Google brand asset
     └── src/
         ├── lib/
         │   ├── utils.ts          # cn() class merge utility
         │   ├── api-client.ts     # Typed API client with credentials inclusion
         │   └── auth/
         │       └── auth-context.tsx # React AuthContext provider & hooks
+        ├── components/
+        │   └── layout/
+        │       ├── app-header.tsx         # Fixed 64px desktop-first top navigation bar
+        │       ├── user-menu.tsx          # Authenticated user dropdown & logout
+        │       ├── more-menu.tsx          # 4-column mega-menu for secondary modules
+        │       ├── command-palette.tsx    # Accessible Command Palette (⌘K)
+        │       ├── notifications-drawer.tsx # Slide-over notification drawer
+        │       └── page-header.tsx        # Standardized page header with breadcrumbs
         └── app/
             ├── globals.css       # Base CSS, tabular-nums, liquid glass
             ├── layout.tsx        # Root HTML layout with providers
-            ├── page.tsx          # Foundation landing page
+            ├── page.tsx          # Root client redirector (dashboard or login)
             ├── providers.tsx     # TanStack Query & AuthContext Provider
-            └── (auth)/           # Single Common Authentication route group
-                ├── layout.tsx    # Auth centered layout
-                ├── login/
-                │   └── page.tsx  # Single common login screen
-                ├── register/
-                │   └── page.tsx  # Single common registration screen
-                ├── verify-email/
-                │   └── page.tsx  # Link & 6-digit OTP verification screen
-                └── forgot-password/
-                    └── page.tsx  # Password reset request screen
+            ├── (auth)/           # Single Common Authentication route group (public)
+            │   ├── layout.tsx    # Auth centered card layout
+            │   ├── login/
+            │   │   └── page.tsx  # Single common login screen with Google OAuth
+            │   ├── register/
+            │   │   └── page.tsx  # Single common registration screen with Google OAuth
+            │   ├── verify-email/
+            │   │   └── page.tsx  # Link & 6-digit OTP verification screen
+            │   └── forgot-password/
+            │       └── page.tsx  # Password reset request screen
+            └── (app)/            # Authenticated Application route group
+                ├── layout.tsx    # Authenticated shell layout (64px AppHeader + shortcuts)
+                ├── dashboard/page.tsx       # Operations dashboard & KPI metrics
+                ├── pos/page.tsx             # High-velocity 2-panel counter billing
+                ├── inventory/page.tsx       # Stock valuation & stock list shell
+                ├── sales/page.tsx           # Sales orders & invoices register
+                ├── purchases/page.tsx       # Purchase orders & vendor inward register
+                ├── reports/page.tsx         # Reports & business intelligence
+                ├── products/page.tsx        # Products master catalog
+                ├── categories/page.tsx      # Categories master catalog
+                ├── brands/page.tsx          # Brands master data
+                ├── customers/page.tsx       # Customers directory & credit limits
+                ├── suppliers/page.tsx       # Suppliers directory & GSTIN records
+                ├── warehouses/page.tsx      # Warehouses & store locations
+                ├── stock-movements/page.tsx # Immutable stock audit ledger
+                ├── stock-adjustments/page.tsx # Stock variance & audit adjustments
+                ├── stock-transfers/page.tsx # Inter-warehouse stock transfers
+                ├── batches/page.tsx         # Batch & expiry date tracking
+                ├── sales-returns/page.tsx   # Customer returns & credit notes
+                ├── purchase-returns/page.tsx # Vendor returns & debit notes
+                ├── payments/page.tsx        # Payments & collections register
+                ├── invoices/page.tsx        # Invoices & thermal receipts
+                ├── ledger/page.tsx          # Double-entry accounts ledger
+                ├── users/page.tsx           # User management administration
+                ├── roles/page.tsx           # RBAC roles & permissions
+                ├── audit-logs/page.tsx      # System audit & activity trail
+                ├── notifications/page.tsx   # Notification center
+                └── settings/page.tsx        # Company & system configuration
 
 packages/
 │
