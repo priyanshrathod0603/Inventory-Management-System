@@ -63,3 +63,11 @@ Established the comprehensive human-readable engineering and product documentati
 - **Infrastructure**: `docs/infrastructure/` (overview, hosting, networking, storage volumes, monitoring, backup/recovery).
 - **User Guides**: `docs/user-guides/` (getting started guide, user guide, admin guide, troubleshooting guide).
 - **Root README**: Created `README.md` introducing the system with index links to all documentation sections.
+
+## Git Safety & Version Control Governance Integration
+Integrated strict Git safety rules and version control constitution into the `.ai/` Project Brain:
+- **AI Rules**: Updated `AI_RULES.md` with explicit forbidden automatic commands (`git add .`, `git commit`, `git push`, `git reset --hard`, `git clean`), allowed read-only inspection commands, explicit commit/push authorization protocols, and the default workflow (`Inspect → Modify → Validate → git status → git diff → Report → STOP`).
+- **Coding Rules**: Updated `CODING_RULES.md` workflow sequence, pre/post checklists, and absolute prohibitions.
+- **Security Rules**: Updated `SECURITY_RULES.md` Section 6 with Git safety and release control policies.
+- **Decision Log**: Appended `DECISION-011` in `DECISIONS.md`.
+- **State Preservation**: Updated `CURRENT_STATE.md` and `SESSION_STATE.md`.

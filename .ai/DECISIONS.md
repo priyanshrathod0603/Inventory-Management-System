@@ -110,3 +110,13 @@
 * **Decision**: Freeze all specifications across the `.ai/` Project Brain (Requirements, Architecture, Database Schema, REST APIs, UI Rules, Security Standards, Coding Rules, and Testing Strategy). The project is formally declared implementation-ready.
 * **Reason**: Clear, complete, ambiguity-free specifications prevent costly architectural rework and maintain development velocity during implementation.
 * **Impact**: Direct implementation can proceed with zero requirement ambiguity.
+
+---
+
+## DECISION-011
+* **Title**: Strict Git Safety and Version Control Governance
+* **Status**: Accepted
+* **Context**: Version Control Governance & AI Safety Boundaries
+* **Decision**: Git operations must remain under explicit human control. The AI must NEVER automatically stage (`git add .`), commit (`git commit`), or push (`git push`) changes. The AI is restricted to read-only Git inspection commands (`git status`, `git branch`, `git log`, `git diff`, etc.) and must stop after validating changes. Staging, committing, or pushing require separate, direct, explicit human instructions. Destructive Git commands (`git reset --hard`, `git clean -fd`, force-push, history rewriting) are strictly prohibited without prior explicit human approval.
+* **Reason**: Prevents unintended repository mutations, protects Git history integrity, avoids accidental commit of unvetted artifacts or secrets, and ensures human ownership over release control and repository state.
+* **Impact**: Mandatory workflow: `Inspect → Modify → Validate → git status → git diff → Report → STOP`. Zero automatic git mutations by AI.

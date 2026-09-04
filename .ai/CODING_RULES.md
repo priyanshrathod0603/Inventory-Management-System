@@ -68,7 +68,7 @@ All critical business workflows must maintain high automated test coverage befor
 
 ## 5. Required AI Workflow & Pre/Post Checklists
 
-Every development task must follow this 10-step sequence:
+Every development task must follow this sequence:
 
 ```
 STEP 1: READ        → Read relevant .ai/ rules, requirements, and decisions.
@@ -78,9 +78,11 @@ STEP 4: CONFLICT    → Verify compliance with locked UI, locked tech stack, and
 STEP 5: PLAN        → Formulate a minimal, non-destructive implementation plan.
 STEP 6: ASK         → If ambiguity or conflict exists, STOP AND ASK the user.
 STEP 7: IMPLEMENT   → Execute only the minimal required code changes.
-STEP 8: TEST        → Execute automated unit/integration tests covering affected areas.
-STEP 9: VERIFY      → Ensure no UI regressions, no fake data, and no secret leakage.
-STEP 10: DOCUMENT   → Update .ai/ files (CURRENT_STATE, CHANGELOG, TASKS) preserving history.
+STEP 8: VALIDATE    → Execute automated unit/integration tests, typechecks, and linters.
+STEP 9: DOCUMENT    → Update .ai/ files (CURRENT_STATE, CHANGELOG, TASKS) preserving history.
+STEP 10: INSPECT    → Run git status and relevant git diff inspection.
+STEP 11: REPORT     → Clearly report what files changed and validation results.
+STEP 12: STOP       → STOP. Do NOT stage, commit, or push automatically.
 ```
 
 ### Pre-Change Checklist:
@@ -92,17 +94,41 @@ STEP 10: DOCUMENT   → Update .ai/ files (CURRENT_STATE, CHANGELOG, TASKS) pres
 - [ ] Locked Tech Stack (Next.js, NestJS, PostgreSQL, Prisma) respected.
 
 ### Post-Change Checklist:
-- [ ] Automated tests pass.
+- [ ] Validation commands (automated tests, typechecks, linters) pass.
 - [ ] Existing features and workflows remain unbroken.
 - [ ] Zero fake business data or mocked API success states.
 - [ ] Authorization and permission guards verified on backend.
 - [ ] Error, loading, and empty states verified.
-- [ ] Zero secrets or `.env` files committed.
+- [ ] Zero secrets or `.env` files exposed.
 - [ ] `.ai/` state and changelog updated by append (history preserved).
+- [ ] `git status` and `git diff` inspected.
+- [ ] Changes and validation results reported to human.
+- [ ] Stopped without automatically staging, committing, or pushing.
 
 ---
 
-## 6. Absolute Prohibitions (NEVER DO)
+## 6. Git Safety & Version Control Standards
+
+Git operations must remain under explicit human control. The AI must NEVER automatically stage, commit, or push changes.
+
+1. **Strictly Forbidden Automatic Commands**:
+   * `git add .`, `git add -A`, `git add --all`
+   * `git commit`
+   * `git push`
+   * `git reset --hard`, `git clean -fd`
+   * `git rebase`, `git merge`, `git cherry-pick`
+2. **Allowed Read-Only Inspection**:
+   * `git status`, `git branch`, `git log`, `git diff`, `git diff --stat`, `git diff --name-only`, `git remote -v`, `git show`, `git ls-files`.
+3. **Commit & Push Authorization**:
+   * Commits require explicit human instructions (e.g. *"Create a Git commit for these changes"*).
+   * Pushing requires separate, explicit authorization (e.g. *"Commit and push these changes"*).
+   * Never use `git add .` or stage all files automatically; identify and stage only specific authorized files when explicitly directed.
+4. **Destructive Operations**:
+   * Never execute `git reset --hard`, `git clean`, force-push, history rewrite, or branch deletion without explicit human confirmation.
+
+---
+
+## 7. Absolute Prohibitions (NEVER DO)
 
 1. **NEVER** delete historical financial transactions (Sales, Invoices, Payments, Stock Movements).
 2. **NEVER** redesign approved UI, change locked fonts (`Plus Jakarta Sans`, `IBM Plex Mono`), or alter locked colors (Indigo, Emerald, Amber, Rose).
@@ -111,3 +137,5 @@ STEP 10: DOCUMENT   → Update .ai/ files (CURRENT_STATE, CHANGELOG, TASKS) pres
 5. **NEVER** commit `.env`, `.env.example`, private keys, or credentials to version control.
 6. **NEVER** erase historical entries in `.ai/` files (`DECISIONS.md`, `CHANGELOG.md`, `CURRENT_STATE.md`).
 7. **NEVER** silently change architecture, database schemas, or API contracts without explicit documentation and user approval.
+8. **NEVER** automatically stage (`git add .`), commit (`git commit`), or push (`git push`) changes without explicit human instruction.
+9. **NEVER** execute destructive Git operations (`git reset --hard`, `git clean`, force-push, history rewrite) without explicit human confirmation.

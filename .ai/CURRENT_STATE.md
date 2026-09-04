@@ -98,3 +98,17 @@ Begin Module Scaffolding starting with Database migrations and Authentication/RB
 * **Tests**: Structure validation (PASS), Internal links verification (PASS), Zero secret check (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization to begin database migration and Auth/RBAC module implementation.
+
+### Entry 5
+* **Date**: 2026-09-04
+* **Task**: Implement Git Safety & Version Control Rule in .ai Project Brain
+* **Completed**:
+  1. Updated `AI_RULES.md` with comprehensive Git Safety & Version Control rules, explicit forbidden/allowed command definitions, staging/commit/push policies, and the mandatory `Inspect → Modify → Validate → git status → git diff → Report → STOP` workflow.
+  2. Updated `CODING_RULES.md` with Git Safety & Version Control standards, updated development workflow steps, checklists, and absolute prohibitions.
+  3. Updated `SECURITY_RULES.md` with Git Safety and control governance.
+  4. Appended `DECISION-011` to `DECISIONS.md`.
+  5. Verified zero automatic staging, committing, or pushing occurs.
+* **Changed**: `.ai/AI_RULES.md`, `.ai/CODING_RULES.md`, `.ai/SECURITY_RULES.md`, `.ai/DECISIONS.md`, `.ai/CURRENT_STATE.md`, `.ai/CHANGELOG.md`, `.ai/SESSION_STATE.md`
+* **Tests**: Read and cross-verified updated `.ai/` files.
+* **Known Issues**: None.
+* **Next Steps**: Run git status and diff inspection, report to user, and stop without auto-staging or auto-committing.

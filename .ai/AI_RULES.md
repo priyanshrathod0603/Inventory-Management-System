@@ -58,10 +58,149 @@ Before writing or editing a single line of code or documentation, AI MUST:
 
 Upon completing any development or documentation step, AI MUST:
 
-1. Run automated tests to verify zero regressions.
-2. Verify that no secrets, credentials, or `.env` files are exposed or committed.
+1. Run the appropriate validation commands (typechecks, linting, automated tests) to verify zero regressions.
+2. Verify that no secrets, credentials, or `.env` files are exposed.
 3. Update `CURRENT_STATE.md` by appending the latest accurate state.
 4. Update `TASKS.md` (move completed items to Completed; keep implementation tasks in Pending).
 5. Update `CHANGELOG.md` with a chronological entry.
 6. Update `SESSION_STATE.md` summarizing the session.
 7. Record any newly established user decisions in `DECISIONS.md`.
+8. Run `git status` and relevant `git diff` inspection commands to verify working tree changes.
+9. Clearly report changed files and validation results to the user.
+10. **STOP**. Do NOT stage, commit, or push changes automatically.
+
+---
+
+## 7. Git Safety & Version Control Rules
+
+Git operations must remain under explicit human control.
+
+The AI must NEVER automatically stage, commit, or push changes.
+
+### Strictly Forbidden
+
+The AI must NOT automatically execute:
+* `git add .`
+* `git add -A`
+* `git add --all`
+* `git commit`
+* `git push`
+* `git reset --hard`
+* `git clean -fd`
+* `git rebase`
+* `git merge`
+* `git cherry-pick`
+
+The AI must also NOT:
+* Automatically stage files
+* Automatically create commits
+* Automatically push to remote repositories
+* Automatically rewrite Git history
+* Automatically amend commits
+* Automatically force-push
+* Automatically delete branches
+* Automatically modify remote configuration
+
+### Allowed Git Operations
+
+The AI MAY perform read-only Git inspection such as:
+* `git status`
+* `git branch`
+* `git log`
+* `git diff`
+* `git diff --stat`
+* `git diff --name-only`
+* `git remote -v`
+* `git show`
+* `git ls-files`
+
+These commands are allowed for understanding repository state and validating changes.
+
+### After Making Code Changes
+
+After completing requested changes, the AI must:
+1. Run the appropriate validation commands.
+2. Run `git status`.
+3. Run relevant `git diff` / diff inspection.
+4. Clearly report what files were changed.
+5. Clearly report validation results.
+6. **STOP**.
+
+The AI must NOT stage or commit the changes automatically.
+
+### Commit Policy
+
+Git commits must be created manually by the human unless the human explicitly gives a direct instruction to create a commit.
+
+For example, the AI may create a commit ONLY after an explicit instruction such as:
+> *"Create a Git commit for these changes."*
+
+Without such explicit permission:
+* `git add`
+* `git commit`
+* `git push`
+
+must NOT be executed.
+
+### Staging Policy
+
+* Never use `git add .` automatically.
+* Never stage all repository files automatically.
+* Never stage unrelated changes.
+* If the human explicitly asks the AI to prepare a commit, the AI must first inspect the working tree and identify exactly which files belong to that commit.
+
+### Push Policy
+
+* Never push automatically.
+* Even when a commit has been explicitly requested, pushing requires a separate explicit instruction.
+* For example:
+  * *"Create the commit, but do not push."* → means commit only.
+  * *"Commit and push these changes."* → explicitly authorizes both operations.
+
+### Destructive Git Operations
+
+The AI must NEVER perform destructive Git operations without explicit confirmation.
+
+This includes:
+* `git reset --hard`
+* `git clean`
+* force push
+* history rewriting
+* deleting branches
+* destructive rebases
+* discarding uncommitted changes
+
+If such an operation appears necessary, STOP and ask for explicit human approval.
+
+### Mandatory Workflow Principle
+
+The default workflow is:
+```
+Inspect
+   ↓
+Modify
+   ↓
+Validate
+   ↓
+git status
+   ↓
+git diff
+   ↓
+Report
+   ↓
+STOP
+```
+
+**NOT:**
+```
+Modify
+   ↓
+git add .
+   ↓
+git commit
+   ↓
+git push
+```
+
+The human owns Git history and release control.
+The AI owns implementation and validation only unless explicitly authorized otherwise.

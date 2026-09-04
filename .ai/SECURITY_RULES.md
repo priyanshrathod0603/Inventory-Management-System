@@ -79,6 +79,9 @@
    * Private keys, certificates, database credentials, and local database dumps must be excluded via `.gitignore`.
 2. **Environment Variable Ingestion**:
    * Secrets must be supplied via secure environment variables or secret managers at runtime.
+3. **Git Safety & Control Policy**:
+   * All staging, commit, and push operations are strictly controlled by the human.
+   * Automated/unauthorized `git add`, `git commit`, `git push`, or destructive operations (`git reset --hard`, `git clean`) by AI are strictly forbidden.
 
 ---
 
