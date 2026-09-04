@@ -3,9 +3,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
+import {
+  GlobalExceptionFilter,
+  TransformResponseInterceptor,
+  LoggingInterceptor,
+} from './common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Graceful shutdown hooks
+  app.enableShutdownHooks();
 
   // Global Middlewares
   app.use(cookieParser());
@@ -29,10 +37,21 @@ async function bootstrap() {
     }),
   );
 
+  // Global Interceptors
+  app.useGlobalInterceptors(
+    new LoggingInterceptor(),
+    new TransformResponseInterceptor(),
+  );
+
+  // Global Exception Filter
+  app.useGlobalFilters(new GlobalExceptionFilter());
+
   // OpenAPI / Swagger Documentation
   const config = new DocumentBuilder()
     .setTitle('Stock Management System (SMS) API')
-    .setDescription('Production-grade REST API for SMS POS, Inventory, Procurement, and Financial Management')
+    .setDescription(
+      'Production-grade REST API for SMS POS, Inventory, Procurement, and Financial Management',
+    )
     .setVersion('1.0')
     .addCookieAuth('sms_session')
     .build();

@@ -60,12 +60,27 @@ apps/
 │   ├── tsconfig.json
 │   ├── tsconfig.build.json
 │   ├── prisma/
-│   │   └── schema.prisma         # Prisma schema matching .ai/DATABASE.md
+│   │   ├── schema.prisma         # Prisma schema matching .ai/DATABASE.md
+│   │   └── migrations/
+│   │       ├── migration_lock.toml
+│   │       └── 20260904000000_init/
+│   │           └── migration.sql # Deterministic baseline migration
 │   ├── src/
-│   │   ├── main.ts               # NestJS bootstrap (/api/v1, Swagger, Validation)
-│   │   ├── app.module.ts         # Root application module
+│   │   ├── main.ts               # NestJS bootstrap (/api/v1, Swagger, Pipes, Interceptors, Filters)
+│   │   ├── app.module.ts         # Root application module with RequestIdMiddleware
 │   │   ├── prisma/               # PrismaService & PrismaModule
-│   │   └── health/               # Health check endpoint (/api/v1/health)
+│   │   ├── health/               # Health check endpoints (/api/v1/health, /api/v1/health/ready)
+│   │   │   ├── health.controller.ts
+│   │   │   ├── health.controller.spec.ts
+│   │   │   └── health.module.ts
+│   │   └── common/               # Common backend infrastructure
+│   │       ├── index.ts          # Barrel export
+│   │       ├── interfaces/       # ApiResponse, ApiErrorResponse, PaginationMeta
+│   │       ├── dto/              # PaginationQueryDto
+│   │       ├── middleware/       # RequestIdMiddleware & unit tests
+│   │       ├── interceptors/     # TransformResponseInterceptor, LoggingInterceptor & tests
+│   │       ├── filters/          # GlobalExceptionFilter & tests
+│   │       └── decorators/       # @CurrentUser, @Permissions, @Public
 │   └── test/
 │       ├── app.e2e-spec.ts
 │       └── jest-e2e.json
@@ -84,3 +99,30 @@ apps/
             ├── layout.tsx        # Root HTML layout with providers
             ├── page.tsx          # Foundation landing page
             └── providers.tsx     # TanStack QueryClientProvider
+
+packages/
+│
+├── config/                       # Shared configuration & tooling boundary
+├── types/                        # Shared TypeScript types boundary
+└── validation/                   # Shared validation schemas boundary
+
+scripts/                          # Root automation scripts boundary
+
+docs/                             # Human-readable engineering & product documentation layer
+├── requirements/
+├── architecture/
+├── api/
+├── database/
+├── security/
+├── design/
+├── testing/
+├── deployment/
+├── infrastructure/
+└── user-guides/
+
+Root Configuration Files:
+├── .gitattributes                # Repository line-ending & binary file normalization
+├── .gitignore                    # Secrets & artifact protection
+├── package.json                  # Root monorepo workspace configuration
+├── pnpm-workspace.yaml           # pnpm workspace declaration (apps/*, packages/*)
+└── README.md                     # Repository entry point

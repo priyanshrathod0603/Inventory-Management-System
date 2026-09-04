@@ -71,3 +71,51 @@ Integrated strict Git safety rules and version control constitution into the `.a
 - **Security Rules**: Updated `SECURITY_RULES.md` Section 6 with Git safety and release control policies.
 - **Decision Log**: Appended `DECISION-011` in `DECISIONS.md`.
 - **State Preservation**: Updated `CURRENT_STATE.md` and `SESSION_STATE.md`.
+
+## Phase 2 Root Project Structure Milestone
+Established the clean, scalable, production-grade root project structure and monorepo boundaries:
+- **Root Directory Organization**: Established `apps/` (`web`, `api`), `packages/` (`config`, `types`, `validation`), `scripts/`, `docs/`, and `.ai/`.
+- **Workspace Configuration**: Updated `pnpm-workspace.yaml` to include `packages/*` and `apps/*`.
+- **Repository Normalization**: Created minimal `.gitattributes` for LF line endings and binary asset handling.
+- **Security & Secret Protection**: Updated `.gitignore` to strictly ignore all environment files (`.env`, `.env.*`, `.env.example`).
+- **README Entry Point**: Updated root `README.md` to state Phase 2 development status, technology direction, and workspace layout while explicitly clarifying that planned architecture is distinct from implemented functionality.
+- **Scope Discipline**: Verified zero implementation of future phase logic (Docker, Prisma migrations, NestJS business modules, Next.js UI screens, auth, fake data).
+
+## Phase 3 Docker + Local Development Milestone
+Established and verified local development infrastructure in Docker Compose:
+- **Docker Compose Configuration**: Configured `docker-compose.yml` with `postgres:16-alpine` and `redis:7-alpine`.
+- **Networking**: Established explicit named bridge network `sms-network` for reliable inter-container service discovery.
+- **Persistent Storage**: Configured named volumes `postgres_data` and `redis_data` to ensure data durability across container lifecycles.
+- **Health Checks**: Configured connection-level health checks for PostgreSQL (`pg_isready -U postgres -d sms_db`) and Redis (`redis-cli ping`).
+- **Docker Ignore**: Updated `.dockerignore` to exclude environment files, build artifacts, caches, and logs.
+- **Scope Verification**: Verified that no Phase 4+ tasks (Prisma migrations, database seeds, business modules, auth, UI screens, fake data) were implemented.
+
+## Phase 4 Database + Prisma Milestone
+Established and verified PostgreSQL + Prisma ORM database foundation:
+- **Prisma Schema Verification**: Validated `apps/api/prisma/schema.prisma` against `.ai/DATABASE.md` and `docs/database/` across all 24 relational tables, financial decimal standards (`DECIMAL(12,2)` amounts, `DECIMAL(10,3)` stock, `DECIMAL(5,2)` tax rates), relationships, constraints, and indexes.
+- **Prisma Client**: Generated complete, type-safe Prisma 6 Client (`@prisma/client` v6.19.3).
+- **Migration History**: Generated initial baseline migration (`apps/api/prisma/migrations/20260904000000_init/migration.sql`) and `migration_lock.toml`.
+- **PrismaService & Module**: Verified `PrismaService` lifecycle and `PrismaModule` integration within NestJS API foundation.
+- **Quality Gates**: Verified clean NestJS build (`nest build`), TypeScript typechecks (`tsc --noEmit`), and backend unit tests (`jest`).
+- **Scope Verification**: Verified zero implementation of business modules, controllers, DTOs, authentication, UI screens, or fake business data.
+
+## Phase 5 Backend / NestJS Milestone
+Established and verified common NestJS backend architectural foundation:
+- **Common Module (`apps/api/src/common/`)**:
+  - `interfaces/api-response.interface.ts`: Standard API success and error envelopes (`ApiResponse<T>`, `ApiErrorResponse`, `PaginationMeta`).
+  - `dto/pagination-query.dto.ts`: `PaginationQueryDto` with class-validator rules and Swagger OpenAPI metadata.
+  - `middleware/request-id.middleware.ts`: Global middleware extracting incoming `x-request-id` or generating cryptographic UUID v4.
+  - `interceptors/transform-response.interceptor.ts`: Global interceptor wrapping responses into standard `{ success: true, data: ..., meta: ..., message: ... }` envelope.
+  - `interceptors/logging.interceptor.ts`: Execution duration, method, path, IP logging with strict sensitive parameter redaction.
+  - `filters/global-exception.filter.ts`: Central exception filter formatting HTTP and Prisma exceptions (`P2002`, `P2025`, `P2003`) into standard `{ success: false, error: ... }` while preventing internal leakage.
+  - `decorators/`: `@CurrentUser()`, `@Permissions()`, and `@Public()` decorators for RBAC readiness.
+- **Health & Readiness (`apps/api/src/health/`)**:
+  - Added database connectivity probe `GET /api/v1/health/ready` verifying active PostgreSQL connection via `SELECT 1`.
+  - Maintained liveness check `GET /api/v1/health`.
+- **Global Configuration**:
+  - `apps/api/src/main.ts`: Configured global prefix `/api/v1`, `ValidationPipe` (whitelist + transform), global filter, interceptors, and Prisma shutdown hooks.
+  - `apps/api/src/app.module.ts`: Configured `RequestIdMiddleware` for all routes.
+- **Testing & Quality Gates**:
+  - Created unit tests for `RequestIdMiddleware`, `TransformResponseInterceptor`, `GlobalExceptionFilter`, and `HealthController` (4 suites, 13 tests passing).
+  - Validated clean `nest build` and `tsc --noEmit` across monorepo workspaces.
+- **Scope Verification**: Verified zero implementation of Phase 6+ business features (auth controllers, password hashing, sessions, business domain services, UI screens).

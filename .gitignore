@@ -11,7 +11,7 @@ out/
 # Environment Files (Strictly protect secrets)
 .env
 .env.*
-!.env.example
+.env.example
 
 # Logs
 *.log
