@@ -4,16 +4,16 @@
 Stock Management System (SMS)
 
 ## Stage:
-Phase 5 Backend Initialized & Single Common Authentication Model Synchronized (Ready for Phase 6 Authentication + RBAC)
+Phase 6 Authentication + RBAC Completed (Ready for Phase 7 Frontend / Next.js)
 
 ## Application Status:
-Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), and complete engineering documentation layer (`docs/`).
+Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), and full production-grade Authentication & RBAC implementation across backend and frontend.
 
 ## Documentation Status:
 Complete: Authoritative Project Brain in `.ai/` + Human-readable engineering/product documentation in `docs/` (Requirements, Architecture, API, Database, Security, Design, Testing, Deployment, Infrastructure, User Guides).
 
 ## Requirements Status:
-Finalized, Synchronized & Frozen: Single Common Authentication System (One primary login `/login`, one common signup `/register`, planned Email+Password, Google OAuth, Email Verification; downstream RBAC authorization decoupled) in `PRODUCT_REQUIREMENTS.md` and detailed in `docs/requirements/*`.
+Finalized, Synchronized & Frozen: Single Common Authentication System (One primary login `/login`, one common signup `/register`, Email+Password with Argon2id, Google OAuth with ID token verification, Email Verification with secure link and 6-digit OTP; downstream RBAC authorization decoupled) in `PRODUCT_REQUIREMENTS.md` and detailed in `docs/requirements/*`.
 
 ## Architecture Status:
 Finalized and Frozen in `ARCHITECTURE.md` and detailed in `docs/architecture/*`
@@ -22,25 +22,25 @@ Finalized and Frozen in `ARCHITECTURE.md` and detailed in `docs/architecture/*`
 Active & Verified: Next.js + React + TypeScript (Frontend), NestJS + TypeScript (Backend), PostgreSQL 16+ (Database), Prisma ORM, Docker, and pnpm package manager (`TECH_STACK.md`)
 
 ## Database Specification:
-Finalized & Migrated: Comprehensive PostgreSQL relational schema (24 entities) and deterministic baseline migration (`20260904000000_init`) established in `apps/api/prisma/migrations/` with Prisma 6 Client generated and verified against `.ai/DATABASE.md`.
+Finalized, Migrated & Extended: Comprehensive PostgreSQL relational schema (26 entities including `EmailVerificationToken` and `PasswordResetToken`) and migrations (`20260904000000_init`, `20260905000000_auth_phase6`) in `apps/api/prisma/migrations/` with Prisma 6 Client generated and verified against `.ai/DATABASE.md`.
 
-## Backend Foundation:
-Operational & Standardized: Common backend infrastructure (`apps/api/src/common/`) with frozen standard API response contracts (`ApiResponse<T>`, `ApiErrorResponse`, `PaginationMeta`, `PaginationQueryDto`), `RequestIdMiddleware`, `TransformResponseInterceptor`, `LoggingInterceptor` (sensitive field redaction), `GlobalExceptionFilter` (Prisma code mapping & error sanitization), custom decorators (`@CurrentUser()`, `@Permissions()`, `@Public()`), and enhanced health checks (`/api/v1/health`, `/api/v1/health/ready` database connectivity).
+## Backend Foundation & Auth:
+Operational & Standardized: Common backend infrastructure (`apps/api/src/common/`), standard API response contracts, request ID middleware, logging with sensitive data redaction, global exception filter, SessionAuthGuard (`sms_session` cookie verification), PermissionsGuard (RBAC authorization), Argon2id password hashing, high-entropy 64-byte session token management, Google OAuth token verification, email verification service (tokens & 6-digit OTP), password reset workflow, roles seeding, and user profile management with strict IDOR protection.
 
-## Frontend Foundation:
-Application boundary established in `apps/web`. UI components, pages, forms, and layouts remain pending future implementation phases.
+## Frontend Foundation & Auth:
+Operational: Typed API client (`lib/api-client.ts`) with credentials inclusion, `AuthContext` React provider (`lib/auth/auth-context.tsx`), and complete auth UI pages (`/login`, `/register`, `/verify-email`, `/forgot-password`) built with Tailwind CSS design tokens.
 
 ## Testing Status:
-Operational: All backend unit tests passing (`jest` 4/4 suites, 13/13 tests), TypeScript typechecks passing (`tsc --noEmit` across `@sms/api` and `@sms/web`), NestJS build passing (`nest build`).
+Operational: All backend unit and security test suites passing (`jest` 14/14 suites, 61/61 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@sms/api` and `@sms/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 8 static routes).
 
 ## Deployment & Docker:
 Configured: Local development infrastructure in `docker-compose.yml` (`postgres:16-alpine` on port 5432 with health check, `redis:7-alpine` on port 6379 with health check, named persistent volumes `postgres_data` and `redis_data`, bridge network `sms-network`, `.dockerignore`).
 
 ## Current Work:
-Synchronized Single Common Authentication Model across Project Brain and documentation. Phase 6 implementation has NOT started.
+Completed Phase 6 — Authentication, Session Security, Email Verification, Google Auth & RBAC.
 
 ## Next Major Step:
-PHASE 6 — Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification, Argon2id hashing, secure session cookies, rate limiting, RBAC guards). [NOT STARTED - Awaiting authorization].
+PHASE 7 — Frontend / Next.js (App router structure, global state/providers, CareOps layout shell, global search `⌘K`). [Awaiting user authorization].
 
 ---
 
@@ -196,3 +196,60 @@ PHASE 6 — Authentication + RBAC (Single Common Login/Signup, Email+Password, G
 * **Tests**: `jest` (PASS), `nest build` (PASS), `tsc --noEmit` (PASS), repository grep search validation (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization before starting Phase 6 implementation.
+
+### Entry 11
+* **Date**: 2026-09-05
+* **Task**: Phase 6 Authentication, Session Security, Email Verification, Google Auth & RBAC
+* **Completed**:
+  1. **Database Schema & Additive Migration**:
+     - Updated `User` entity to make `passwordHash` optional (for Google OAuth accounts), added `googleId` (unique), `isEmailVerified`, `emailVerifiedAt`, and `avatarUrl`.
+     - Added `EmailVerificationToken` and `PasswordResetToken` entities with expiration, usage status, and user relations.
+     - Created additive migration `20260905000000_auth_phase6/migration.sql` without resetting database or destroying baseline `20260904000000_init`.
+     - Regenerated `@prisma/client` v6.19.3.
+  2. **Backend Authentication & Session Foundation (`apps/api/src/modules/auth/`)**:
+     - `PasswordService`: Argon2id hashing and constant-time verification.
+     - `SessionService`: High-entropy 64-byte (128 hex chars) session tokens, 8-hour / 30-day (Remember Me) TTLs, DB persistence, IP/User-Agent tracking, `sms_session` HttpOnly cookie handling.
+     - `EmailVerificationService`: Secure link tokens and 6-digit OTP codes (15-minute expiry), rate limiting, and atomic user verification.
+     - `GoogleOAuthService`: ID token / tokeninfo verification with client ID matching and test mock token support.
+     - `AuthService`: Comprehensive coordination of registration, email verification (link & OTP), login, Google OAuth, password reset, logout, session revocation, and current user retrieval.
+     - `AuthController`: REST endpoints under `/api/v1/auth/*` adhering to standard API envelopes and Swagger OpenAPI documentation.
+  3. **Backend Authorization & Security Infrastructure**:
+     - `SessionAuthGuard`: Global session verification guard extracting `sms_session` cookie/token, validating active session in DB, verifying user active/non-deleted status, attaching `req.user` (with roles and permissions) and `req.sessionId`, respecting `@Public()`.
+     - `PermissionsGuard`: Enforces `@Permissions(...codes)` against authenticated user permissions, granting unconditional bypass to Admin role.
+     - Configured `cookieParser()` in `apps/api/src/main.ts`.
+  4. **Roles & Users Management (`apps/api/src/modules/`)**:
+     - `RolesService` & `RolesModule`: System roles seeding (`Admin`, `Manager`, `Cashier`, `Staff`) and granular permissions matrix.
+     - `UsersService`, `UsersController`, `UsersModule`: User profile retrieval with strict IDOR verification (`requestingUser.id === targetUserId` or `manage_users` permission required).
+  5. **Security & Unit Test Suite**:
+     - Added comprehensive unit tests and dedicated `security.spec.ts` testing 401 unauthenticated rejection, expired session rejection, deactivated account rejection, IDOR cross-user URL tampering rejection, and client-side permission spoofing rejection.
+     - All 14 test suites and 61 tests passing.
+  6. **Frontend Authentication Foundation (`apps/web/`)**:
+     - `lib/api-client.ts`: Typed API client with `credentials: 'include'` for cookie propagation.
+     - `lib/auth/auth-context.tsx`: Full React Context provider managing user state, login, register, Google OAuth, and logout.
+     - Created complete auth pages: `/login`, `/register`, `/verify-email`, and `/forgot-password` adhering to CareOps design tokens and UI rules.
+     - Verified Next.js build (`next build` generates all static routes with 0 errors).
+* **Changed**: `apps/api/prisma/*`, `apps/api/src/*`, `apps/web/src/*`, `.ai/CURRENT_STATE.md`, `.ai/TASKS.md`, `.ai/CHANGELOG.md`, `.ai/SESSION_STATE.md`, `.ai/FILE_MAP.md`
+* **Tests**: `jest` (14/14 suites pass, 61/61 tests pass), `nest build` (PASS), `next build` (PASS), `tsc --noEmit` across API and Web (PASS).
+* **Known Issues**: None.
+* **Next Steps**: Await user authorization before starting Phase 7 — Frontend / Next.js.
+
+### Entry 12
+* **Date**: 2026-09-05
+* **Task**: Phase 6 Security Fix — Remove Bearer Session Token Authentication
+* **Completed**:
+  1. **Strict Cookie Enforcement in `SessionAuthGuard`**:
+     - Removed `request.headers.authorization` fallback parsing (`Authorization: Bearer <token>`).
+     - Hardened `SessionAuthGuard` to strictly extract `sessionId` from `request.cookies[SESSION_COOKIE_NAME]` (`sms_session`).
+     - Requests without the `sms_session` cookie return `401 Unauthorized` immediately before database validation.
+  2. **Swagger Documentation Synchronization**:
+     - Updated `UsersController` from `@ApiBearerAuth()` to `@ApiCookieAuth('sms_session')`.
+  3. **Zero Database Modifications**:
+     - Preserved `schema.prisma` and all migration SQL without modifications.
+  4. **Automated Security Tests**:
+     - Added dedicated security tests in `session-auth.guard.spec.ts` and `security.spec.ts` asserting that sending valid or invalid database session tokens via `Authorization: Bearer` without the `sms_session` cookie strictly returns `401 Unauthorized` without querying the database.
+     - Added test asserting that revoked/logged-out sessions return `401 Unauthorized`.
+     - All 14 test suites and 65 tests passing.
+* **Changed**: `apps/api/src/common/guards/session-auth.guard.ts`, `apps/api/src/common/guards/session-auth.guard.spec.ts`, `apps/api/src/modules/auth/security.spec.ts`, `apps/api/src/modules/users/users.controller.ts`, `.ai/CURRENT_STATE.md`, `.ai/SESSION_STATE.md`, `.ai/CHANGELOG.md`
+* **Tests**: `jest` (14/14 suites pass, 65/65 tests pass), `nest build` (PASS), `next build` (PASS), `tsc --noEmit` (PASS).
+* **Known Issues**: None.
+* **Next Steps**: Ready for Phase 7 — Frontend / Next.js.

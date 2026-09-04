@@ -1,12 +1,11 @@
 # Project Tasks
 
 ## In Progress
-*None* — Phase 5 Backend / NestJS is complete. Ready for Phase 6 Authentication + RBAC.
+*None* — Phase 6 Authentication + RBAC is complete. Ready for Phase 7 Frontend / Next.js.
 
 ---
 
 ## Pending Phases (Master Roadmap)
-- [ ] **PHASE 6** → Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification, Argon2id hashing, session cookies, rate limiting, RBAC guards)
 - [ ] **PHASE 7** → Frontend / Next.js (App router, providers, layout shell, global search `⌘K`)
 - [ ] **PHASE 8** → UI Design System (CareOps theme, Tailwind tokens, shadcn/ui components, typography, palette)
 - [ ] **PHASE 9** → API Integration (TanStack Query client, API client, error handling, loading states)
@@ -29,3 +28,4 @@
 - [x] **PHASE 3** → Docker + Local Development (`docker-compose.yml` PostgreSQL 16 + Redis 7, persistent volumes, bridge network `sms-network`, health checks, `.dockerignore`)
 - [x] **PHASE 4** → Database + Prisma (Prisma 6 schema validation, `@prisma/client` generation, baseline migration `20260904000000_init`, PrismaService & PrismaModule integration)
 - [x] **PHASE 5** → Backend / NestJS (Common infrastructure, standard API envelopes, request ID middleware, response transformer, logging with redaction, global exception filter, decorators, readiness check, unit test suites)
+- [x] **PHASE 6** → Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification link + 6-digit OTP, Password Reset, Argon2id hashing, 64-byte session cookies, SessionAuthGuard, PermissionsGuard, IDOR protection, Roles/Users modules, security test suites)

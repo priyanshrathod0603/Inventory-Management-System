@@ -7,3 +7,6 @@ export * from './middleware/request-id.middleware';
 export * from './decorators/current-user.decorator';
 export * from './decorators/permissions.decorator';
 export * from './decorators/public.decorator';
+export * from './guards/session-auth.guard';
+export * from './guards/permissions.guard';
+

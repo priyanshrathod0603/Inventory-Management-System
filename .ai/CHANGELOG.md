@@ -129,3 +129,38 @@ Synchronized the project authentication architecture to standard single common a
 - **Decision Log**: Added `DECISION-012` to `DECISIONS.md`.
 - **Documentation & Specifications Updated**: Aligned `PRODUCT_REQUIREMENTS.md`, `ARCHITECTURE.md`, `API_CONTRACTS.md`, `SECURITY_RULES.md`, `DATABASE.md`, `UI_RULES.md`, and `docs/`.
 - **Phase Boundary Verification**: Confirmed Phase 6 implementation has NOT been started. Zero auth logic, OAuth, Argon2, session tokens, or RBAC guards implemented in this task.
+
+## Phase 6 Authentication, Session Security, Email Verification, Google Auth & RBAC Milestone
+Completed full implementation and verification of Phase 6:
+- **Additive Database Migrations**:
+  - Made `passwordHash` nullable on `User` for OAuth users; added `googleId`, `isEmailVerified`, `emailVerifiedAt`, `avatarUrl`.
+  - Added `EmailVerificationToken` and `PasswordResetToken` tables with token expiration, relations, and usage tracking.
+  - Generated deterministic additive migration `20260905000000_auth_phase6/migration.sql` and regenerated `@prisma/client` v6.19.3.
+- **Backend Authentication Foundation (`apps/api/src/modules/auth/`)**:
+  - `PasswordService`: Argon2id hashing and constant-time verification.
+  - `SessionService`: High-entropy 64-byte tokens, 8-hour session / 30-day Remember Me expiry, DB persistence, IP/User-Agent tracking, `sms_session` HttpOnly cookie management.
+  - `EmailVerificationService`: Dual-mode verification (secure link token + 6-digit OTP code with 15-minute expiry), rate limiting, and atomic user status activation.
+  - `GoogleOAuthService`: Google ID token / tokeninfo verification with audience/client ID verification.
+  - `AuthService`: Unified business logic coordinating registration, email verification (link & OTP), password login, Google OAuth, password reset, logout, session revocation, and current user retrieval.
+  - `AuthController`: Full REST endpoints under `/api/v1/auth/*` adhering to standard API envelopes and Swagger OpenAPI documentation.
+- **Backend Authorization & Security Infrastructure**:
+  - `SessionAuthGuard`: Global session verification guard extracting `sms_session` cookie/token, validating active session in DB, verifying user active/non-deleted status, attaching `req.user` (with roles and permissions) and `req.sessionId`, respecting `@Public()`.
+  - `PermissionsGuard`: Enforces `@Permissions(...codes)` against authenticated user permissions, granting unconditional bypass to Admin role.
+  - Configured `cookieParser()` in `apps/api/src/main.ts`.
+- **Roles & Users Management (`apps/api/src/modules/`)**:
+  - `RolesService` & `RolesModule`: System roles seeding (`Admin`, `Manager`, `Cashier`, `Staff`) and granular permissions matrix.
+  - `UsersService`, `UsersController`, `UsersModule`: User profile retrieval with strict IDOR verification (`requestingUser.id === targetUserId` or `manage_users` permission required).
+- **Security & Unit Test Suites**:
+  - Comprehensive unit tests across all auth services, guards, and controllers, plus dedicated `security.spec.ts` testing 401 unauthenticated rejection, expired session rejection, deactivated account rejection, IDOR cross-user URL tampering rejection, and client-side permission spoofing rejection.
+  - 14 test suites and 61 tests passing.
+- **Frontend Authentication Foundation (`apps/web/`)**:
+  - `lib/api-client.ts`: Typed API client with `credentials: 'include'` for cookie propagation.
+  - `lib/auth/auth-context.tsx`: Full React Context provider managing user state, login, register, Google OAuth, and logout.
+  - Created complete auth pages: `/login`, `/register`, `/verify-email`, and `/forgot-password` adhering to CareOps design tokens and UI rules.
+  - Verified Next.js build (`next build` generates all static routes with 0 errors).
+
+## Phase 6 Security Fix — Bearer Session Authentication Removed
+Enforced strict HttpOnly session cookie transport across all protected routes:
+- **SessionAuthGuard Hardening**: Removed `Authorization: Bearer <token>` fallback extraction. The guard strictly extracts session IDs from `request.cookies.sms_session`.
+- **Swagger Documentation**: Aligned `@ApiCookieAuth('sms_session')` on protected controllers (`UsersController`).
+- **Automated Security Verification**: Added tests in `session-auth.guard.spec.ts` and `security.spec.ts` proving that valid database session tokens presented via `Authorization: Bearer` without cookies are strictly rejected with `401 Unauthorized` without database lookups.

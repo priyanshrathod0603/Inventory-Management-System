@@ -1,0 +1,24 @@
+import { Module } from '@nestjs/common';
+import { AuthController } from './auth.controller';
+import { AuthService } from './services/auth.service';
+import { PasswordService } from './services/password.service';
+import { SessionService } from './services/session.service';
+import { EmailVerificationService } from './services/email-verification.service';
+import { GoogleOAuthService } from './services/google-oauth.service';
+import { PrismaModule } from '../../prisma/prisma.module';
+import { RolesModule } from '../roles/roles.module';
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [PrismaModule, RolesModule, ConfigModule],
+  controllers: [AuthController],
+  providers: [
+    AuthService,
+    PasswordService,
+    SessionService,
+    EmailVerificationService,
+    GoogleOAuthService,
+  ],
+  exports: [AuthService, SessionService, PasswordService],
+})
+export class AuthModule {}

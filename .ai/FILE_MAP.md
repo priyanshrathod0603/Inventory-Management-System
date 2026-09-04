@@ -63,24 +63,43 @@ apps/
 │   │   ├── schema.prisma         # Prisma schema matching .ai/DATABASE.md
 │   │   └── migrations/
 │   │       ├── migration_lock.toml
-│   │       └── 20260904000000_init/
-│   │           └── migration.sql # Deterministic baseline migration
+│   │       ├── 20260904000000_init/
+│   │       │   └── migration.sql # Deterministic baseline migration
+│   │       └── 20260905000000_auth_phase6/
+│   │           └── migration.sql # Additive Phase 6 auth tokens & OAuth migration
 │   ├── src/
-│   │   ├── main.ts               # NestJS bootstrap (/api/v1, Swagger, Pipes, Interceptors, Filters)
-│   │   ├── app.module.ts         # Root application module with RequestIdMiddleware
+│   │   ├── main.ts               # NestJS bootstrap (/api/v1, cookie-parser, Swagger, Pipes, Interceptors, Filters)
+│   │   ├── app.module.ts         # Root application module with Auth, Roles, Users, Prisma, Health
 │   │   ├── prisma/               # PrismaService & PrismaModule
 │   │   ├── health/               # Health check endpoints (/api/v1/health, /api/v1/health/ready)
 │   │   │   ├── health.controller.ts
 │   │   │   ├── health.controller.spec.ts
 │   │   │   └── health.module.ts
-│   │   └── common/               # Common backend infrastructure
-│   │       ├── index.ts          # Barrel export
-│   │       ├── interfaces/       # ApiResponse, ApiErrorResponse, PaginationMeta
-│   │       ├── dto/              # PaginationQueryDto
-│   │       ├── middleware/       # RequestIdMiddleware & unit tests
-│   │       ├── interceptors/     # TransformResponseInterceptor, LoggingInterceptor & tests
-│   │       ├── filters/          # GlobalExceptionFilter & tests
-│   │       └── decorators/       # @CurrentUser, @Permissions, @Public
+│   │   ├── common/               # Common backend infrastructure
+│   │   │   ├── index.ts          # Barrel export
+│   │   │   ├── interfaces/       # ApiResponse, ApiErrorResponse, PaginationMeta
+│   │   │   ├── dto/              # PaginationQueryDto
+│   │   │   ├── middleware/       # RequestIdMiddleware & unit tests
+│   │   │   ├── interceptors/     # TransformResponseInterceptor, LoggingInterceptor & tests
+│   │   │   ├── filters/          # GlobalExceptionFilter & tests
+│   │   │   ├── decorators/       # @CurrentUser, @Permissions, @Public
+│   │   │   └── guards/           # SessionAuthGuard, PermissionsGuard & unit tests
+│   │   └── modules/              # Core business & platform modules
+│   │       ├── auth/             # Authentication & session security module
+│   │       │   ├── auth.controller.ts
+│   │       │   ├── auth.controller.spec.ts
+│   │       │   ├── auth.module.ts
+│   │       │   ├── security.spec.ts
+│   │       │   ├── dto/          # Login, Register, Google, Verify, Reset DTOs
+│   │       │   └── services/     # PasswordService, SessionService, EmailVerificationService, GoogleOAuthService, AuthService
+│   │       ├── roles/            # Roles & permissions module
+│   │       │   ├── roles.service.ts
+│   │       │   └── roles.module.ts
+│   │       └── users/            # User profile & IDOR protected management module
+│   │           ├── users.controller.ts
+│   │           ├── users.service.ts
+│   │           ├── users.service.spec.ts
+│   │           └── users.module.ts
 │   └── test/
 │       ├── app.e2e-spec.ts
 │       └── jest-e2e.json
@@ -93,12 +112,25 @@ apps/
     ├── tsconfig.json
     └── src/
         ├── lib/
-        │   └── utils.ts          # cn() class merge utility
+        │   ├── utils.ts          # cn() class merge utility
+        │   ├── api-client.ts     # Typed API client with credentials inclusion
+        │   └── auth/
+        │       └── auth-context.tsx # React AuthContext provider & hooks
         └── app/
             ├── globals.css       # Base CSS, tabular-nums, liquid glass
             ├── layout.tsx        # Root HTML layout with providers
             ├── page.tsx          # Foundation landing page
-            └── providers.tsx     # TanStack QueryClientProvider
+            ├── providers.tsx     # TanStack Query & AuthContext Provider
+            └── (auth)/           # Single Common Authentication route group
+                ├── layout.tsx    # Auth centered layout
+                ├── login/
+                │   └── page.tsx  # Single common login screen
+                ├── register/
+                │   └── page.tsx  # Single common registration screen
+                ├── verify-email/
+                │   └── page.tsx  # Link & 6-digit OTP verification screen
+                └── forgot-password/
+                    └── page.tsx  # Password reset request screen
 
 packages/
 │
