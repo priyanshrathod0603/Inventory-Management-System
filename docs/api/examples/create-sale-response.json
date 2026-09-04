@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "data": {
+    "saleId": "s1a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c",
+    "invoiceNumber": "INV-2026-001092",
+    "grandTotal": 1140.00,
+    "paidAmount": 1140.00,
+    "changeAmount": 0.00,
+    "paymentStatus": "PAID",
+    "invoice": {
+      "id": "i1a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c",
+      "invoiceNumber": "INV-2026-001092",
+      "formatType": "80MM",
+      "pdfUrl": "/api/v1/invoices/INV-2026-001092/pdf",
+      "thermalPayload": "..."
+    }
+  },
+  "message": "Sale completed successfully"
+}

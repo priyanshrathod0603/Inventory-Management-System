@@ -1,0 +1,32 @@
+{
+  "customerId": "c1a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c",
+  "warehouseId": "w1a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c",
+  "orderDiscountPercent": 5.00,
+  "orderDiscountAmount": 60.00,
+  "items": [
+    {
+      "productId": "p1a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c",
+      "batchId": null,
+      "quantity": 2.000,
+      "unitPrice": 420.00,
+      "discountAmount": 0.00,
+      "taxRate": 5.00
+    },
+    {
+      "productId": "p2a2b3c4-d5e6-7f8a-9b0c-1d2e3f4a5b6c",
+      "batchId": null,
+      "quantity": 1.000,
+      "unitPrice": 275.00,
+      "discountAmount": 40.00,
+      "taxRate": 18.00
+    }
+  ],
+  "payments": [
+    {
+      "paymentMethod": "UPI",
+      "amount": 1140.00,
+      "transactionReference": "UPI-9876543210"
+    }
+  ],
+  "notes": "Counter sale via POS"
+}
