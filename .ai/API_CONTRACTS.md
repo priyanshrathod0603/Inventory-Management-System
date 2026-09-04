@@ -48,8 +48,10 @@
 
 ## 2. Authentication & Session Endpoints (`/auth`)
 
+> **Architectural Standard**: SMS utilizes **ONE Single Common Authentication System**. All users (Admin, Manager, Cashier, Staff, etc.) authenticate through these exact common endpoints. There are no role-specific login/registration endpoints. Downstream authorization is governed by RBAC after authentication. Implementation is scheduled for Phase 6.
+
 ### `POST /api/v1/auth/login`
-* **Purpose**: Authenticate user and issue secure HttpOnly session cookie.
+* **Purpose**: Universal common login endpoint for all users. Authenticates credentials and issues secure HttpOnly session cookie.
 * **Permission**: Public
 * **Request Body**:
   ```json
@@ -67,6 +69,7 @@
       "user": {
         "id": "uuid",
         "username": "rahul_cashier",
+        "email": "rahul@example.com",
         "fullName": "Rahul Sharma",
         "role": "Cashier",
         "permissions": ["create_sale", "view_products", "view_sales"]
@@ -75,13 +78,113 @@
   }
   ```
 
+### `POST /api/v1/auth/register`
+* **Purpose**: Universal common user registration endpoint.
+* **Permission**: Public
+* **Request Body**:
+  ```json
+  {
+    "fullName": "Rahul Sharma",
+    "email": "rahul@example.com",
+    "username": "rahul_cashier",
+    "password": "Password123!"
+  }
+  ```
+* **Response (`201 Created`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "message": "Registration successful. Please verify your email.",
+      "userId": "uuid"
+    }
+  }
+  ```
+
+### `POST /api/v1/auth/google`
+* **Purpose**: Planned Google OAuth authentication (Google Sign-In).
+* **Permission**: Public
+* **Request Body**:
+  ```json
+  {
+    "idToken": "google_oauth_id_token_string"
+  }
+  ```
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "user": {
+        "id": "uuid",
+        "email": "user@gmail.com",
+        "fullName": "Google User",
+        "role": "Cashier",
+        "permissions": ["create_sale", "view_products"]
+      }
+    }
+  }
+  ```
+
+### `POST /api/v1/auth/verify-email`
+* **Purpose**: Planned email verification endpoint validating cryptographic token.
+* **Permission**: Public
+* **Request Body**:
+  ```json
+  {
+    "token": "email_verification_token_string"
+  }
+  ```
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "message": "Email successfully verified."
+    }
+  }
+  ```
+
+### `POST /api/v1/auth/resend-verification`
+* **Purpose**: Resend email verification token.
+* **Permission**: Public
+* **Request Body**:
+  ```json
+  {
+    "email": "user@example.com"
+  }
+  ```
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "message": "Verification email sent if account exists."
+    }
+  }
+  ```
+
 ### `POST /api/v1/auth/logout`
-* **Purpose**: Invalidate current session and clear authentication cookie.
+* **Purpose**: Invalidate current session on server and clear authentication cookie.
 * **Permission**: Authenticated
 
 ### `GET /api/v1/auth/me`
 * **Purpose**: Fetch current authenticated user profile, active role, and granular permission array.
 * **Permission**: Authenticated
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "uuid",
+      "username": "rahul_cashier",
+      "email": "rahul@example.com",
+      "fullName": "Rahul Sharma",
+      "role": "Cashier",
+      "permissions": ["create_sale", "view_products", "view_sales"]
+    }
+  }
+  ```
 
 ---
 

@@ -70,9 +70,9 @@ src/
 │   ├── interceptors/       # AuditLogInterceptor, TransformResponseInterceptor
 │   └── pipes/              # ZodValidationPipe
 ├── modules/
-│   ├── auth/               # Login, session lifecycle, password reset
+│   ├── auth/               # Single Common Auth: Login, Signup, Google OAuth, Email Verification, Session lifecycle, Password reset
 │   ├── users/              # User management, role assignment
-│   ├── roles/              # Role & granular permissions definition
+│   ├── roles/              # Role & granular permissions definition (RBAC authorization)
 │   ├── products/           # Catalog, categories, brands, barcode lookup
 │   ├── inventory/          # Stock movements, adjustments, stock transfers
 │   ├── warehouses/         # Multi-warehouse location management

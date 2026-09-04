@@ -15,29 +15,46 @@ The Stock Management System (SMS) is an enterprise-ready retail POS and inventor
 
 ## 2. Authentication & Session Management
 
-### 2.1 Purpose
-Secure user access control, credentials management, session lifecycle tracking, and brute-force protection for desktop counter terminals.
+### 2.1 Core Architectural Principles
+* **Single Common Authentication System**: SMS uses exactly ONE unified authentication system. All users—regardless of role (Admin, Super Admin, Manager, Cashier, Staff, Accountant)—authenticate through the exact same login entry point. There are NO separate Admin, Manager, Staff, or role-specific login pages or portals.
+* **Single Common Registration System**: A single unified signup flow (`/register`) for new account registration. There are NO role-specific signup portals.
+* **Planned Authentication Methods**:
+  1. **Email + Password**: Standard credential authentication with strong hashing (Argon2id) and validation.
+  2. **Google Authentication**: Social login via Google OAuth 2.0 / Google Sign-In.
+  3. **Email Verification**: Required verification step ensuring account validity before full access.
+* **Authentication vs. Authorization Decoupling**: Authentication strictly verifies identity (*"Who is this user?"*). Authorization (*"What is this user permitted to do?"*) is handled separately via downstream RBAC and granular permissions on the backend after successful authentication.
 
 ### 2.2 Screens & Components
-* **Login Screen** (`/login`): Clean branded card with username/email input, password input with visibility toggle, "Remember Me" checkbox, and "Sign In" button.
-* **Forgot / Reset Password Screen** (`/forgot-password`, `/reset-password`): Administrative password reset request workflow.
+* **Common Login Screen** (`/login`): Clean branded card with username/email input, password input with visibility toggle, "Continue with Google" OAuth button, "Remember Me" checkbox, "Sign In" button, and links to registration and password reset.
+* **Common Registration Screen** (`/register`): Branded registration form with full name, email, password, password confirmation, "Sign up with Google" option, and link to login.
+* **Email Verification Screen** (`/verify-email`): Token-based verification confirmation screen and resend verification email trigger.
+* **Forgot / Reset Password Screen** (`/forgot-password`, `/reset-password`): Self-service and administrative password reset workflow.
 * **Change Password Dialog**: In-app modal accessible from the user profile dropdown.
 
 ### 2.3 Fields & Specifications
 * `identifier`: String (Username or Email, required, trimmed, case-insensitive).
-* `password`: String (Plaintext during entry, min 8 chars with mixed case and digits).
+* `password`: String (Plaintext during entry, min 8 chars with mixed case, digits, and symbols).
 * `rememberMe`: Boolean (Extends session cookie validity from 8 hours to 30 days).
+* `googleAuthToken` / OAuth callback payload: Token/code received from Google OAuth provider.
+* `verificationToken`: Cryptographic token for email verification.
 
 ### 2.4 User Workflow
-1. User enters identifier and password.
-2. Server validates credentials against salted Argon2/bcrypt hash.
-3. On success: Server creates a session record, issues an HttpOnly, Secure cookie, logs an `AUTH_LOGIN` audit event, and returns user profile + granular permissions payload.
-4. On failure: Increments failed attempt counter; triggers exponential rate-limiting after 5 failed attempts within 15 minutes.
+1. **Common Login Flow**:
+   - User enters identifier and password OR clicks "Continue with Google".
+   - For password auth: Server validates credentials against salted Argon2id hash.
+   - For Google auth: Server validates Google OAuth ID token and links/locates existing user record.
+   - Server validates email verification status (if required).
+   - On success: Server creates a session record, issues an HttpOnly, Secure session cookie (`sms_session`), logs an `AUTH_LOGIN` audit event, and returns user profile + granular permissions payload.
+   - On failure: Increments failed attempt counter; triggers exponential rate-limiting after 5 failed attempts within 15 minutes.
+2. **Common Registration Flow**:
+   - User submits registration details or authenticates with Google.
+   - System registers user account, sends email verification token, and prompts user to verify email.
 
 ### 2.5 Validation & Security Rules
-* Session cookies must use `HttpOnly`, `Secure` (in production), and `SameSite=Strict` or `SameSite=Lax`.
-* Passwords must NEVER be logged or returned in any API response.
+* Session cookies must use `HttpOnly`, `Secure` (in production), and `SameSite=Strict` (or `Lax` where justified).
+* Passwords and OAuth secrets must NEVER be logged or returned in any API response.
 * Concurrent session handling: Allows simultaneous logins across different counter terminals while tracking unique terminal/session IDs (`terminalId`, `ipAddress`, `userAgent`).
+* Phase 6 Note: Full implementation of authentication, sessions, OAuth, verification, and RBAC guards is scheduled for Phase 6.
 
 ---
 

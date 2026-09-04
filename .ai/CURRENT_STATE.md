@@ -4,7 +4,7 @@
 Stock Management System (SMS)
 
 ## Stage:
-Phase 5 Backend / NestJS Initialized (Ready for Phase 6 Authentication + RBAC)
+Phase 5 Backend Initialized & Single Common Authentication Model Synchronized (Ready for Phase 6 Authentication + RBAC)
 
 ## Application Status:
 Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), and complete engineering documentation layer (`docs/`).
@@ -13,7 +13,7 @@ Monorepo workspace root structure established with application boundaries (`apps
 Complete: Authoritative Project Brain in `.ai/` + Human-readable engineering/product documentation in `docs/` (Requirements, Architecture, API, Database, Security, Design, Testing, Deployment, Infrastructure, User Guides).
 
 ## Requirements Status:
-Finalized and Frozen in `PRODUCT_REQUIREMENTS.md` and detailed in `docs/requirements/*`
+Finalized, Synchronized & Frozen: Single Common Authentication System (One primary login `/login`, one common signup `/register`, planned Email+Password, Google OAuth, Email Verification; downstream RBAC authorization decoupled) in `PRODUCT_REQUIREMENTS.md` and detailed in `docs/requirements/*`.
 
 ## Architecture Status:
 Finalized and Frozen in `ARCHITECTURE.md` and detailed in `docs/architecture/*`
@@ -37,10 +37,10 @@ Operational: All backend unit tests passing (`jest` 4/4 suites, 13/13 tests), Ty
 Configured: Local development infrastructure in `docker-compose.yml` (`postgres:16-alpine` on port 5432 with health check, `redis:7-alpine` on port 6379 with health check, named persistent volumes `postgres_data` and `redis_data`, bridge network `sms-network`, `.dockerignore`).
 
 ## Current Work:
-Completed Phase 5 Backend / NestJS Foundation Milestone.
+Synchronized Single Common Authentication Model across Project Brain and documentation. Phase 6 implementation has NOT started.
 
 ## Next Major Step:
-PHASE 6 — Authentication + RBAC (Argon2id hashing, secure session cookies, login/logout, rate limiting, RBAC guards).
+PHASE 6 — Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification, Argon2id hashing, secure session cookies, rate limiting, RBAC guards). [NOT STARTED - Awaiting authorization].
 
 ---
 
@@ -177,3 +177,22 @@ PHASE 6 — Authentication + RBAC (Argon2id hashing, secure session cookies, log
 * **Tests**: `jest` (4/4 suites pass, 13/13 tests pass), `nest build` (PASS), `tsc --noEmit` on `@sms/api` and `@sms/web` (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization for Phase 6 — Authentication + RBAC.
+
+### Entry 10
+* **Date**: 2026-09-04
+* **Task**: Strict Authentication Model Synchronization (Single Common Authentication System)
+* **Completed**:
+  1. Locked and formalized the Single Common Authentication System architecture across the Project Brain:
+     - ONE single common login entry point (`/login`, `POST /api/v1/auth/login`) for all users regardless of role.
+     - ONE single common registration entry point (`/register`, `POST /api/v1/auth/register`).
+     - Explicitly eliminated all notions of separate Admin login, Manager login, Staff login, Super Admin login, or role-specific login pages.
+     - Documented planned authentication methods: Email + Password, Google Authentication (Google OAuth 2.0 / Sign-In), and Email Verification.
+     - Strictly decoupled Authentication (*"Who is this user?"*) from Authorization (*"What is this user permitted to do?"* - handled downstream via RBAC and backend permission guards).
+  2. Recorded `DECISION-012` in `.ai/DECISIONS.md`.
+  3. Updated `.ai/PRODUCT_REQUIREMENTS.md`, `.ai/ARCHITECTURE.md`, `.ai/API_CONTRACTS.md`, `.ai/SECURITY_RULES.md`, `.ai/DATABASE.md`, `.ai/UI_RULES.md`, `docs/security/authentication.md`, and `docs/api/authentication-api.md`.
+  4. Verified database schema safety: `apps/api/prisma/schema.prisma` already maintains a single `User` and `Session` table with zero separate role-login tables; no database reset or destructive changes were made.
+  5. Verified strict Phase boundary: Phase 6 implementation has NOT been started.
+* **Changed**: `.ai/DECISIONS.md`, `.ai/PRODUCT_REQUIREMENTS.md`, `.ai/ARCHITECTURE.md`, `.ai/API_CONTRACTS.md`, `.ai/SECURITY_RULES.md`, `.ai/DATABASE.md`, `.ai/UI_RULES.md`, `.ai/CURRENT_STATE.md`, `.ai/TASKS.md`, `.ai/SESSION_STATE.md`, `.ai/CHANGELOG.md`, `docs/security/authentication.md`, `docs/api/authentication-api.md`
+* **Tests**: `jest` (PASS), `nest build` (PASS), `tsc --noEmit` (PASS), repository grep search validation (PASS).
+* **Known Issues**: None.
+* **Next Steps**: Await user authorization before starting Phase 6 implementation.

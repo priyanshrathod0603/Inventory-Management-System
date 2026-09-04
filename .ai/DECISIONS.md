@@ -120,3 +120,17 @@
 * **Decision**: Git operations must remain under explicit human control. The AI must NEVER automatically stage (`git add .`), commit (`git commit`), or push (`git push`) changes. The AI is restricted to read-only Git inspection commands (`git status`, `git branch`, `git log`, `git diff`, etc.) and must stop after validating changes. Staging, committing, or pushing require separate, direct, explicit human instructions. Destructive Git commands (`git reset --hard`, `git clean -fd`, force-push, history rewriting) are strictly prohibited without prior explicit human approval.
 * **Reason**: Prevents unintended repository mutations, protects Git history integrity, avoids accidental commit of unvetted artifacts or secrets, and ensures human ownership over release control and repository state.
 * **Impact**: Mandatory workflow: `Inspect → Modify → Validate → git status → git diff → Report → STOP`. Zero automatic git mutations by AI.
+
+---
+
+## DECISION-012
+* **Title**: Single Common Authentication System (One Primary Login & One Common Signup)
+* **Status**: Accepted
+* **Context**: Authentication Model Standardization & Clarification
+* **Decision**: SMS adopts ONE single common authentication system across the entire application:
+  1. **One Primary Login**: All users (regardless of role: Admin, Super Admin, Manager, Cashier, Staff, Accountant, etc.) authenticate through the exact same single login entry point (`/login` and `POST /api/v1/auth/login`). There are NO separate Admin login, Manager login, Staff login, Super Admin login, or role-specific login pages/flows.
+  2. **One Common Signup**: A single common registration flow (`/register` and `POST /api/v1/auth/register`). There are NO role-specific signup portals.
+  3. **Supported / Planned Auth Methods**: Email + Password and Google Authentication (Google OAuth / Sign-In), with Email Verification planned as an integral part of the core authentication lifecycle.
+  4. **Strict Decoupling of Authentication vs. Authorization**: Authentication answers *"Who is this user?"* (universal, role-agnostic). Authorization answers *"What is this user permitted to do?"* (handled downstream via RBAC, role assignments, and granular backend permission guards).
+* **Reason**: Eliminates redundant login workflows, reduces attack surfaces, simplifies credential lifecycle management, provides a seamless modern user experience, and strictly adheres to standard software engineering principles separating identity from authorization.
+* **Impact**: All documentation, architecture diagrams, API contracts, and future Phase 6 implementation contracts adhere strictly to this single common entry point. Roles exist purely as authorization constructs, not authentication portals. Phase 6 implementation is deferred to its designated phase.

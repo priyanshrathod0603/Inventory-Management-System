@@ -50,6 +50,8 @@
 
 ### 3.1 Authentication, Users & RBAC
 
+> **Single Common Identity Standard**: The `users` table is the single, common account table for all users in the system (Admin, Manager, Cashier, Staff, etc.). There are NO separate login tables or role-specific account tables. All users authenticate through the same login system. The `roles`, `permissions`, and `role_permissions` tables serve downstream authorization (RBAC) only.
+
 #### `users`
 * `id`: `UUID` (PK, default `gen_random_uuid()`)
 * `username`: `VARCHAR(50)` (Unique, NOT NULL)

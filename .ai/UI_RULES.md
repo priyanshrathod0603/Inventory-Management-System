@@ -956,7 +956,39 @@ Payment Modes:         Cash, UPI, Card, Bank Transfer, Credit / Khata
 
 ---
 
-## 36. Phase 1 vs Future Scope Boundaries
+## 36. Single Common Authentication & Account UI Specification
+
+> **Architectural Standard**: SMS uses **ONE Common Login System** and **ONE Common Registration Flow**. All users (Admin, Manager, Cashier, Staff, etc.) access the application through the exact same authentication screens. There are **NO separate role-based login screens**. Downstream role/permission authorization takes effect inside the application shell after login.
+
+### 36.1 Common Login Screen (`/login`)
+* **Card Container**: Centered branded glass card (`w-full max-w-md bg-white border border-slate-200 shadow-xl rounded-2xl p-8`).
+* **Header**: Brand Logo, Application Name ("Stock Management System"), Subtitle ("Sign in to your counter or management terminal").
+* **Elements**:
+  * `Identifier Field`: Input for username or email address with left icon (`User` / `Mail`).
+  * `Password Field`: Input with eye toggle (`Eye` / `EyeOff`) to show/hide plaintext.
+  * `Remember Me`: Checkbox extending session duration for counter terminals.
+  * `Primary CTA`: `Sign In` button (`h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg w-full`).
+  * `Divider`: Visual "or continue with" horizontal separator.
+  * `Google Sign-In CTA`: `Continue with Google` button (`h-11 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded-lg w-full flex items-center justify-center gap-2`).
+  * `Footer Links`: "Forgot Password?" (`/forgot-password`) and "Create an account" (`/register`).
+
+### 36.2 Common Registration Screen (`/register`)
+* **Card Container**: Centered branded card (`max-w-md bg-white border border-slate-200 shadow-xl rounded-2xl p-8`).
+* **Elements**:
+  * Full Name, Email, Username, Password, and Password Confirmation fields.
+  * "Sign up with Google" alternative button.
+  * "Already have an account? Sign In" link (`/login`).
+
+### 36.3 Email Verification Screen (`/verify-email`)
+* **Card Container**: Centered confirmation card (`max-w-md bg-white border border-slate-200 shadow-xl rounded-2xl p-8 text-center`).
+* **Elements**:
+  * Verification status badge / icon (`MailCheck` / `Loader2`).
+  * "Resend Verification Email" action button.
+  * "Back to Login" link (`/login`).
+
+---
+
+## 37. Phase 1 vs Future Scope Boundaries
 
 To prevent scope creep and maintain development focus, strict boundaries are enforced:
 
@@ -985,7 +1017,7 @@ To prevent scope creep and maintain development focus, strict boundaries are enf
 
 ---
 
-## 37. UI Design DO's and DON'Ts
+## 38. UI Design DO's and DON'Ts
 
 ### DO:
 * **DO** maintain the CareOps-inspired top-navigation structure across all authenticated screens.

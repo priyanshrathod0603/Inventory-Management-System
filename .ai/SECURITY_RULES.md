@@ -2,17 +2,25 @@
 
 ## 1. Authentication & Session Security
 
-1. **Password Hashing**:
+1. **Single Common Authentication Model**:
+   * All users authenticate through the single common login entry point (`/login`, `POST /api/v1/auth/login`). There are NO separate Admin, Manager, Staff, or role-specific login pages or endpoints.
+   * Single common user registration entry point (`/register`, `POST /api/v1/auth/register`).
+2. **Password Hashing & Credentials Protection**:
    * All passwords must be hashed using strong, salted algorithms (`Argon2id` or `bcrypt` with work factor ≥ 12).
    * Plaintext passwords must NEVER be saved, logged, cached, transmitted unencrypted, or exposed in any API response or error trace.
-2. **Session Cookie Security**:
+3. **Session Cookie Security**:
    * Sessions must be managed via secure cookies named `sms_session`.
    * Cookies MUST enforce: `HttpOnly = true`, `Secure = true` (in production/HTTPS), and `SameSite = Strict` (or `Lax` where justified).
    * Sessions must be invalidated immediately on server upon user logout, password reset, or account deactivation.
    * Do NOT store authentication tokens in browser `localStorage` or `sessionStorage`.
-3. **Brute Force & Rate Limiting**:
-   * Rate limiting must be enforced on `/api/v1/auth/login` (max 5 failed attempts per 15 minutes per IP/username before temporary lockout).
+4. **Google OAuth & Email Verification Security (Planned)**:
+   * Google OAuth ID tokens must be cryptographically verified on the backend via official Google Auth libraries before session creation.
+   * Email verification tokens must be cryptographically secure, time-limited, and single-use.
+5. **Brute Force & Rate Limiting**:
+   * Rate limiting must be enforced on `/api/v1/auth/login` and `/api/v1/auth/register` (max 5 failed attempts per 15 minutes per IP/username before temporary lockout).
    * Sensitive API endpoints (password resets, payment reversals, manual stock adjustments) must enforce rate limiting and throttling.
+6. **Implementation Deferral**:
+   * Full implementation of authentication, sessions, OAuth, verification, and RBAC guards is scheduled strictly for Phase 6.
 
 ---
 

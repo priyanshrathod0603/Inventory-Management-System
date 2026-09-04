@@ -119,3 +119,13 @@ Established and verified common NestJS backend architectural foundation:
   - Created unit tests for `RequestIdMiddleware`, `TransformResponseInterceptor`, `GlobalExceptionFilter`, and `HealthController` (4 suites, 13 tests passing).
   - Validated clean `nest build` and `tsc --noEmit` across monorepo workspaces.
 - **Scope Verification**: Verified zero implementation of Phase 6+ business features (auth controllers, password hashing, sessions, business domain services, UI screens).
+
+## Single Common Authentication System Standardization
+Synchronized the project authentication architecture to standard single common authentication:
+- **Unified Identity & Access**: Explicitly formalized that SMS uses ONE single common login entry point (`/login`, `POST /api/v1/auth/login`) and ONE single common registration flow (`/register`, `POST /api/v1/auth/register`).
+- **Elimination of Role-Specific Login Portals**: Confirmed there are NO separate Admin, Manager, Staff, Cashier, or role-specific login portals/pages. All users authenticate through the same entry point.
+- **Planned Authentication Methods**: Documented planned Email + Password, Google Authentication (Google OAuth 2.0 / Sign-In), and Email Verification.
+- **Decoupled Authorization**: Clarified separation between identity authentication (*"Who is this user?"*) and downstream RBAC authorization (*"What is this user permitted to do?"*).
+- **Decision Log**: Added `DECISION-012` to `DECISIONS.md`.
+- **Documentation & Specifications Updated**: Aligned `PRODUCT_REQUIREMENTS.md`, `ARCHITECTURE.md`, `API_CONTRACTS.md`, `SECURITY_RULES.md`, `DATABASE.md`, `UI_RULES.md`, and `docs/`.
+- **Phase Boundary Verification**: Confirmed Phase 6 implementation has NOT been started. Zero auth logic, OAuth, Argon2, session tokens, or RBAC guards implemented in this task.

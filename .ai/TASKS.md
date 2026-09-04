@@ -6,7 +6,7 @@
 ---
 
 ## Pending Phases (Master Roadmap)
-- [ ] **PHASE 6** → Authentication + RBAC (Argon2id hashing, session cookies, login/logout, rate limiting, RBAC guards)
+- [ ] **PHASE 6** → Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification, Argon2id hashing, session cookies, rate limiting, RBAC guards)
 - [ ] **PHASE 7** → Frontend / Next.js (App router, providers, layout shell, global search `⌘K`)
 - [ ] **PHASE 8** → UI Design System (CareOps theme, Tailwind tokens, shadcn/ui components, typography, palette)
 - [ ] **PHASE 9** → API Integration (TanStack Query client, API client, error handling, loading states)
