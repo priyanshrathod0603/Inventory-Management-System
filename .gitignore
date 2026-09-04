@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Production Builds
+dist/
+build/
+.next/
+out/
+
+# Environment Files (Strictly protect secrets)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# Prisma local artifacts
+*.db
+*.db-journal
+
+# Temporary files
+tmp/
+temp/

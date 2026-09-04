@@ -51,3 +51,36 @@
 │
 └── FILE_MAP.md
     Master repository documentation and file map.
+
+apps/
+│
+├── api/
+│   ├── nest-cli.json
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── tsconfig.build.json
+│   ├── prisma/
+│   │   └── schema.prisma         # Prisma schema matching .ai/DATABASE.md
+│   ├── src/
+│   │   ├── main.ts               # NestJS bootstrap (/api/v1, Swagger, Validation)
+│   │   ├── app.module.ts         # Root application module
+│   │   ├── prisma/               # PrismaService & PrismaModule
+│   │   └── health/               # Health check endpoint (/api/v1/health)
+│   └── test/
+│       ├── app.e2e-spec.ts
+│       └── jest-e2e.json
+│
+└── web/
+    ├── next.config.mjs
+    ├── package.json
+    ├── postcss.config.mjs
+    ├── tailwind.config.ts        # Locked UI design system tokens
+    ├── tsconfig.json
+    └── src/
+        ├── lib/
+        │   └── utils.ts          # cn() class merge utility
+        └── app/
+            ├── globals.css       # Base CSS, tabular-nums, liquid glass
+            ├── layout.tsx        # Root HTML layout with providers
+            ├── page.tsx          # Foundation landing page
+            └── providers.tsx     # TanStack QueryClientProvider
