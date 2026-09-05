@@ -101,8 +101,19 @@
   }
   ```
 
+### `GET /api/v1/auth/google`
+* **Purpose**: Initiate Google OAuth 2.0 authorization-code redirect flow with CSRF state protection.
+* **Permission**: Public
+* **Response (`302 Redirect`)**: Redirects browser to `accounts.google.com/o/oauth2/v2/auth` with `client_id`, `redirect_uri`, `scope`, and `state`. Sets secure HttpOnly `google_oauth_state` cookie.
+
+### `GET /api/v1/auth/google/callback`
+* **Purpose**: OAuth 2.0 redirect callback endpoint. Exchanges authorization code, cryptographically verifies ID token via `google-auth-library`, provisions/links user account, creates session, and redirects to frontend application.
+* **Permission**: Public
+* **Query Params**: `code` (string), `state` (string), `error` (string, optional)
+* **Response (`302 Redirect`)**: Sets HttpOnly `sms_session` cookie and redirects to `${FRONTEND_URL}/` (or `/login?error=...` on failure).
+
 ### `POST /api/v1/auth/google`
-* **Purpose**: Planned Google OAuth authentication (Google Sign-In).
+* **Purpose**: Google OAuth ID token verification (for Google Identity Services / One-Tap / programmatic clients).
 * **Permission**: Public
 * **Request Body**:
   ```json
@@ -126,8 +137,8 @@
   }
   ```
 
-### `POST /api/v1/auth/verify-email`
-* **Purpose**: Planned email verification endpoint validating cryptographic token.
+### `POST /api/v1/auth/verify-email-link`
+* **Purpose**: Email verification endpoint validating cryptographic link token.
 * **Permission**: Public
 * **Request Body**:
   ```json
@@ -145,8 +156,28 @@
   }
   ```
 
+### `POST /api/v1/auth/verify-email-otp`
+* **Purpose**: Email verification endpoint validating 6-digit OTP code.
+* **Permission**: Public
+* **Request Body**:
+  ```json
+  {
+    "email": "user@example.com",
+    "otpCode": "123456"
+  }
+  ```
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "message": "Email successfully verified."
+    }
+  }
+  ```
+
 ### `POST /api/v1/auth/resend-verification`
-* **Purpose**: Resend email verification token.
+* **Purpose**: Resend email verification token & OTP code via Gmail SMTP.
 * **Permission**: Public
 * **Request Body**:
   ```json
@@ -160,6 +191,45 @@
     "success": true,
     "data": {
       "message": "Verification email sent if account exists."
+    }
+  }
+  ```
+
+### `POST /api/v1/auth/forgot-password`
+* **Purpose**: Request a password reset link sent via Gmail SMTP. Preserves anti-enumeration response.
+* **Permission**: Public
+* **Request Body**:
+  ```json
+  {
+    "email": "user@example.com"
+  }
+  ```
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "message": "If an account exists with this email, a password reset link has been sent."
+    }
+  }
+  ```
+
+### `POST /api/v1/auth/reset-password`
+* **Purpose**: Reset user password using verified one-time token and invalidates all active sessions.
+* **Permission**: Public
+* **Request Body**:
+  ```json
+  {
+    "token": "password_reset_token_hex",
+    "newPassword": "NewSecurePassword123!"
+  }
+  ```
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "message": "Password has been reset successfully. Please sign in with your new password."
     }
   }
   ```

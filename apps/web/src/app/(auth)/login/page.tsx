@@ -7,7 +7,7 @@ import { useAuth } from '../../../lib/auth/auth-context';
 import { Eye, EyeOff, Lock, User, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
-  const { login, googleLogin } = useAuth();
+  const { login } = useAuth();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -43,22 +43,15 @@ export default function LoginPage() {
   };
 
   const isGoogleConfigured = !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = () => {
     if (!isGoogleConfigured) {
-      setError('Google authentication is not yet configured. Please use email and password to sign in.');
+      setError('Google authentication is not configured. Please sign in with email and password.');
       return;
     }
-    setError(null);
-    setIsSubmitting(true);
-    try {
-      // Real Google Sign-In SDK integration will be added in a future phase
-      setError('Google Sign-In integration is pending configuration.');
-    } catch (err: any) {
-      setError(err.message || 'Google authentication failed.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Redirect to backend which initiates the real Google authorization-code flow
+    window.location.href = `${API_BASE}/auth/google`;
   };
 
   return (

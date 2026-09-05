@@ -233,3 +233,34 @@ Comprehensive repository audit, security hardening, validation repair, and UI al
   - TypeScript typechecks: 0 errors across `@sms/api` and `@sms/web`.
   - NestJS build: PASS.
   - Next.js build: PASS (34 static routes).
+
+---
+
+## [2026-09-05] — Google OAuth Authorization-Code Flow, Gmail SMTP Migration & UI Font Fix Milestone
+
+Completed full audit and repair of the authentication lifecycle and frontend typography system:
+- **UI Typography Regression Fix**:
+  - Identified root cause of unstyled serif default font rendering on auth pages: missing Google Fonts `@import` rule in `globals.css`.
+  - Added `@import` for `Plus Jakarta Sans` and `IBM Plex Mono` in `apps/web/src/app/globals.css`, configured CSS variables in `:root`, and applied body font cascade.
+  - Verified clean Next.js build with 34 static routes.
+- **Production Google OAuth 2.0 Authorization-Code Flow**:
+  - Added `google-auth-library` dependency to `@sms/api`.
+  - Upgraded `GoogleOAuthService` to use `OAuth2Client` with full cryptographic ID token verification (`verifyIdToken` validating signature, audience, issuer, expiration, sub, email, and email_verified).
+  - Implemented `generateAuthUrl()` for authorization-code flow with `openid`, `email`, and `profile` scopes.
+  - Implemented `exchangeCodeAndVerify()` for exchanging codes with Google token endpoints.
+  - Implemented `GET /api/v1/auth/google` with cryptographically random `state` parameter bound in a 10-minute secure HttpOnly `google_oauth_state` CSRF cookie.
+  - Implemented `GET /api/v1/auth/google/callback` with CSRF state validation, single-use cookie clearing, and delegation to `AuthService.googleCallback`.
+  - Implemented `AuthService.googleCallback` supporting: (1) existing Google users, (2) auto-linking verified email accounts, (3) provisioning new users with collision-safe unique usernames, and issuing standard `sms_session` cookies.
+  - Updated frontend login and registration Google buttons to perform real redirect to `${API_BASE_URL}/auth/google` when configured.
+  - Added `apps/web/.env.local` with `NEXT_PUBLIC_GOOGLE_CLIENT_ID` for frontend environment resolution.
+- **Gmail SMTP Migration & Password Reset Email Delivery**:
+  - Removed Resend credentials from `.env` and `.env.example`; migrated to dedicated Gmail SMTP (`smtp.gmail.com:587` with STARTTLS and App Password instructions).
+  - Added `MailService.sendPasswordResetEmail()` with branded HTML/plain-text templates containing 1-hour expiration reset links.
+  - Connected `AuthService.forgotPassword()` to `MailService.sendPasswordResetEmail()` and removed plain-text reset token logging (security fix).
+  - Preserved anti-enumeration timing and generic responses across all auth endpoints.
+- **Automated Testing & Full Verification**:
+  - Updated and expanded unit tests across `google-oauth.service.spec.ts`, `mail.service.spec.ts`, `auth.service.spec.ts`, and `auth.controller.spec.ts`.
+  - All 15 backend test suites passing (85/85 tests, up from 70).
+  - TypeScript typechecks passing with 0 errors across `@sms/api` and `@sms/web`.
+  - NestJS API build passing (`nest build`).
+  - Next.js Web build passing (`next build` with 34 static routes).

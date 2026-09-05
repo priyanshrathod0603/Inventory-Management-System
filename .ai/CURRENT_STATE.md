@@ -31,13 +31,13 @@ Operational & Standardized: Common backend infrastructure (`apps/api/src/common/
 Operational: Typed API client (`lib/api-client.ts`) with credentials inclusion, `AuthContext` React provider (`lib/auth/auth-context.tsx`), Next.js App Router structure (`(auth)` public routes and `(app)` authenticated routes), fixed 64px Top Navigation bar (`AppHeader`), 4-column More Mega-Menu (`MoreMenu`), global Command Palette (`⌘K` / `Ctrl+K`), slide-over Notification Drawer (`NotificationsDrawer`), User Menu with role badge & logout (`UserMenu`), reusable `PageHeader` with breadcrumbs, and 26 modular page shells with empty states across Master Data, Inventory, Transactions, Administration, POS, Dashboard, and Reports.
 
 ## Testing Status:
-Operational: All backend unit and security test suites passing (`jest` 14/14 suites, 65/65 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@sms/api` and `@sms/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
+Operational: All backend unit and security test suites passing (`jest` 15/15 suites, 85/85 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@sms/api` and `@sms/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
 
 ## Deployment & Docker:
 Configured: Local development infrastructure in `docker-compose.yml` (`postgres:16-alpine` on port 5432 with health check, `redis:7-alpine` on port 6379 with health check, named persistent volumes `postgres_data` and `redis_data`, bridge network `sms-network`, `.dockerignore`).
 
 ## Current Work:
-Completed Phase 7 — Frontend / Next.js.
+Completed Auth & UI System Repair (Real Google OAuth Authorization-Code Flow + Cryptographic ID Token Verification via google-auth-library, Gmail SMTP Integration & Reset Email Dispatch, CSS Font Loading Resolution).
 
 ## Next Major Step:
 PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, dialogs, drawers, form elements, status indicators, and toast system). [Awaiting user authorization].
@@ -343,5 +343,36 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
      - Next.js Web build passes generating 34 static routes with 0 errors (`next build`).
 * **Changed**: `apps/api/src/modules/auth/services/google-oauth.service.ts`, `apps/api/src/modules/auth/services/google-oauth.service.spec.ts`, `apps/web/src/app/(auth)/login/page.tsx`, `apps/web/src/app/(auth)/register/page.tsx`, `apps/web/src/components/layout/user-menu.tsx`, `apps/web/src/components/layout/app-header.tsx`, `apps/web/src/app/(app)/dashboard/page.tsx`, `.ai/DECISIONS.md`, `.ai/UI_RULES.md`, `.ai/BUGS.md`, `.ai/CURRENT_STATE.md`, `.ai/SESSION_STATE.md`, `.ai/CHANGELOG.md`
 * **Tests**: `jest` (15/15 suites, 70/70 tests PASS), `tsc --noEmit` on `@sms/api` & `@sms/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
+* **Known Issues**: None.
+* **Next Steps**: Await user authorization for Phase 8 — UI Design System.
+
+### Entry 16
+* **Date**: 2026-09-05
+* **Task**: Comprehensive Auth & UI System Repair (Real Google OAuth Authorization-Code Flow, Gmail SMTP Migration, Password Reset Email Dispatch, and CSS Font Loading Fix)
+* **Completed**:
+  1. **UI / CSS Typography Regression Resolution**:
+     - Identified root cause: typography fallback to system serif defaults occurred because Google Fonts (`Plus Jakarta Sans` and `IBM Plex Mono`) CSS variables were declared in `:root` and consumed by Tailwind but never imported from Google Fonts.
+     - Updated `apps/web/src/app/globals.css` with authoritative `@import` for `Plus Jakarta Sans` and `IBM Plex Mono` alongside `:root` variable definitions and body fallback stack.
+     - Cleaned `apps/web/src/app/layout.tsx` to maintain unified font application.
+  2. **Real Google OAuth 2.0 Authorization-Code Flow**:
+     - Installed `google-auth-library` in `apps/api`.
+     - Upgraded `GoogleOAuthService` to use `OAuth2Client` with cryptographic token verification (`verifyIdToken` validating signature, audience, issuer, expiration, sub, email, and email_verified).
+     - Added `generateAuthUrl(state)` with `openid`, `email`, `profile` scopes and `offline` access.
+     - Added `exchangeCodeAndVerify(code)` to exchange authorization codes directly with Google token endpoints.
+     - Added `GET /api/v1/auth/google` in `AuthController` generating cryptographically random state stored in a secure HttpOnly `google_oauth_state` cookie for CSRF defense.
+     - Added `GET /api/v1/auth/google/callback` in `AuthController` validating state cookie, handling OAuth errors, and delegating to `AuthService.googleCallback`.
+     - Added `AuthService.googleCallback` with full handling for: (1) existing Google users, (2) linking existing email accounts, and (3) provisioning new users with collision-safe usernames, issuing standard high-entropy `sms_session` cookies.
+     - Updated frontend `/login` and `/register` Google buttons to trigger backend authorization-code redirect when configured, with `apps/web/.env.local` providing `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
+  3. **Gmail SMTP Migration & Password Reset Email Delivery**:
+     - Replaced Resend configuration in `.env` and `.env.example` with dedicated Gmail SMTP configuration (`smtp.gmail.com:587` with STARTTLS and App Password instructions).
+     - Added `MailService.sendPasswordResetEmail()` with branded HTML/plain-text email templates containing 1-hour expiration reset links.
+     - Updated `AuthService.forgotPassword()` to dispatch real emails via `MailService.sendPasswordResetEmail()` and removed plain-text reset token logging (security fix).
+     - Preserved anti-enumeration timing and responses across all auth endpoints.
+  4. **Automated Testing & Full Verification**:
+     - Expanded test coverage across auth modules (15/15 test suites, 85/85 tests passing).
+     - Validated TypeScript typechecks (`tsc --noEmit`) with 0 errors across `@sms/api` and `@sms/web`.
+     - Verified NestJS build (`nest build`) and Next.js static build (`next build` with 34 static routes).
+* **Changed**: `apps/api/package.json`, `apps/api/.env`, `apps/web/.env.local`, `.env.example`, `.env`, `apps/web/src/app/globals.css`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/(auth)/login/page.tsx`, `apps/web/src/app/(auth)/register/page.tsx`, `apps/api/src/modules/auth/auth.module.ts`, `apps/api/src/modules/auth/auth.controller.ts`, `apps/api/src/modules/auth/auth.controller.spec.ts`, `apps/api/src/modules/auth/services/auth.service.ts`, `apps/api/src/modules/auth/services/auth.service.spec.ts`, `apps/api/src/modules/auth/services/google-oauth.service.ts`, `apps/api/src/modules/auth/services/google-oauth.service.spec.ts`, `apps/api/src/modules/auth/services/mail.service.ts`, `apps/api/src/modules/auth/services/mail.service.spec.ts`, `.ai/CURRENT_STATE.md`
+* **Tests**: `npm test` in `apps/api` (15 suites, 85 tests PASS), `tsc --noEmit` on `@sms/api` & `@sms/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization for Phase 8 — UI Design System.

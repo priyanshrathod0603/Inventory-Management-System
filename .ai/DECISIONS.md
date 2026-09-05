@@ -148,3 +148,32 @@
   All dropdown menu actions (Profile & Account, Store Settings, Sign Out) remain fully accessible and functional.
 * **Reason**: User explicitly required the removal of the profile avatar from the application header to ensure a clean, modern, distraction-free desktop SaaS layout, eliminating broken avatar image loads and redundant circular icons.
 * **Impact**: Overrides the earlier specification in `UI_RULES.md` that suggested a 36×36px avatar in the top navigation. The header user area is clean, text-and-badge-only, with zero profile avatar elements. Future AI agents and developers must NOT reintroduce an avatar to the application header.
+
+---
+
+## DECISION-014
+* **Title**: Google OAuth 2.0 Authorization-Code Flow & google-auth-library Cryptographic Verification
+* **Status**: Accepted
+* **Context**: Production Google OAuth Implementation
+* **Decision**: 
+  1. Google authentication implements the real OAuth 2.0 authorization-code redirect flow (`GET /api/v1/auth/google` → Google Consent → `GET /api/v1/auth/google/callback`).
+  2. CSRF protection during OAuth uses a cryptographically random `state` parameter bound in a 10-minute HttpOnly, SameSite=Lax cookie (`google_oauth_state`) cleared immediately on validation.
+  3. Token exchange and ID token verification are performed exclusively via official `google-auth-library` (`OAuth2Client`), cryptographically checking signatures, audiences, issuers, expirations, and verified emails.
+  4. Google user provisioning handles: (a) existing Google users, (b) automatic account linking for matching verified emails, and (c) new user creation with collision-safe unique usernames and default roles.
+  5. The standard high-entropy `sms_session` HttpOnly cookie is issued upon successful callback.
+* **Reason**: Replaces insecure or mock token flows with production-grade, cryptographically verified Google OpenID Connect authentication.
+* **Impact**: Zero mock tokens, real server-side authorization flow, robust CSRF defense, and full standard session integration.
+
+---
+
+## DECISION-015
+* **Title**: Dedicated Gmail SMTP for Transactional Authentication Emails
+* **Status**: Accepted
+* **Context**: Email Delivery Architecture for Auth Workflows
+* **Decision**:
+  1. All transactional authentication emails (email verification OTP/link and password reset links) are routed through Gmail SMTP (`smtp.gmail.com:587` with STARTTLS) using dedicated Google App Passwords (`SMTP_USER`, `SMTP_PASS`).
+  2. Third-party vendor transports (such as Resend) are removed from active authentication flows.
+  3. Password reset tokens are strictly delivered via email links and must never be exposed or logged in plain-text server logs.
+  4. Email dispatch failures degrade gracefully without revealing account existence or crashing requests.
+* **Reason**: User requirement to use dedicated Gmail SMTP instead of third-party SaaS email APIs, and security best practice to prevent credential leakage in logs.
+* **Impact**: Eliminates Resend dependency for auth, standardizes Nodemailer on Gmail SMTP, and secures password reset tokens end-to-end.

@@ -67,15 +67,24 @@ Prisma will be the primary ORM/database access layer for the NestJS backend.
 Raw SQL may be used only when justified for complex reporting, performance-critical queries, PostgreSQL-specific functionality, or other documented reasons.
 Do not bypass the data-access architecture unnecessarily.
 ## Authentication
-Use secure server-side/session-based authentication.
-Preferred implementation:
-* Secure cookies
-* HttpOnly
-* Secure in production
-* Appropriate SameSite policy
-* Server-side authentication/session validation
+Use secure server-side/session-based authentication:
+* Secure cookies (`sms_session`, HttpOnly, SameSite=Lax, Secure in production)
+* Password hashing with Argon2id (`argon2` package)
+* Server-side database session storage with cryptographic session token validation
+* Google OAuth 2.0 authorization-code flow and cryptographic OpenID Connect verification via `google-auth-library`
+* Dual Email Verification: Secure time-limited verification link + 6-digit cryptographic OTP code
+* Password reset workflow with SHA-256 hashed database tokens and 1-hour expiration
+
 Do NOT store authentication tokens in localStorage by default.
 Authentication and authorization must follow the existing security rules.
+
+## Email Delivery
+* Nodemailer (`nodemailer` package)
+* Provider: Dedicated Gmail SMTP (`smtp.gmail.com:587` with STARTTLS)
+* Authentication: Google App Password (`SMTP_USER`, `SMTP_PASS`)
+* Scope: Transactional system emails (Email Verification, Password Reset)
+* Resend / Third-party vendor email APIs are explicitly disabled/removed from auth flows.
+
 ## Authorization
 Use:
 * RBAC

@@ -10,6 +10,7 @@ import { PasswordService } from './password.service';
 import { SessionService } from './session.service';
 import { EmailVerificationService } from './email-verification.service';
 import { GoogleOAuthService } from './google-oauth.service';
+import { MailService } from './mail.service';
 import { RolesService } from '../../roles/roles.service';
 import {
   LoginDto,
@@ -34,6 +35,7 @@ export class AuthService {
     private readonly sessionService: SessionService,
     private readonly emailVerificationService: EmailVerificationService,
     private readonly googleOAuthService: GoogleOAuthService,
+    private readonly mailService: MailService,
     private readonly rolesService: RolesService,
   ) {}
 
@@ -84,7 +86,7 @@ export class AuthService {
       },
     });
 
-    // Generate email verification request
+    // Generate email verification request (sends via Gmail SMTP)
     await this.emailVerificationService.createVerificationRequest(user.id, user.email);
 
     this.logger.log(`New user registered: ${user.id} (${user.email})`);
@@ -172,7 +174,8 @@ export class AuthService {
   }
 
   /**
-   * Google OAuth login / account registration.
+   * Google OAuth login / account registration (POST /auth/google — ID token flow).
+   * Used by Google Identity Services / One-Tap integrations.
    */
   async googleLogin(dto: GoogleLoginDto, req: Request, res: Response) {
     const googleProfile = await this.googleOAuthService.verifyIdToken(dto.idToken);
@@ -282,6 +285,154 @@ export class AuthService {
   }
 
   /**
+   * Google OAuth callback for authorization-code flow (GET /auth/google/callback).
+   * Called after Google redirects back with ?code= and ?state= parameters.
+   * Handles all three user provisioning cases and sets the SMS session cookie.
+   */
+  async googleCallback(code: string, req: Request, res: Response): Promise<void> {
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+    const googleProfile = await this.googleOAuthService.exchangeCodeAndVerify(code);
+
+    // Reject unverified emails from Google
+    if (!googleProfile.emailVerified) {
+      this.logger.warn(`Google OAuth rejected: unverified email for ${googleProfile.email}`);
+      res.redirect(`${frontendUrl}/login?error=google_email_unverified`);
+      return;
+    }
+
+    let user = await this.prisma.user.findFirst({
+      where: {
+        OR: [{ googleId: googleProfile.googleId }, { email: googleProfile.email }],
+      },
+      include: {
+        role: {
+          include: {
+            rolePermissions: {
+              include: { permission: true },
+            },
+          },
+        },
+      },
+    });
+
+    if (user) {
+      // CASE 1 & 2: Existing user (by googleId or matching verified email)
+      if (user.isDeleted) {
+        res.redirect(`${frontendUrl}/login?error=account_not_found`);
+        return;
+      }
+      if (!user.isActive) {
+        res.redirect(`${frontendUrl}/login?error=account_deactivated`);
+        return;
+      }
+
+      // Link Google ID if not yet linked; mark email verified
+      if (!user.googleId || !user.isEmailVerified) {
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: {
+            googleId: googleProfile.googleId,
+            isEmailVerified: true,
+            emailVerifiedAt: user.emailVerifiedAt || new Date(),
+            avatarUrl: user.avatarUrl || googleProfile.avatarUrl || null,
+          },
+          include: {
+            role: {
+              include: {
+                rolePermissions: {
+                  include: { permission: true },
+                },
+              },
+            },
+          },
+        });
+      }
+    } else {
+      // CASE 3: New user — create with Google identity
+      const defaultRole = await this.rolesService.getDefaultRole();
+      const baseUsername = googleProfile.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_');
+      const uniqueSuffix = crypto.randomInt(100, 999).toString();
+      const username = `${baseUsername}_${uniqueSuffix}`.substring(0, 50);
+
+      try {
+        user = await this.prisma.user.create({
+          data: {
+            username,
+            email: googleProfile.email,
+            fullName: googleProfile.fullName,
+            googleId: googleProfile.googleId,
+            avatarUrl: googleProfile.avatarUrl || null,
+            roleId: defaultRole.id,
+            isEmailVerified: true,
+            emailVerifiedAt: new Date(),
+            isActive: true,
+            isDeleted: false,
+          },
+          include: {
+            role: {
+              include: {
+                rolePermissions: {
+                  include: { permission: true },
+                },
+              },
+            },
+          },
+        });
+        this.logger.log(`New Google user registered: ${user.id} (${user.email})`);
+      } catch (err: any) {
+        // Handle username collision at database level — retry with different suffix
+        if (err?.code === 'P2002') {
+          const retrySuffix = crypto.randomInt(1000, 9999).toString();
+          const retryUsername = `${baseUsername}_${retrySuffix}`.substring(0, 50);
+          user = await this.prisma.user.create({
+            data: {
+              username: retryUsername,
+              email: googleProfile.email,
+              fullName: googleProfile.fullName,
+              googleId: googleProfile.googleId,
+              avatarUrl: googleProfile.avatarUrl || null,
+              roleId: defaultRole.id,
+              isEmailVerified: true,
+              emailVerifiedAt: new Date(),
+              isActive: true,
+              isDeleted: false,
+            },
+            include: {
+              role: {
+                include: {
+                  rolePermissions: {
+                    include: { permission: true },
+                  },
+                },
+              },
+            },
+          });
+          this.logger.log(`New Google user registered (retry): ${user.id} (${user.email})`);
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    // Create SMS session — same mechanism as email/password login
+    const ip = req?.ip || req?.socket?.remoteAddress || undefined;
+    const userAgent = (req?.headers && req.headers['user-agent']) || undefined;
+    const { sessionId, expiresAt } = await this.sessionService.createSession(
+      user.id,
+      ip,
+      userAgent,
+      true, // Google logins: 30-day remember session
+    );
+
+    this.sessionService.setSessionCookie(res, sessionId, expiresAt);
+    this.logger.log(`Google OAuth callback login successful for user: ${user.id}`);
+
+    // Redirect to frontend dashboard
+    res.redirect(`${frontendUrl}/`);
+  }
+
+  /**
    * Verify email via link token.
    */
   async verifyEmailLink(dto: VerifyEmailLinkDto) {
@@ -304,6 +455,8 @@ export class AuthService {
 
   /**
    * Forgot password initiation.
+   * Generates a secure reset token and sends it via Gmail SMTP.
+   * Does NOT reveal whether the email exists.
    */
   async forgotPassword(dto: ForgotPasswordDto) {
     const email = dto.email.toLowerCase().trim();
@@ -324,7 +477,14 @@ export class AuthService {
         },
       });
 
-      this.logger.log(`[PASSWORD RESET] To: ${email} | Token: ${resetToken}`);
+      // Send reset email via Gmail SMTP — token is NOT logged
+      await this.mailService.sendPasswordResetEmail({
+        to: email,
+        token: resetToken,
+        fullName: user.fullName,
+      });
+
+      this.logger.log(`Password reset dispatched for: ${email}`);
     }
 
     return {

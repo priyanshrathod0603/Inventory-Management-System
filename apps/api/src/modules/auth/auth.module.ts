@@ -21,6 +21,6 @@ import { ConfigModule } from '@nestjs/config';
     GoogleOAuthService,
     MailService,
   ],
-  exports: [AuthService, SessionService, PasswordService, MailService],
+  exports: [AuthService, SessionService, PasswordService, MailService, GoogleOAuthService],
 })
 export class AuthModule {}

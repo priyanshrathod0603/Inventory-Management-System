@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
+import { GoogleOAuthService } from './services/google-oauth.service';
 import { SessionService } from './services/session.service';
 import { Reflector } from '@nestjs/core';
 
@@ -12,6 +13,7 @@ describe('AuthController', () => {
     register: jest.fn(),
     login: jest.fn(),
     googleLogin: jest.fn(),
+    googleCallback: jest.fn(),
     verifyEmailLink: jest.fn(),
     verifyEmailOtp: jest.fn(),
     resendVerification: jest.fn(),
@@ -19,6 +21,13 @@ describe('AuthController', () => {
     resetPassword: jest.fn(),
     logout: jest.fn(),
     getMe: jest.fn(),
+  };
+
+  const mockGoogleOAuthService = {
+    generateAuthUrl: jest.fn().mockReturnValue('https://accounts.google.com/o/oauth2/auth?mock'),
+    isConfigured: jest.fn().mockReturnValue(true),
+    verifyIdToken: jest.fn(),
+    exchangeCodeAndVerify: jest.fn(),
   };
 
   const mockSessionService = {
@@ -34,6 +43,10 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: mockAuthService,
+        },
+        {
+          provide: GoogleOAuthService,
+          useValue: mockGoogleOAuthService,
         },
         {
           provide: SessionService,
