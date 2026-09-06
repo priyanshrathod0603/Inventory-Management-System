@@ -36,3 +36,154 @@
   box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12),
               0 0 0 1px rgba(226, 232, 240, 0.6);
 }
+
+/* Premium Auth Liquid Glass Card Surface */
+.surface-liquid-glass-auth {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.25),
+    0 24px 48px -12px rgba(15, 23, 42, 0.09),
+    0 8px 20px -6px rgba(79, 70, 229, 0.05),
+    0 0 0 1px rgba(226, 232, 240, 0.55);
+}
+
+/* Glass Specular Top Sheen Highlight */
+.glass-specular-sheen {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+}
+
+/* Segmented Glass Mode Switcher Track */
+.glass-segmented-track {
+  background: rgba(15, 23, 42, 0.04);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+}
+
+/* Segmented Glass Thumb */
+.glass-segmented-thumb {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
+    0 2px 6px -1px rgba(15, 23, 42, 0.08),
+    0 1px 3px -1px rgba(15, 23, 42, 0.04);
+}
+
+/* Liquid Glass Input Field */
+.liquid-glass-input {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.88);
+  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.02);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-input:hover {
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(199, 210, 254, 0.95);
+  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.02), 0 2px 8px -2px rgba(79, 70, 229, 0.06);
+}
+
+.liquid-glass-input:focus-within {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: #6366F1;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
+    0 0 0 3.5px rgba(99, 102, 241, 0.13),
+    0 3px 10px -2px rgba(79, 70, 229, 0.12);
+}
+
+/* Liquid Glass Primary Button */
+.glass-primary-button {
+  background: linear-gradient(180deg, #6366F1 0%, #4F46E5 100%);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+    0 8px 20px -4px rgba(79, 70, 229, 0.32),
+    0 2px 6px -1px rgba(79, 70, 229, 0.2);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-primary-button:hover:not(:disabled) {
+  background: linear-gradient(180deg, #818CF8 0%, #4F46E5 100%);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.45),
+    0 12px 24px -4px rgba(79, 70, 229, 0.4),
+    0 4px 8px -2px rgba(79, 70, 229, 0.25);
+  transform: translateY(-1px);
+}
+
+.glass-primary-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
+    0 4px 12px -2px rgba(79, 70, 229, 0.3);
+}
+
+/* Liquid Glass Secondary / Google Button */
+.glass-secondary-button {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.88);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 5px -1px rgba(15, 23, 42, 0.04);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-secondary-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(203, 213, 225, 1);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
+    0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  transform: translateY(-0.5px);
+}
+
+.glass-secondary-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.99);
+}
+
+/* Ambient Dot Grid Pattern */
+.bg-operations-grid {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Ambient Floating Animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.04);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+/* Reduced Motion Overrides */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-glow {
+    animation: none !important;
+  }
+  
+  .liquid-glass-input,
+  .glass-primary-button,
+  .glass-secondary-button {
+    transition: none !important;
+  }
+}

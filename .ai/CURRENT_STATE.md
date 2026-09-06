@@ -376,3 +376,28 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
 * **Tests**: `npm test` in `apps/api` (15 suites, 85 tests PASS), `tsc --noEmit` on `@sms/api` & `@sms/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization for Phase 8 — UI Design System.
+
+### Entry 18
+* **Date**: 2026-09-06
+* **Task**: Widescreen 2-Column Split Liquid Glass Authentication Redesign with 3D Character Hero (Login + Sign Up)
+* **Completed**:
+  1. **Two-Column Split Composition**:
+     - Redesigned `AuthCard` (`apps/web/src/components/auth/auth-card.tsx`) into a widescreen split container (`max-w-5xl` surface) with responsive single-column mobile fallback (`grid-cols-1 lg:grid-cols-12`).
+     - **Left Column**: High-contrast, crystal-clear Liquid Glass authentication form with SMS brand header, segmented tab switcher (Sign In | Create Account), dynamic heading/subtitle, field inputs with active focus icon illumination, primary action button, Google OAuth button with Google brand asset, and mode switch link.
+     - **Right Column**: Dedicated visual hero area with soft translucent glass backing, ambient background lighting, clean typography, live feature micro-pills (Live Sync, Multi-Location, Instant POS), and high-resolution rendering of the user's 3D character group illustration asset (`/images/auth-characters.png`).
+  2. **Asset & Sub-Route Modernization**:
+     - Embedded provided 3D character group illustration asset into `apps/web/public/images/auth-characters.png`.
+     - Updated `AuthLayout` (`apps/web/src/app/(auth)/layout.tsx`) to support widescreen split layout while maintaining ambient background lights and minimal enterprise footer (`© 2026 Stock Management System (SMS). All rights reserved.`).
+     - Aligned `/forgot-password` and `/verify-email` with matching self-contained Liquid Glass cards and SMS brand identity headers.
+  3. **Strict Preservation of Auth Architecture & Security**:
+     - Zero backend modifications, zero API contract changes, zero database changes.
+     - 100% preservation of Argon2id password hashing, `sms_session` HttpOnly cookie verification, Google OAuth 2.0 authorization-code flow, and client-side validation with real-time error mapping.
+     - Smooth 300–450ms animated transitions between Login and Sign Up with browser URL synchronization via `window.history.pushState`.
+  4. **Automated Verification**:
+     - TypeScript typechecking (`tsc --noEmit`) passed with 0 errors across `@sms/web` and `@sms/api`.
+     - Next.js production build (`next build`) passed generating all 34 static routes with 0 errors.
+     - Backend test suite (`jest`) passed with 15/15 test suites and 85/85 tests passing.
+* **Changed**: `apps/web/public/images/auth-characters.png`, `apps/web/src/components/auth/auth-card.tsx`, `apps/web/src/app/(auth)/layout.tsx`, `apps/web/src/app/(auth)/forgot-password/page.tsx`, `apps/web/src/app/(auth)/verify-email/page.tsx`, `.ai/CURRENT_STATE.md`
+* **Tests**: `pnpm --filter @sms/web typecheck` (PASS), `pnpm --filter @sms/web build` (PASS), `pnpm --filter @sms/api test` (PASS, 15/15 suites, 85/85 tests).
+* **Known Issues**: None.
+* **Next Steps**: Ready for user review and subsequent Phase 8 UI Design System tasks.
