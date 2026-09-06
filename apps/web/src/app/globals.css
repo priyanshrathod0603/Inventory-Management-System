@@ -1,5 +1,5 @@
 /* Google Fonts — Plus Jakarta Sans + IBM Plex Mono */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -14,7 +14,7 @@
   }
 
   body {
-    background-color: #F8FAFC;
+    background-color: #0E0C0B;
     color: #0F172A;
     font-family: var(--font-plus-jakarta-sans);
     -webkit-font-smoothing: antialiased;
@@ -27,163 +27,119 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Subtle Apple iOS-Inspired Liquid Glass Utility */
-.surface-liquid-glass {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.12),
-              0 0 0 1px rgba(226, 232, 240, 0.6);
-}
-
-/* Premium Auth Liquid Glass Card Surface */
-.surface-liquid-glass-auth {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.85);
+/* Payoneer / Split Master Canvas Shell */
+.payoneer-auth-shell {
+  background-color: #171413;
   box-shadow: 
-    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.25),
-    0 24px 48px -12px rgba(15, 23, 42, 0.09),
-    0 8px 20px -6px rgba(79, 70, 229, 0.05),
-    0 0 0 1px rgba(226, 232, 240, 0.55);
+    0 35px 80px -20px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-/* Glass Specular Top Sheen Highlight */
-.glass-specular-sheen {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+/* Payoneer Signature Pill Inputs */
+.pill-input {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 9999px;
+  color: #0F172A;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Segmented Glass Mode Switcher Track */
-.glass-segmented-track {
-  background: rgba(15, 23, 42, 0.04);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+.pill-input:hover:not(:disabled) {
+  border-color: #CBD5E1;
+  background: #FAFAFC;
 }
 
-/* Segmented Glass Thumb */
-.glass-segmented-thumb {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.95);
+.pill-input:focus {
+  background: #FFFFFF;
+  border-color: #FF4E00;
   box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
-    0 2px 6px -1px rgba(15, 23, 42, 0.08),
-    0 1px 3px -1px rgba(15, 23, 42, 0.04);
+    0 0 0 4px rgba(255, 78, 0, 0.12),
+    0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-/* Liquid Glass Input Field */
-.liquid-glass-input {
-  background: rgba(255, 255, 255, 0.62);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(226, 232, 240, 0.88);
-  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.02);
+.pill-input::placeholder {
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+/* Payoneer Signature Vibrant Coral/Orange-to-Rose Gradient Pill Button */
+.pill-btn-coral {
+  background: linear-gradient(90deg, #FF4500 0%, #FF2654 45%, #E60067 100%);
+  border-radius: 9999px;
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: 
+    0 12px 30px -4px rgba(255, 69, 0, 0.45),
+    0 4px 12px -2px rgba(230, 0, 103, 0.3),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.liquid-glass-input:hover {
-  background: rgba(255, 255, 255, 0.86);
-  border-color: rgba(199, 210, 254, 0.95);
-  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.02), 0 2px 8px -2px rgba(79, 70, 229, 0.06);
-}
-
-.liquid-glass-input:focus-within {
-  background: rgba(255, 255, 255, 0.98);
-  border-color: #6366F1;
+.pill-btn-coral:hover:not(:disabled) {
+  background: linear-gradient(90deg, #FF571A 0%, #FF3864 45%, #F50072 100%);
   box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
-    0 0 0 3.5px rgba(99, 102, 241, 0.13),
-    0 3px 10px -2px rgba(79, 70, 229, 0.12);
-}
-
-/* Liquid Glass Primary Button */
-.glass-primary-button {
-  background: linear-gradient(180deg, #6366F1 0%, #4F46E5 100%);
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
-    0 8px 20px -4px rgba(79, 70, 229, 0.32),
-    0 2px 6px -1px rgba(79, 70, 229, 0.2);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-primary-button:hover:not(:disabled) {
-  background: linear-gradient(180deg, #818CF8 0%, #4F46E5 100%);
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.45),
-    0 12px 24px -4px rgba(79, 70, 229, 0.4),
-    0 4px 8px -2px rgba(79, 70, 229, 0.25);
+    0 16px 36px -4px rgba(255, 69, 0, 0.55),
+    0 6px 16px -2px rgba(230, 0, 103, 0.4),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.5);
   transform: translateY(-1px);
 }
 
-.glass-primary-button:active:not(:disabled) {
-  transform: translateY(0) scale(0.99);
+.pill-btn-coral:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
   box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
-    0 4px 12px -2px rgba(79, 70, 229, 0.3);
+    0 6px 16px -2px rgba(255, 69, 0, 0.35),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Liquid Glass Secondary / Google Button */
-.glass-secondary-button {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(226, 232, 240, 0.88);
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
-    0 2px 5px -1px rgba(15, 23, 42, 0.04);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+/* Pill Secondary / Google Button */
+.pill-btn-secondary {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 9999px;
+  color: #1E293B;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-secondary-button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.96);
-  border-color: rgba(203, 213, 225, 1);
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
-    0 4px 12px -2px rgba(15, 23, 42, 0.08);
+.pill-btn-secondary:hover:not(:disabled) {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
   transform: translateY(-0.5px);
 }
 
-.glass-secondary-button:active:not(:disabled) {
-  transform: translateY(0) scale(0.99);
+.pill-btn-secondary:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+  background: #F1F5F9;
 }
 
-/* Ambient Dot Grid Pattern */
-.bg-operations-grid {
-  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
+/* Concentric Circular Rings in Left Panel */
+.concentric-rings {
+  background-image: 
+    radial-gradient(circle at 75% 35%, transparent 120px, rgba(255, 255, 255, 0.04) 121px, transparent 123px),
+    radial-gradient(circle at 75% 35%, transparent 220px, rgba(255, 255, 255, 0.04) 221px, transparent 223px),
+    radial-gradient(circle at 75% 35%, transparent 320px, rgba(255, 255, 255, 0.035) 321px, transparent 323px),
+    radial-gradient(circle at 75% 35%, transparent 440px, rgba(255, 255, 255, 0.025) 441px, transparent 443px);
 }
 
-/* Ambient Floating Animation */
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.45;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.65;
-    transform: scale(1.04);
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulseGlow 8s ease-in-out infinite;
+/* Phone Mockup Subtle Bezel */
+.phone-mockup-frame {
+  background: #0B0A0A;
+  border: 4px solid #332F2D;
+  border-radius: 40px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 2px #1E1B19;
 }
 
 /* Reduced Motion Overrides */
 @media (prefers-reduced-motion: reduce) {
-  .animate-pulse-glow {
-    animation: none !important;
-  }
-  
-  .liquid-glass-input,
-  .glass-primary-button,
-  .glass-secondary-button {
+  .pill-input,
+  .pill-btn-coral,
+  .pill-btn-secondary {
     transition: none !important;
   }
 }
+

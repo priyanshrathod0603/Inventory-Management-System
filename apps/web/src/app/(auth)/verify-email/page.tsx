@@ -4,7 +4,48 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { apiClient } from '../../../lib/api-client';
-import { MailCheck, AlertCircle, CheckCircle2, Loader2, ArrowRight, RefreshCw } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, ArrowRight, RefreshCw } from 'lucide-react';
+
+function SpectrumLogo() {
+  return (
+    <div className="flex items-center gap-2.5 justify-center mb-6 select-none">
+      <svg
+        className="w-7 h-7 shrink-0"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="20"
+          cy="20"
+          r="15"
+          stroke="url(#spectrum_grad_ve)"
+          strokeWidth="4.5"
+          strokeLinecap="round"
+        />
+        <defs>
+          <linearGradient
+            id="spectrum_grad_ve"
+            x1="5"
+            y1="5"
+            x2="35"
+            y2="35"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FF4E00" />
+            <stop offset="0.3" stopColor="#FFD000" />
+            <stop offset="0.6" stopColor="#00E5FF" />
+            <stop offset="0.8" stopColor="#7928CA" />
+            <stop offset="1" stopColor="#FF0080" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span className="text-xl font-bold tracking-tight text-slate-900 font-sans">
+        Inventory Management System
+      </span>
+    </div>
+  );
+}
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
@@ -18,7 +59,6 @@ function VerifyEmailContent() {
   const [isResending, setIsResending] = useState(false);
   const [resendMsg, setResendMsg] = useState<string | null>(null);
 
-  // Auto-verify if token is present in URL
   useEffect(() => {
     if (tokenFromUrl) {
       handleVerifyLink(tokenFromUrl);
@@ -27,7 +67,7 @@ function VerifyEmailContent() {
 
   const handleVerifyLink = async (token: string) => {
     setStatus('loading');
-    setMessage('Verifying your email token...');
+    setMessage('Verifying security token with server...');
     try {
       const res = await apiClient('/auth/verify-email-link', {
         method: 'POST',
@@ -85,96 +125,69 @@ function VerifyEmailContent() {
   };
 
   return (
-    <div className="surface-liquid-glass-auth relative w-full max-w-[460px] mx-auto rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 shadow-2xl transition-all duration-300 overflow-hidden">
-      {/* Liquid Glass Top Reflection Sheen */}
-      <div className="glass-specular-sheen absolute -top-1 left-0 right-0 h-32 pointer-events-none rounded-t-[28px]" />
+    <div className="bg-white text-slate-900 w-full max-w-[500px] mx-auto rounded-[36px] p-8 sm:p-10 shadow-2xl transition-all duration-300">
+      <SpectrumLogo />
 
-      {/* SMS Brand Identity Header */}
-      <div className="relative z-10 flex items-center justify-center gap-2.5 mb-6">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white font-bold text-sm flex items-center justify-center shadow-md shadow-indigo-500/20 border border-white/40">
-          SMS
-        </div>
-        <div className="text-left">
-          <div className="text-sm font-bold text-slate-900 leading-none">Stock Management System</div>
-          <div className="text-[10px] text-slate-500 font-medium tracking-wide mt-0.5">Inventory & POS Operations</div>
-        </div>
-      </div>
-
-      <div className="relative z-10 text-center mb-6">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50/90 text-indigo-600 mb-3 border border-indigo-100 shadow-inner">
-          <MailCheck className="w-6 h-6" />
-        </div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-sans">
-          Verify Your Email
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xs mx-auto">
-          Enter the 6-digit code sent to your email or click the link in your inbox.
+      <div className="text-center mb-6">
+        <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 font-sans">
+          Verify Email
+        </h2>
+        <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-xs mx-auto font-normal leading-relaxed">
+          Enter the 6-digit confirmation PIN sent to your email.
         </p>
       </div>
 
       {status === 'loading' && (
-        <div className="relative z-10 mb-6 p-4 bg-indigo-50/90 border border-indigo-100 rounded-xl flex items-center justify-center gap-3 text-indigo-700 text-xs sm:text-sm shadow-xs animate-in fade-in">
-          <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
-          <span>{message}</span>
+        <div className="mb-6 p-4 bg-orange-50 border border-orange-100 rounded-2xl flex items-center justify-center gap-3 text-orange-800 text-xs sm:text-sm animate-in fade-in">
+          <Loader2 className="w-4 h-4 animate-spin text-[#FF4E00]" />
+          <span className="font-semibold">{message}</span>
         </div>
       )}
 
       {status === 'error' && (
         <div
           role="alert"
-          className="relative z-10 mb-6 p-3.5 bg-rose-50/90 border border-rose-200/80 rounded-xl flex items-start gap-2.5 text-rose-700 text-xs sm:text-sm shadow-xs animate-in fade-in"
+          className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-rose-800 text-xs sm:text-sm animate-in fade-in"
         >
-          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-500" />
-          <span className="leading-snug">{message}</span>
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
+          <span className="leading-snug font-medium">{message}</span>
         </div>
       )}
 
       {status === 'success' ? (
-        <div className="relative z-10 space-y-6 text-center animate-in fade-in">
+        <div className="space-y-6 text-center animate-in fade-in">
           <div
             role="status"
-            className="p-4 bg-emerald-50/90 border border-emerald-200/80 rounded-xl flex items-start justify-center gap-2.5 text-emerald-700 text-xs sm:text-sm shadow-xs"
+            className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start justify-center gap-3 text-emerald-800 text-xs sm:text-sm"
           >
-            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-500" />
-            <span className="leading-snug">{message}</span>
+            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5 text-emerald-600" />
+            <span className="leading-snug font-semibold">{message}</span>
           </div>
           <Link
             href="/login"
-            className="glass-primary-button group w-full h-11 text-white font-semibold rounded-xl flex items-center justify-center gap-2"
+            className="pill-btn-coral w-full h-14 text-white font-bold flex items-center justify-center gap-2"
           >
-            <span>Proceed to Login</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            <span>Proceed to Sign In</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       ) : (
-        <form onSubmit={handleOtpSubmit} className="relative z-10 space-y-4">
+        <form onSubmit={handleOtpSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="verify-email"
-              className="block text-[11px] font-semibold uppercase tracking-wider text-slate-700 mb-1.5"
-            >
-              Email Address
-            </label>
             <input
               id="verify-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. rahul@example.com"
+              placeholder="Registered Email Address"
               disabled={status === 'loading'}
               autoComplete="email"
-              className="liquid-glass-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 text-sm focus:outline-none"
+              className="pill-input w-full px-6 py-4 text-sm font-medium text-slate-900 focus:outline-none"
               required
             />
           </div>
 
           <div>
-            <label
-              htmlFor="otp-code"
-              className="block text-[11px] font-semibold uppercase tracking-wider text-slate-700 mb-1.5"
-            >
-              6-Digit Verification Code
-            </label>
             <input
               id="otp-code"
               type="text"
@@ -182,10 +195,10 @@ function VerifyEmailContent() {
               maxLength={6}
               value={otpCode}
               onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-              placeholder="123456"
+              placeholder="• • • • • •"
               disabled={status === 'loading'}
               autoComplete="one-time-code"
-              className="liquid-glass-input w-full px-4 py-2.5 text-center tracking-[0.4em] font-mono text-xl font-bold rounded-xl text-slate-900 focus:outline-none"
+              className="pill-input w-full px-6 py-4 text-center tracking-[0.5em] font-mono text-2xl font-black text-slate-950 focus:outline-none placeholder:text-slate-300"
               required
             />
           </div>
@@ -193,39 +206,39 @@ function VerifyEmailContent() {
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="glass-primary-button relative group overflow-hidden w-full h-11 text-white font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            className="pill-btn-coral w-full h-14 text-white font-bold text-base flex items-center justify-center gap-2 cursor-pointer mt-3 group disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {status === 'loading' ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-white/90" />
-                <span>Verifying...</span>
+                <Loader2 className="w-5 h-5 animate-spin text-white" />
+                <span>Verifying credentials...</span>
               </>
             ) : (
               <>
-                <span>Verify Account</span>
+                <span>Verify & Activate</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </>
             )}
           </button>
 
           {resendMsg && (
-            <div className="p-2.5 bg-slate-100/90 border border-slate-200/80 rounded-lg text-xs text-slate-600 text-center animate-in fade-in">
+            <div className="p-3 bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 text-center animate-in fade-in">
               {resendMsg}
             </div>
           )}
 
-          <div className="flex items-center justify-between text-xs pt-2">
+          <div className="flex items-center justify-between text-xs pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={handleResend}
               disabled={isResending}
-              className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-800 font-semibold transition hover:underline cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-[#FF4E00] hover:text-[#E60067] font-bold transition hover:underline cursor-pointer"
             >
-              <RefreshCw className={`w-3 h-3 ${isResending ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
               <span>{isResending ? 'Sending...' : 'Resend Code / Link'}</span>
             </button>
-            <Link href="/login" className="text-slate-500 hover:text-slate-700 font-medium transition">
-              Back to Login
+            <Link href="/login" className="text-slate-500 hover:text-slate-800 font-semibold transition">
+              Back to Sign In
             </Link>
           </div>
         </form>
@@ -238,9 +251,9 @@ export default function VerifyEmailPage() {
   return (
     <Suspense
       fallback={
-        <div className="surface-liquid-glass-auth rounded-[24px] p-8 text-center text-slate-500 text-sm flex items-center justify-center gap-2">
-          <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
-          <span>Loading verification...</span>
+        <div className="bg-white rounded-[36px] p-8 text-center text-slate-500 text-sm flex items-center justify-center gap-2">
+          <Loader2 className="w-5 h-5 animate-spin text-[#FF4E00]" />
+          <span className="font-semibold">Loading verification module...</span>
         </div>
       }
     >
@@ -248,5 +261,7 @@ export default function VerifyEmailPage() {
     </Suspense>
   );
 }
+
+
 
 
