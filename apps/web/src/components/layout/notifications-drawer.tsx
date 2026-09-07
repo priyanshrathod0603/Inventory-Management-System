@@ -36,42 +36,42 @@ export function NotificationsDrawer({ isOpen, onClose }: NotificationsDrawerProp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-50 flex justify-end animate-in fade-in duration-150">
+    <div className="fixed inset-0 bg-navy-950/30 backdrop-blur-xs z-50 flex justify-end animate-in fade-in duration-150">
       <div
         ref={drawerRef}
-        className="w-full max-w-sm bg-white h-full shadow-2xl border-l border-slate-200 flex flex-col animate-in slide-in-from-right duration-200"
+        className="w-full max-w-sm bg-white h-full shadow-modal border-l border-border flex flex-col animate-in slide-in-from-right duration-200"
       >
         {/* Header */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+        <div className="p-5 border-b border-border flex items-center justify-between bg-surface">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-2xl bg-coral-50 text-coral-600 flex items-center justify-center shadow-xs">
               <Bell className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Notifications</h3>
-              <p className="text-[11px] text-slate-400">Real-time alerts & store updates</p>
+              <h3 className="text-sm font-bold text-navy-950 font-sans">Notifications</h3>
+              <p className="text-[11px] text-content-muted">Real-time alerts &amp; store updates</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition"
+            className="p-1.5 text-content-muted hover:text-navy-950 rounded-full hover:bg-surface-subtle transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Category Tabs */}
-        <div className="px-4 py-2 border-b border-slate-100 bg-slate-50/60 flex gap-1 text-xs">
+        <div className="px-5 py-2.5 border-b border-border-subtle bg-surface-subtle/70 flex gap-1.5 text-xs overflow-x-auto">
           {(['ALL', 'STOCK', 'FINANCE', 'SYSTEM'] as const).map((tab) => (
             <button
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className={`px-2.5 py-1 rounded-md font-semibold text-[11px] transition ${
+              className={`px-3 py-1 rounded-full font-semibold text-[11px] transition shrink-0 cursor-pointer ${
                 activeTab === tab
-                  ? 'bg-white text-indigo-600 shadow-xs border border-slate-200/80'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'bg-coral-500 text-white shadow-xs'
+                  : 'text-content-secondary hover:text-navy-950 hover:bg-surface-muted'
               }`}
             >
               {tab.charAt(0) + tab.slice(1).toLowerCase()}
@@ -80,22 +80,22 @@ export function NotificationsDrawer({ isOpen, onClose }: NotificationsDrawerProp
         </div>
 
         {/* Notification Content Foundation */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center text-center">
-          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-3">
-            <Bell className="w-5 h-5 text-slate-400" />
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center text-center">
+          <div className="w-14 h-14 rounded-full bg-surface-subtle border border-border text-content-muted flex items-center justify-center mb-3.5 shadow-xs">
+            <Bell className="w-6 h-6 text-content-muted" />
           </div>
-          <h4 className="text-xs font-semibold text-slate-800 mb-1">No unread alerts</h4>
-          <p className="text-[11px] text-slate-400 max-w-[240px]">
+          <h4 className="text-sm font-bold text-navy-950 mb-1">No unread alerts</h4>
+          <p className="text-xs text-content-secondary max-w-[240px] leading-relaxed">
             You are all caught up! Low stock warnings, expiry notices, and financial anomalies will appear here.
           </p>
         </div>
 
         {/* Footer */}
-        <div className="p-3 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-[11px]">
-          <span className="text-slate-400">Inventory Notification Center</span>
+        <div className="p-4 border-t border-border bg-surface-subtle/80 flex items-center justify-between text-xs">
+          <span className="text-content-muted">Notification Center</span>
           <button
             type="button"
-            className="text-indigo-600 font-semibold hover:text-indigo-800 transition"
+            className="text-coral-600 font-semibold hover:text-coral-700 transition cursor-pointer"
             onClick={onClose}
           >
             Close

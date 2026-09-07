@@ -401,3 +401,42 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
 * **Tests**: `pnpm --filter @sms/web typecheck` (PASS), `pnpm --filter @sms/web build` (PASS), `pnpm --filter @sms/api test` (PASS, 15/15 suites, 85/85 tests).
 * **Known Issues**: None.
 * **Next Steps**: Ready for user review and subsequent Phase 8 UI Design System tasks.
+
+### Entry 19
+* **Date**: 2026-09-07
+* **Task**: Visual Design System Transformation — Warm Luxury SaaS & Coral Accent Aesthetic
+* **Completed**:
+  1. **Core Theme & Design Tokens**:
+     - Configured `apps/web/tailwind.config.ts` with warm ivory canvas (`#FCF9F6`), primary coral palette (50–900 with `#FF7048` primary / `#FF5722` active), warm white surfaces (`#FFFFFF`, subtle `#F8F5F2`), deep dark navy text (`#111722`), soft neutral borders (`#EAE5E0`), rounded card tokens (`20px`, `24px`, `32px`, `pill: '9999px'`), and multi-layer soft SaaS drop shadows (`shadow-card`, `shadow-card-hover`, `shadow-coral`).
+     - Enhanced `apps/web/src/app/globals.css` with fine dot grid (`.bg-subtle-grid`), pill input classes (`.pill-input`, `.form-input-warm`), pill button classes (`.pill-btn-coral`, `.pill-btn-secondary`, `.pill-btn-ghost`, `.pill-btn-danger`), and warm smartphone mockup frame styling.
+     - Updated root `apps/web/src/app/layout.tsx` body styles to `bg-[#FCF9F6] text-[#111722] font-sans antialiased`.
+  2. **Reusable UI Primitives (`@sms/web/components/ui`)**:
+     - `button.tsx`: CVA component supporting coral pill (`default`), `secondary`, `outline`, `ghost`, `danger`, `success`, size variants (`sm`, `default`, `lg`, `xl`, `icon`), and loading spinner state.
+     - `badge.tsx`: CVA component with `coral`, `solidCoral`, `success`, `warning`, `danger`, `info`, `neutral`, and `outline` variants.
+     - `card.tsx`: Warm `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter` with `rounded-[20px]` / `rounded-[24px]` and soft borders.
+  3. **Authentication Screens Transformed**:
+     - `apps/web/src/app/(auth)/layout.tsx`: Warm canvas, subtle background texture, warm ambient radial glows, and clean SaaS footer.
+     - `apps/web/src/components/auth/auth-card.tsx`: Split 2-column card with warm white surface `rounded-[32px] sm:rounded-[40px]`, left editorial hero panel with warm phone mockup & coral chart accents, right form panel with pill inputs and coral primary CTA.
+     - `forgot-password/page.tsx` & `verify-email/page.tsx`: Warm white cards `rounded-[32px]`, coral brand mark, coral OTP pin inputs and verify actions.
+  4. **Navigation Shell & Global Overlays**:
+     - `app-header.tsx`: Fixed 64px header with warm white backdrop blur, coral SMS logo mark, pill nav links with coral active badges, warm search trigger (`⌘K`), and coral `+ New Sale` action button.
+     - `more-menu.tsx`: 4-column mega-menu popover `rounded-[24px]` with soft borders and coral hover highlights.
+     - `user-menu.tsx`: Warm card `rounded-2xl` with role badges and sign-out action.
+     - `command-palette.tsx`: Modal `rounded-[24px]` with coral selected highlights and keyboard navigation.
+     - `notifications-drawer.tsx`: Slide-over drawer with coral active category pills and warm empty state.
+     - `page-header.tsx`: Warm breadcrumbs, deep dark navy title `#111722`, muted description `#5F636B`.
+     - `apps/web/src/app/(app)/layout.tsx`: Warm ivory canvas `#FCF9F6` and warm loading skeletons.
+  5. **Operations Dashboard & POS Modernized**:
+     - `dashboard/page.tsx`: 5 KPI cards `rounded-[20px]`, bold `tabular-nums` figures, revenue trends container, quick action shortcuts, recent activity empty state.
+     - `pos/page.tsx`: High-velocity 2-panel split layout preserving zero vertical overflow at 1366x768 and 1440x900; barcode search with coral focus ring, category filter chips with coral active pill, summary card with grand total in tabular-nums, tender modes with coral active states, complete sale button.
+  6. **All 24 Operational Page Shells Modernized**:
+     - Modernized `inventory`, `products`, `categories`, `brands`, `sales`, `purchases`, `reports`, `customers`, `suppliers`, `warehouses`, `stock-movements`, `stock-adjustments`, `stock-transfers`, `batches`, `sales-returns`, `purchase-returns`, `payments`, `invoices`, `ledger`, `users`, `roles`, `audit-logs`, `notifications`, `settings`, and root redirector `page.tsx`.
+  7. **Automated Verification & Integrity Guarantee**:
+     - `tsc --noEmit` on `@sms/web` and `@sms/api`: PASS (0 errors).
+     - `pnpm --filter @sms/web build`: PASS (all 34 static routes generated with 0 errors).
+     - `pnpm --filter @sms/api test`: PASS (15/15 test suites, 85/85 tests passing).
+     - Backend contracts, database schema, and authentication logic remain 100% untouched.
+* **Changed**: `apps/web/tailwind.config.ts`, `apps/web/src/app/globals.css`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/page.tsx`, `apps/web/src/components/ui/button.tsx`, `apps/web/src/components/ui/badge.tsx`, `apps/web/src/components/ui/card.tsx`, `apps/web/src/app/(auth)/layout.tsx`, `apps/web/src/components/auth/auth-card.tsx`, `apps/web/src/app/(auth)/forgot-password/page.tsx`, `apps/web/src/app/(auth)/verify-email/page.tsx`, `apps/web/src/components/layout/app-header.tsx`, `apps/web/src/components/layout/more-menu.tsx`, `apps/web/src/components/layout/user-menu.tsx`, `apps/web/src/components/layout/command-palette.tsx`, `apps/web/src/components/layout/notifications-drawer.tsx`, `apps/web/src/components/layout/page-header.tsx`, `apps/web/src/app/(app)/layout.tsx`, `apps/web/src/app/(app)/dashboard/page.tsx`, `apps/web/src/app/(app)/pos/page.tsx`, and all 22 other operational page routes.
+* **Tests**: `pnpm --filter @sms/web typecheck` (PASS), `pnpm --filter @sms/web build` (PASS), `pnpm --filter @sms/api test` (PASS).
+* **Known Issues**: None.
+* **Next Steps**: Ready for user review and subsequent Phase 9 API Integration.

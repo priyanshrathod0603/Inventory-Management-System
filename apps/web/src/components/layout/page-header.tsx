@@ -30,29 +30,29 @@ export function PageHeader({
   const actionContent = actions || children;
 
   return (
-    <div className="mb-6 pb-4 border-b border-slate-200/80 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="mb-6 pb-4 border-b border-border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div>
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <nav className="flex items-center gap-1.5 text-[11px] text-slate-400 mb-1" aria-label="Breadcrumb">
-            <Link href="/dashboard" className="hover:text-slate-600 transition">
+          <nav className="flex items-center gap-1.5 text-[11px] text-content-muted mb-1.5" aria-label="Breadcrumb">
+            <Link href="/dashboard" className="hover:text-navy-950 transition font-medium">
               Home
             </Link>
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={crumb.label + idx}>
-                <ChevronRight className="w-3 h-3 text-slate-300 shrink-0" />
+                <ChevronRight className="w-3 h-3 text-border-dark shrink-0" />
                 {crumb.href ? (
-                  <Link href={crumb.href} className="hover:text-slate-600 transition">
+                  <Link href={crumb.href} className="hover:text-navy-950 transition font-medium">
                     {crumb.label}
                   </Link>
                 ) : (
-                  <span className="text-slate-700 font-semibold">{crumb.label}</span>
+                  <span className="text-navy-950 font-bold">{crumb.label}</span>
                 )}
               </React.Fragment>
             ))}
           </nav>
         )}
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 font-sans">{title}</h1>
-        {subText && <p className="text-xs text-slate-500 mt-0.5">{subText}</p>}
+        <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-navy-950 font-sans">{title}</h1>
+        {subText && <p className="text-xs sm:text-sm text-content-secondary mt-1 font-normal leading-relaxed">{subText}</p>}
       </div>
 
       {actionContent && <div className="flex items-center gap-2.5 shrink-0 flex-wrap">{actionContent}</div>}

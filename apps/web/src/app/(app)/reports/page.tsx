@@ -6,12 +6,6 @@ import {
   BarChart3,
   Calendar,
   Download,
-  TrendingUp,
-  FileSpreadsheet,
-  Printer,
-  DollarSign,
-  Boxes,
-  Users,
 } from 'lucide-react';
 
 export default function ReportsPage() {
@@ -26,74 +20,74 @@ export default function ReportsPage() {
   ] as const;
 
   return (
-    <div>
+    <div className="space-y-6">
       <PageHeader
         title="Reports & Analytics"
         subtitle="Business intelligence, sales velocity summaries, and inventory financial reports."
         breadcrumbs={[{ label: 'Reports' }]}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
-            className="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-1.5 shadow-xs"
+            className="h-9 px-4 bg-white border border-border rounded-full text-xs font-semibold text-content-secondary hover:text-navy-950 hover:bg-surface-subtle flex items-center gap-2 shadow-xs transition cursor-pointer"
           >
-            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+            <Calendar className="w-3.5 h-3.5 text-content-muted" />
             <span>This Month: Sep 2026</span>
           </button>
           <button
             type="button"
-            className="px-3.5 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-xs rounded-lg shadow-xs flex items-center gap-1.5"
+            className="pill-btn-coral h-9 px-4 text-white font-semibold text-xs rounded-full shadow-coral flex items-center gap-1.5 transition cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-slate-500" />
+            <Download className="w-3.5 h-3.5" />
             <span>Export Excel</span>
           </button>
         </div>
       </PageHeader>
 
       {/* KPI Financial Overview Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white border border-border rounded-[20px] p-5 shadow-card">
+          <span className="text-[10px] font-extrabold text-content-muted uppercase tracking-wider block mb-1">
             Total Revenue
           </span>
-          <div className="text-xl font-bold text-slate-900 tabular-nums">₹0.00</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Gross collections this period</p>
+          <div className="text-2xl font-black text-navy-950 tabular-nums font-sans">₹0.00</div>
+          <p className="text-xs text-content-secondary mt-1">Gross collections this period</p>
         </div>
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Total Cost of Goods (COGS)
+        <div className="bg-white border border-border rounded-[20px] p-5 shadow-card">
+          <span className="text-[10px] font-extrabold text-content-muted uppercase tracking-wider block mb-1">
+            Cost of Goods (COGS)
           </span>
-          <div className="text-xl font-bold text-slate-900 tabular-nums">₹0.00</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Direct stock purchase cost</p>
+          <div className="text-2xl font-black text-navy-950 tabular-nums font-sans">₹0.00</div>
+          <p className="text-xs text-content-secondary mt-1">Direct stock purchase cost</p>
         </div>
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+        <div className="bg-white border border-border rounded-[20px] p-5 shadow-card">
+          <span className="text-[10px] font-extrabold text-content-muted uppercase tracking-wider block mb-1">
             Gross Profit
           </span>
-          <div className="text-xl font-bold text-emerald-600 tabular-nums">₹0.00</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Calculated net margin</p>
+          <div className="text-2xl font-black text-emerald-600 tabular-nums font-sans">₹0.00</div>
+          <p className="text-xs text-content-secondary mt-1">Calculated net margin</p>
         </div>
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+        <div className="bg-white border border-border rounded-[20px] p-5 shadow-card">
+          <span className="text-[10px] font-extrabold text-content-muted uppercase tracking-wider block mb-1">
             Profit Margin %
           </span>
-          <div className="text-xl font-bold text-slate-900 tabular-nums">0.00%</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Average across all categories</p>
+          <div className="text-2xl font-black text-coral-600 tabular-nums font-sans">0.00%</div>
+          <p className="text-xs text-content-secondary mt-1">Average across all categories</p>
         </div>
       </div>
 
       {/* Report Category Container */}
-      <div className="bg-white border border-slate-200/90 rounded-xl shadow-xs overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-200/80 bg-slate-50/50 flex items-center gap-1 overflow-x-auto">
+      <div className="bg-white border border-border rounded-[24px] shadow-card overflow-hidden">
+        <div className="px-5 py-3 border-b border-border bg-surface-subtle/50 flex items-center gap-1.5 overflow-x-auto">
           {reportTabs.map((tab) => (
             <button
               key={tab.key}
               type="button"
               onClick={() => setActiveTab(tab.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
                 activeTab === tab.key
-                  ? 'bg-white text-indigo-600 shadow-xs border border-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-coral-500 text-white shadow-xs'
+                  : 'bg-white border border-border text-content-secondary hover:text-navy-950 hover:bg-surface-subtle'
               }`}
             >
               {tab.label}
@@ -101,13 +95,13 @@ export default function ReportsPage() {
           ))}
         </div>
 
-        <div className="py-16 text-center text-slate-400 flex flex-col items-center justify-center p-6">
-          <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-            <BarChart3 className="w-6 h-6 text-slate-400" />
+        <div className="py-16 text-center text-content-secondary flex flex-col items-center justify-center p-6">
+          <div className="w-14 h-14 rounded-2xl bg-surface-subtle border border-border flex items-center justify-center mb-3.5 shadow-xs">
+            <BarChart3 className="w-7 h-7 text-content-muted" />
           </div>
-          <h3 className="text-sm font-bold text-slate-800 mb-1">Reports Data Aggregation Shell</h3>
-          <p className="text-xs text-slate-400 max-w-sm mb-4">
-            Aggregated financial calculations, GST reports, product-wise sales summaries, and export tools will render here in Phase 14.
+          <h3 className="text-base font-bold text-navy-950 mb-1">Reports Data Aggregation Module</h3>
+          <p className="text-xs text-content-secondary max-w-sm leading-relaxed mb-4">
+            Aggregated financial calculations, GST reports, product-wise sales summaries, and export tools will render here.
           </p>
         </div>
       </div>

@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Search,
-  Zap,
   LayoutDashboard,
   ShoppingCart,
   Boxes,
@@ -263,17 +262,17 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-start justify-center pt-20 px-4 animate-in fade-in duration-150"
+      className="fixed inset-0 bg-navy-950/40 backdrop-blur-sm z-50 flex items-start justify-center pt-20 px-4 animate-in fade-in duration-150"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl bg-white border border-slate-200/90 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150"
+        className="w-full max-w-xl bg-white border border-border rounded-[24px] shadow-modal overflow-hidden animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
         {/* Search Input Bar */}
-        <div className="flex items-center px-4 py-3.5 border-b border-slate-100 gap-3">
-          <Search className="w-5 h-5 text-slate-400 shrink-0" />
+        <div className="flex items-center px-5 py-4 border-b border-border gap-3 bg-surface">
+          <Search className="w-5 h-5 text-content-muted shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -283,27 +282,27 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               setSelectedIndex(0);
             }}
             placeholder="Type a command or jump to page..."
-            className="w-full text-sm text-slate-900 placeholder:text-slate-400 bg-transparent outline-none"
+            className="w-full text-sm text-navy-950 placeholder:text-content-muted bg-transparent outline-none font-medium"
           />
           {query ? (
             <button
               type="button"
               onClick={() => setQuery('')}
-              className="p-1 text-slate-400 hover:text-slate-600 rounded"
+              className="p-1 text-content-muted hover:text-navy-950 rounded-full hover:bg-surface-subtle"
             >
               <X className="w-4 h-4" />
             </button>
           ) : (
-            <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-[11px] font-mono text-slate-500 rounded">
+            <kbd className="px-2 py-0.5 bg-surface-subtle border border-border text-[10px] font-mono text-content-secondary rounded-full font-semibold">
               ESC
             </kbd>
           )}
         </div>
 
         {/* Results List */}
-        <div ref={listRef} className="max-h-[380px] overflow-y-auto p-2 divide-y divide-slate-50">
+        <div ref={listRef} className="max-h-[380px] overflow-y-auto p-2.5 divide-y divide-surface-subtle">
           {filteredItems.length === 0 ? (
-            <div className="py-12 text-center text-xs text-slate-400">
+            <div className="py-12 text-center text-xs text-content-muted">
               No matching actions or pages found for &quot;{query}&quot;
             </div>
           ) : (
@@ -317,26 +316,26 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     type="button"
                     onClick={() => handleSelect(item)}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-left transition cursor-pointer ${
                       isSelected
-                        ? 'bg-indigo-50/90 text-indigo-900 font-semibold'
-                        : 'text-slate-700 hover:bg-slate-50 font-medium'
+                        ? 'bg-coral-50/90 text-navy-950 font-semibold'
+                        : 'text-content-secondary hover:bg-surface-subtle font-medium'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition ${
                           isSelected
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-slate-100 text-slate-500'
+                            ? 'bg-coral-500 text-white shadow-xs'
+                            : 'bg-surface-subtle text-content-secondary'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <div className="text-xs truncate">{item.title}</div>
+                        <div className="text-xs truncate font-semibold text-navy-950">{item.title}</div>
                         {item.description && (
-                          <div className="text-[11px] text-slate-400 font-normal truncate">
+                          <div className="text-[11px] text-content-muted font-normal truncate">
                             {item.description}
                           </div>
                         )}
@@ -345,12 +344,12 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
 
                     <div className="flex items-center gap-2 shrink-0 ml-3">
                       {item.shortcut && (
-                        <span className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-[10px] font-mono text-slate-500 rounded font-semibold">
+                        <span className="px-2 py-0.5 bg-surface-subtle border border-border text-[10px] font-mono text-content-secondary rounded-full font-semibold">
                           {item.shortcut}
                         </span>
                       )}
                       {isSelected && (
-                        <CornerDownLeft className="w-3.5 h-3.5 text-indigo-500" />
+                        <CornerDownLeft className="w-3.5 h-3.5 text-coral-500" />
                       )}
                     </div>
                   </button>
@@ -361,13 +360,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         </div>
 
         {/* Footer info */}
-        <div className="px-4 py-2.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+        <div className="px-5 py-3 bg-surface-subtle/80 border-t border-border-subtle flex items-center justify-between text-[11px] text-content-muted">
           <div className="flex items-center gap-3">
-            <span><kbd className="px-1 bg-white border border-slate-200 rounded text-[10px]">↑↓</kbd> navigate</span>
-            <span><kbd className="px-1 bg-white border border-slate-200 rounded text-[10px]">↵</kbd> select</span>
-            <span><kbd className="px-1 bg-white border border-slate-200 rounded text-[10px]">esc</kbd> close</span>
+            <span><kbd className="px-1.5 py-0.5 bg-white border border-border rounded-md text-[10px]">↑↓</kbd> navigate</span>
+            <span><kbd className="px-1.5 py-0.5 bg-white border border-border rounded-md text-[10px]">↵</kbd> select</span>
+            <span><kbd className="px-1.5 py-0.5 bg-white border border-border rounded-md text-[10px]">esc</kbd> close</span>
           </div>
-          <span>Inventory Command Center</span>
+          <span className="font-semibold text-content-muted">Inventory Command Palette</span>
         </div>
       </div>
     </div>

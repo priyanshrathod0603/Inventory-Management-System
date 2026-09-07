@@ -1,12 +1,11 @@
 # Project Tasks
 
 ## In Progress
-*None* — Phase 7 Frontend / Next.js is complete. Ready for Phase 8 UI Design System.
+*None* — Phase 8 UI Design System is complete. Ready for Phase 9 API Integration.
 
 ---
 
 ## Pending Phases (Master Roadmap)
-- [ ] **PHASE 8** → UI Design System (CareOps theme, Tailwind tokens, shadcn/ui components, typography, palette)
 - [ ] **PHASE 9** → API Integration (TanStack Query client, API client, error handling, loading states)
 - [ ] **PHASE 10** → Products + Inventory (Master data, stock movements, adjustments, inter-warehouse transfers, batches)
 - [ ] **PHASE 11** → Purchase + Sales + POS (Counter billing UI, barcode scanner, purchase bills, interactive transactions)
@@ -29,3 +28,4 @@
 - [x] **PHASE 5** → Backend / NestJS (Common infrastructure, standard API envelopes, request ID middleware, response transformer, logging with redaction, global exception filter, decorators, readiness check, unit test suites)
 - [x] **PHASE 6** → Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification link + 6-digit OTP, Password Reset, Argon2id hashing, 64-byte session cookies, SessionAuthGuard, PermissionsGuard, IDOR protection, Roles/Users modules, security test suites)
 - [x] **PHASE 7** → Frontend / Next.js (App router architecture, `(auth)` and `(app)` separation, 64px Top Navigation bar, 4-column More Mega-Menu, Command Palette `⌘K`, Notification slide-over drawer, PageHeader with breadcrumbs, and 26 modular page shells with empty states)
+- [x] **PHASE 8** → UI Design System (Warm luxury SaaS aesthetic, `#FCF9F6` canvas, coral primary `#FF7048`, rounded card tokens 20px–32px, pill buttons/inputs, soft multi-layer SaaS shadows, modernized Auth card, App header, Dashboard, POS, and 24 operational page shells)

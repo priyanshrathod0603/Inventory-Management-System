@@ -38,36 +38,36 @@ export function UserMenu({ user }: UserMenuProps) {
 
   const roleBadgeColor =
     user.role === 'Admin'
-      ? 'bg-purple-50 text-purple-700 border-purple-200'
+      ? 'bg-coral-50 text-coral-700 border-coral-200'
       : user.role === 'Manager'
-      ? 'bg-blue-50 text-blue-700 border-blue-200'
-      : 'bg-slate-100 text-slate-700 border-slate-200';
+      ? 'bg-amber-50 text-amber-700 border-amber-200'
+      : 'bg-surface-subtle text-navy-800 border-border';
 
   return (
     <div className="relative" ref={menuRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2.5 p-1 rounded-lg hover:bg-slate-100 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 cursor-pointer"
+        className="flex items-center gap-2.5 p-1 rounded-full hover:bg-surface-subtle transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 cursor-pointer"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <div className="text-left">
-          <p className="text-xs font-semibold text-slate-800 leading-tight max-w-[120px] truncate">{user.fullName}</p>
-          <span className={`inline-block px-1.5 py-0.5 text-[10px] font-semibold rounded border uppercase tracking-wider ${roleBadgeColor}`}>
+        <div className="text-left hidden sm:block">
+          <p className="text-xs font-bold text-navy-950 leading-tight max-w-[120px] truncate font-sans">{user.fullName}</p>
+          <span className={`inline-block px-1.5 py-0.5 text-[9px] font-extrabold rounded-full border uppercase tracking-wider ${roleBadgeColor}`}>
             {user.role}
           </span>
         </div>
-        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3.5 h-3.5 text-content-muted transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1.5 animate-in fade-in zoom-in-95 duration-150">
-          <div className="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50/50 rounded-t-xl">
-            <p className="text-sm font-semibold text-slate-900">{user.fullName}</p>
-            <p className="text-xs text-slate-500 font-mono truncate">{user.email}</p>
-            <div className="mt-1.5 flex items-center gap-1.5">
-              <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold rounded-full border ${roleBadgeColor}`}>
+        <div className="absolute right-0 mt-2 w-64 bg-white border border-border rounded-2xl shadow-popover z-50 py-1.5 animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-4 py-3 border-b border-border-subtle bg-surface-subtle/80 rounded-t-2xl">
+            <p className="text-sm font-bold text-navy-950 font-sans">{user.fullName}</p>
+            <p className="text-xs text-content-muted font-mono truncate">{user.email}</p>
+            <div className="mt-2 flex items-center gap-1.5">
+              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 text-[10px] font-bold rounded-full border ${roleBadgeColor}`}>
                 <Shield className="w-3 h-3" />
                 {user.role}
               </span>
@@ -78,31 +78,31 @@ export function UserMenu({ user }: UserMenuProps) {
             <Link
               href="/settings"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
+              className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-content-secondary hover:text-navy-950 hover:bg-surface-subtle transition"
             >
-              <User className="w-4 h-4 text-slate-400" />
-              <span>Profile & Account</span>
+              <User className="w-4 h-4 text-content-muted" />
+              <span>Profile &amp; Account</span>
             </Link>
             <Link
               href="/settings"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
+              className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-content-secondary hover:text-navy-950 hover:bg-surface-subtle transition"
             >
-              <Settings className="w-4 h-4 text-slate-400" />
+              <Settings className="w-4 h-4 text-content-muted" />
               <span>Store Settings</span>
             </Link>
           </div>
 
-          <div className="border-t border-slate-100 pt-1">
+          <div className="border-t border-border-subtle pt-1">
             <button
               type="button"
               onClick={async () => {
                 setIsOpen(false);
                 await logout();
               }}
-              className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+              className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-danger-600 hover:bg-danger-50 transition cursor-pointer"
             >
-              <LogOut className="w-4 h-4 text-rose-500" />
+              <LogOut className="w-4 h-4 text-danger-500" />
               <span>Sign Out</span>
             </button>
           </div>

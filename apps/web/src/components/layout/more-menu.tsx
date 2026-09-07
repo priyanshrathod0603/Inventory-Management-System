@@ -16,7 +16,6 @@ import {
   RotateCcw,
   Receipt,
   CreditCard,
-  FileSpreadsheet,
   BookOpen,
   UserCheck,
   Shield,
@@ -109,10 +108,10 @@ export function MoreMenu({ isOpen, onToggle, onClose }: MoreMenuProps) {
       <button
         type="button"
         onClick={onToggle}
-        className={`px-3 py-1.5 text-xs font-semibold rounded-md transition flex items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 ${
+        className={`px-3.5 py-1.5 text-xs font-semibold rounded-full transition flex items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 ${
           isOpen || isMoreActive
-            ? 'text-indigo-600 bg-indigo-50/80'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            ? 'text-coral-600 bg-coral-50 font-bold border border-coral-200/60'
+            : 'text-content-secondary hover:text-navy-950 hover:bg-surface-subtle font-medium'
         }`}
         aria-expanded={isOpen}
       >
@@ -121,11 +120,11 @@ export function MoreMenu({ isOpen, onToggle, onClose }: MoreMenuProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[720px] bg-white border border-slate-200/90 rounded-2xl shadow-2xl z-50 p-6 animate-in fade-in zoom-in-95 duration-150 backdrop-blur-md">
+        <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[740px] bg-white border border-border rounded-[24px] shadow-popover z-50 p-6 animate-in fade-in zoom-in-95 duration-150">
           <div className="grid grid-cols-4 gap-6">
             {categories.map((group) => (
               <div key={group.title} className="space-y-3">
-                <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <h4 className="text-[10px] font-extrabold text-content-muted uppercase tracking-wider">
                   {group.title}
                 </h4>
                 <ul className="space-y-1">
@@ -137,13 +136,13 @@ export function MoreMenu({ isOpen, onToggle, onClose }: MoreMenuProps) {
                         <Link
                           href={item.href}
                           onClick={onClose}
-                          className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition ${
+                          className={`flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs transition ${
                             active
-                              ? 'bg-indigo-50 text-indigo-700 font-semibold'
-                              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium'
+                              ? 'bg-coral-50 text-coral-700 font-bold'
+                              : 'text-content-secondary hover:text-navy-950 hover:bg-surface-subtle font-medium'
                           }`}
                         >
-                          <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-indigo-600' : 'text-slate-400'}`} />
+                          <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-coral-500' : 'text-content-muted'}`} />
                           <span className="truncate">{item.label}</span>
                         </Link>
                       </li>
@@ -154,9 +153,15 @@ export function MoreMenu({ isOpen, onToggle, onClose }: MoreMenuProps) {
             ))}
           </div>
 
-          <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-            <span>Press <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[10px]">⌘K</kbd> to quickly search all commands</span>
-            <span className="text-slate-400">Inventory Master Catalog</span>
+          <div className="mt-5 pt-3.5 border-t border-border-subtle flex items-center justify-between text-[11px] text-content-muted">
+            <div className="flex items-center gap-1.5">
+              <span>Press</span>
+              <kbd className="px-1.5 py-0.5 bg-surface-subtle border border-border rounded-full font-mono text-[10px] text-navy-950 font-semibold">
+                ⌘K
+              </kbd>
+              <span>to search all modules &amp; actions</span>
+            </div>
+            <span className="font-semibold text-content-muted">Inventory Master Catalog</span>
           </div>
         </div>
       )}

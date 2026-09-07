@@ -44,38 +44,38 @@ export default function AuthenticatedAppLayout({
   // Loading skeleton state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] flex flex-col">
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between animate-pulse">
+      <div className="min-h-screen bg-[#FCF9F6] flex flex-col">
+        <header className="h-16 bg-white/90 border-b border-border px-6 flex items-center justify-between animate-pulse">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-slate-200" />
-            <div className="w-24 h-4 bg-slate-200 rounded" />
+            <div className="w-9 h-9 rounded-2xl bg-surface-muted" />
+            <div className="w-28 h-4 bg-surface-muted rounded-full" />
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-40 h-8 bg-slate-100 rounded-lg" />
-            <div className="w-8 h-8 rounded-full bg-slate-200" />
+            <div className="w-44 h-8 bg-surface-subtle rounded-full" />
+            <div className="w-8 h-8 rounded-full bg-surface-muted" />
           </div>
         </header>
         <main className="flex-1 max-w-[1600px] w-full mx-auto p-6">
           <div className="space-y-4 animate-pulse">
-            <div className="h-8 bg-slate-200 rounded w-1/4" />
-            <div className="h-4 bg-slate-100 rounded w-1/3" />
+            <div className="h-8 bg-surface-muted rounded-full w-1/4" />
+            <div className="h-4 bg-surface-subtle rounded-full w-1/3" />
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-28 bg-white border border-slate-200 rounded-xl p-4" />
+                <div key={i} className="h-28 bg-white border border-border rounded-[20px] p-4 shadow-card" />
               ))}
             </div>
-            <div className="h-64 bg-white border border-slate-200 rounded-xl mt-6" />
+            <div className="h-64 bg-white border border-border rounded-[24px] mt-6 shadow-card" />
           </div>
         </main>
       </div>
     );
   }
 
-  // If unauthenticated, return null while redirecting
+  // If unauthenticated, return loader while redirecting
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+      <div className="min-h-screen bg-[#FCF9F6] flex items-center justify-center">
+        <Loader2 className="w-7 h-7 text-coral-500 animate-spin" />
       </div>
     );
   }
@@ -83,7 +83,7 @@ export default function AuthenticatedAppLayout({
   const isPosPage = pathname === '/pos';
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-slate-900 antialiased">
+    <div className="min-h-screen bg-[#FCF9F6] flex flex-col font-sans text-navy-950 antialiased">
       {/* Top Application Header */}
       <AppHeader
         onOpenSearch={() => setIsSearchOpen(true)}

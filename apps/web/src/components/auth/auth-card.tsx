@@ -14,29 +14,34 @@ import {
   Loader2,
   LogIn,
   UserPlus,
-  Globe,
-  HelpCircle,
+  ArrowRight,
   Search,
+  Sparkles,
 } from 'lucide-react';
 
 interface AuthCardProps {
   initialMode?: 'login' | 'register';
 }
 
-// Inventory Management System Brand Emblem
+// Stock Management System Brand Emblem (Coral / Navy Theme)
 function InventoryLogo() {
   return (
     <div className="flex items-center gap-3 select-none">
-      <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center shadow-md shadow-indigo-500/25 shrink-0">
-        <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-coral-500 to-coral-600 text-white font-bold text-sm flex items-center justify-center shadow-md shadow-coral-500/25 shrink-0">
+        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
           <path d="m3.3 7 8.7 5 8.7-5" />
           <path d="M12 22V12" />
         </svg>
       </div>
-      <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 font-sans">
-        Inventory Management System
-      </span>
+      <div>
+        <span className="text-lg sm:text-xl font-extrabold tracking-tight text-navy-950 font-sans block leading-tight">
+          SMS
+        </span>
+        <span className="text-[10px] text-content-muted font-semibold tracking-wider uppercase block">
+          Stock Management System
+        </span>
+      </div>
     </div>
   );
 }
@@ -79,7 +84,7 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
 
   // Password strength calculation for registration
   const calculatePasswordStrength = (pwd: string) => {
-    if (!pwd) return { score: 0, label: '', color: 'bg-slate-200' };
+    if (!pwd) return { score: 0, label: '', color: 'bg-surface-muted' };
     let score = 0;
     if (pwd.length >= 8) score += 1;
     if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score += 1;
@@ -92,11 +97,11 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
       case 2:
         return { score: 2, label: 'Fair', color: 'bg-amber-500' };
       case 3:
-        return { score: 3, label: 'Good', color: 'bg-indigo-500' };
+        return { score: 3, label: 'Good', color: 'bg-coral-500' };
       case 4:
         return { score: 4, label: 'Strong', color: 'bg-emerald-500' };
       default:
-        return { score: 0, label: 'Too Short', color: 'bg-slate-300' };
+        return { score: 0, label: 'Too Short', color: 'bg-border' };
     }
   };
 
@@ -265,128 +270,124 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
   const isSubmitting = isLoginSubmitting || isRegisterSubmitting;
 
   return (
-    <div className="auth-split-shell relative w-full max-w-[1240px] rounded-[32px] sm:rounded-[44px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[720px] transition-all duration-300">
+    <div className="auth-split-shell relative w-full max-w-[1180px] rounded-[32px] sm:rounded-[40px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[680px] transition-all duration-300 bg-surface border border-border shadow-popover">
       {/* ========================================================= */}
-      {/* LEFT COLUMN: HERO PANEL (DEEP SLATE/INDIGO WITH MOCKUP)   */}
+      {/* LEFT COLUMN: WARM EDITORIAL HERO PANEL                    */}
       {/* ========================================================= */}
-      <div className="lg:col-span-6 xl:col-span-6 concentric-rings-indigo bg-[#0B0F19] text-white p-7 sm:p-10 lg:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-800/60">
+      <div className="lg:col-span-6 xl:col-span-6 bg-surface-subtle bg-subtle-grid text-navy-950 p-7 sm:p-10 lg:p-12 flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-border">
         {/* Top Tagline */}
         <div className="relative z-10">
-          <p className="text-xs sm:text-sm text-slate-400 font-normal tracking-wide max-w-sm leading-relaxed">
-            Smart stock control made simple – online inventory solutions for you.
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-border text-xs font-semibold text-content-secondary shadow-xs mb-3">
+            <span className="w-2 h-2 rounded-full bg-coral-500 animate-pulse" />
+            <span>Real-time inventory &amp; POS</span>
+          </div>
+          <p className="text-xs sm:text-sm text-content-secondary font-normal tracking-wide max-w-sm leading-relaxed">
+            Smart stock control made simple – online inventory solutions for modern retail.
           </p>
         </div>
 
         {/* Center Typography & Phone Dashboard Mockup */}
-        <div className="relative z-10 my-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.08] mb-8 font-sans">
+        <div className="relative z-10 my-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-navy-950 tracking-tight leading-[1.06] mb-8 font-sans">
             Manage <br />
             your items
           </h1>
 
-          {/* Smartphone Mockup */}
-          <div className="relative max-w-[290px] sm:max-w-[310px] mx-auto lg:mx-0">
-            <div className="phone-mockup-frame p-3.5 text-white">
-              {/* Phone Top Speaker & Notch */}
-              <div className="flex items-center justify-between px-2 pt-1 pb-2">
-                <span className="text-[10px] text-slate-400 font-medium">Week 4–10 July</span>
-                <div className="w-12 h-3.5 bg-black rounded-full mx-auto" />
-                <span className="text-[10px] text-slate-400 font-mono">98%</span>
+          {/* Smartphone Dashboard Mockup in Warm Luxury Style */}
+          <div className="relative max-w-[300px] sm:max-w-[320px] mx-auto lg:mx-0">
+            <div className="phone-mockup-frame-warm p-4 text-navy-950 bg-white">
+              {/* Phone Top Notch & Time */}
+              <div className="flex items-center justify-between px-2 pt-0.5 pb-2 text-[10px] text-content-muted font-medium">
+                <span>09:41</span>
+                <div className="w-12 h-3 bg-navy-950 rounded-full mx-auto" />
+                <span className="font-mono">100%</span>
               </div>
 
-              {/* Main Total Stock Value Card */}
+              {/* Total Stock Value Card */}
               <div className="mt-1 px-2">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-black font-mono tracking-tight text-white">
-                    897.00
+                <div className="text-[10px] uppercase font-bold tracking-wider text-content-muted">Total Valuation</div>
+                <div className="flex items-baseline gap-1.5 mt-0.5">
+                  <span className="text-2xl font-black font-sans tracking-tight text-navy-950 tabular-nums">
+                    ₹8,97,420
                   </span>
-                  <span className="text-sm font-bold text-slate-300">k ₹</span>
                 </div>
-                <div className="text-[10px] text-emerald-400 font-semibold mt-0.5">
-                  ↑ 14.8% inventory turnover
+                <div className="text-[11px] text-emerald-600 font-semibold mt-0.5 flex items-center gap-1">
+                  <span>↑ 14.8%</span>
+                  <span className="text-content-muted font-normal">turnover velocity</span>
                 </div>
               </div>
 
-              {/* Mini Weekly Bar Chart */}
-              <div className="my-3 px-1 py-2 bg-white/5 rounded-xl border border-white/5">
-                <div className="flex items-end justify-between gap-1 h-14 px-2 pt-2">
+              {/* Mini Weekly Velocity Bar Chart */}
+              <div className="my-3 p-2 bg-surface-subtle rounded-xl border border-border">
+                <div className="flex items-end justify-between gap-1 h-14 px-1 pt-2">
                   <div className="flex-1 flex flex-col items-center gap-1">
-                    <div className="w-full bg-slate-700/80 rounded-t h-6" />
-                    <span className="text-[8px] text-slate-400">Mon</span>
+                    <div className="w-full bg-border-dark rounded-t h-6" />
+                    <span className="text-[8px] text-content-muted font-mono">M</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1">
-                    <div className="w-full bg-slate-700/80 rounded-t h-8" />
-                    <span className="text-[8px] text-slate-400">Tue</span>
+                    <div className="w-full bg-border-dark rounded-t h-8" />
+                    <span className="text-[8px] text-content-muted font-mono">T</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1">
-                    <div className="w-full bg-slate-700/80 rounded-t h-7" />
-                    <span className="text-[8px] text-slate-400">Wed</span>
+                    <div className="w-full bg-border-dark rounded-t h-7" />
+                    <span className="text-[8px] text-content-muted font-mono">W</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1">
-                    <div className="w-full bg-slate-700/80 rounded-t h-9" />
-                    <span className="text-[8px] text-slate-400">Thu</span>
+                    <div className="w-full bg-border-dark rounded-t h-9" />
+                    <span className="text-[8px] text-content-muted font-mono">T</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1 relative">
-                    <div className="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t h-12 shadow-md shadow-indigo-500/40" />
-                    <span className="text-[8px] text-indigo-400 font-bold">Fri</span>
+                    <div className="w-full bg-gradient-to-t from-coral-600 to-coral-400 rounded-t h-12 shadow-sm shadow-coral-500/30" />
+                    <span className="text-[8px] text-coral-600 font-bold font-mono">F</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1">
-                    <div className="w-full bg-slate-700/80 rounded-t h-5" />
-                    <span className="text-[8px] text-slate-400">Sat</span>
+                    <div className="w-full bg-border-dark rounded-t h-5" />
+                    <span className="text-[8px] text-content-muted font-mono">S</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1">
-                    <div className="w-full bg-slate-700/80 rounded-t h-8" />
-                    <span className="text-[8px] text-slate-400">Sun</span>
+                    <div className="w-full bg-border-dark rounded-t h-8" />
+                    <span className="text-[8px] text-content-muted font-mono">S</span>
                   </div>
                 </div>
               </div>
 
               {/* Stock Category Preview Cards */}
               <div className="space-y-1.5 px-1">
-                <div className="flex items-center justify-between text-[10px] text-slate-400 px-1">
-                  <span>Categories</span>
-                  <Search className="w-3 h-3 text-slate-500" />
+                <div className="flex items-center justify-between text-[10px] text-content-muted px-1">
+                  <span className="font-semibold uppercase tracking-wider">Categories</span>
+                  <Search className="w-3 h-3 text-content-muted" />
                 </div>
                 <div className="grid grid-cols-2 gap-1.5">
-                  <div className="bg-white/5 p-2 rounded-xl border border-white/5">
-                    <span className="text-[11px] font-mono font-bold block">₹950.00 k</span>
-                    <span className="text-[9px] text-slate-400 block mt-0.5">Electronics</span>
+                  <div className="bg-surface-subtle p-2 rounded-xl border border-border">
+                    <span className="text-[11px] font-bold text-navy-950 block tabular-nums">₹9.50 L</span>
+                    <span className="text-[9px] text-content-secondary block mt-0.5">Electronics</span>
                   </div>
-                  <div className="bg-white/5 p-2 rounded-xl border border-white/5">
-                    <span className="text-[11px] font-mono font-bold block">₹785.00 k</span>
-                    <span className="text-[9px] text-slate-400 block mt-0.5">Hardware</span>
+                  <div className="bg-surface-subtle p-2 rounded-xl border border-border">
+                    <span className="text-[11px] font-bold text-navy-950 block tabular-nums">₹7.85 L</span>
+                    <span className="text-[9px] text-content-secondary block mt-0.5">Hardware</span>
                   </div>
                 </div>
-              </div>
-
-              {/* Phone Dock with Indicator */}
-              <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-around">
-                <div className="w-4 h-4 rounded bg-white/10" />
-                <div className="w-5 h-5 rounded-full p-0.5 bg-gradient-to-tr from-indigo-500 to-emerald-400 flex items-center justify-center shadow-xs shadow-indigo-500/50">
-                  <div className="w-full h-full bg-[#0B0F19] rounded-full" />
-                </div>
-                <div className="w-4 h-4 rounded bg-white/10" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Left Subtle Indicator */}
-        <div className="relative z-10 flex items-center gap-2 text-xs text-slate-400">
-          <div className="w-5 h-5 rounded-full border border-indigo-500/40 bg-indigo-950/50 flex items-center justify-center text-indigo-400 text-[10px]">
+        {/* Bottom Left Platform Indicator */}
+        <div className="relative z-10 flex items-center gap-2 text-xs text-content-secondary">
+          <div className="w-5 h-5 rounded-full bg-coral-100 border border-coral-200 flex items-center justify-center text-coral-600 text-[10px]">
             ⚡
           </div>
-          <span>Enterprise Inventory Cloud Platform</span>
+          <span className="font-medium">Production-Grade Enterprise Inventory Platform</span>
         </div>
       </div>
 
       {/* ========================================================= */}
-      {/* RIGHT COLUMN: AUTHENTICATION FORM (WHITE CURVED CARD)    */}
+      {/* RIGHT COLUMN: AUTHENTICATION FORM                        */}
       {/* ========================================================= */}
-      <div className="lg:col-span-6 xl:col-span-6 bg-white text-slate-900 p-7 sm:p-10 lg:p-14 flex flex-col justify-between relative rounded-t-[36px] lg:rounded-t-none lg:rounded-l-[44px] shadow-2xl">
+      <div className="lg:col-span-6 xl:col-span-6 bg-white text-navy-950 p-7 sm:p-10 lg:p-14 flex flex-col justify-between relative">
         <div>
           {/* Top Bar: Brand Logo + Top-Right Switch Button */}
-          <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center justify-between mb-8">
             <InventoryLogo />
 
             {/* Quick Switch Button (Sign Up / Sign In) */}
@@ -394,9 +395,9 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
               type="button"
               onClick={() => switchMode(mode === 'login' ? 'register' : 'login')}
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:text-indigo-600 transition cursor-pointer group"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-content-secondary hover:text-coral-500 transition cursor-pointer group px-3 py-1.5 rounded-full hover:bg-surface-subtle"
             >
-              <User className="w-4 h-4 text-slate-500 group-hover:text-indigo-600 transition-colors" />
+              <User className="w-4 h-4 text-content-muted group-hover:text-coral-500 transition-colors" />
               <span>{mode === 'login' ? 'Sign Up' : 'Sign In'}</span>
             </button>
           </div>
@@ -411,20 +412,25 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                 : 'opacity-100 translate-y-0 scale-100'
             }`}
           >
-            {/* Form Title */}
-            <div className="mb-7">
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-950 font-sans">
+            {/* Form Title & Subtitle */}
+            <div className="mb-6">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-navy-950 font-sans">
                 {mode === 'login' ? 'Sign In' : 'Create Account'}
               </h2>
+              <p className="text-xs sm:text-sm text-content-secondary mt-1.5">
+                {mode === 'login'
+                  ? 'Enter your credentials to access your store dashboard.'
+                  : 'Start managing your products, sales, and inventory today.'}
+              </p>
             </div>
 
             {/* Global Error Banner */}
             {mode === 'login' && loginError && (
               <div
                 role="alert"
-                className="mb-5 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-rose-800 text-xs sm:text-sm animate-in fade-in duration-200"
+                className="mb-5 p-4 bg-danger-50 border border-danger-200 rounded-2xl flex items-start gap-3 text-danger-700 text-xs sm:text-sm animate-in fade-in duration-200"
               >
-                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-600" />
+                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-danger-600" />
                 <span className="leading-snug font-medium">{loginError}</span>
               </div>
             )}
@@ -432,9 +438,9 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
             {mode === 'register' && registerError && (
               <div
                 role="alert"
-                className="mb-5 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-rose-800 text-xs sm:text-sm animate-in fade-in duration-200"
+                className="mb-5 p-4 bg-danger-50 border border-danger-200 rounded-2xl flex items-start gap-3 text-danger-700 text-xs sm:text-sm animate-in fade-in duration-200"
               >
-                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-600" />
+                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-danger-600" />
                 <span className="leading-snug font-medium">{registerError}</span>
               </div>
             )}
@@ -443,90 +449,96 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
             {mode === 'register' && registerSuccess && (
               <div
                 role="status"
-                className="mb-5 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3 text-emerald-800 text-xs sm:text-sm animate-in fade-in duration-200"
+                className="mb-5 p-4 bg-success-50 border border-success-200 rounded-2xl flex items-start gap-3 text-success-700 text-xs sm:text-sm animate-in fade-in duration-200"
               >
-                <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5 text-emerald-600" />
+                <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5 text-success-600" />
                 <span className="leading-snug font-medium">{registerSuccess}</span>
               </div>
             )}
 
             {/* ========================================================= */}
-            {/* LOGIN FORM (PILL DESIGN)                                  */}
+            {/* LOGIN FORM                                                */}
             {/* ========================================================= */}
             {mode === 'login' && (
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
+                  <label htmlFor="login-identifier" className="block text-xs font-semibold text-navy-950 mb-1.5">
+                    Email or Username
+                  </label>
                   <input
                     id="login-identifier"
                     type="text"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
-                    placeholder="Email or Username"
+                    placeholder="name@store.com or admin"
                     disabled={isLoginSubmitting}
                     autoComplete="username"
-                    className="pill-input w-full px-6 py-4 text-sm font-medium text-slate-900 focus:outline-none"
+                    className="pill-input w-full px-5 py-3.5 text-sm font-medium text-navy-950 focus:outline-none"
                     required
                   />
                 </div>
 
-                <div className="relative">
-                  <input
-                    id="login-password"
-                    type={showLoginPassword ? 'text' : 'password'}
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Password"
-                    disabled={isLoginSubmitting}
-                    autoComplete="current-password"
-                    className="pill-input w-full pl-6 pr-12 py-4 text-sm font-medium text-slate-900 focus:outline-none"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowLoginPassword(!showLoginPassword)}
-                    aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-700 transition cursor-pointer"
-                  >
-                    {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label htmlFor="login-password" className="block text-xs font-semibold text-navy-950">
+                      Password
+                    </label>
+                    <Link
+                      href="/forgot-password"
+                      className="text-xs font-semibold text-coral-500 hover:text-coral-600 transition hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div className="relative">
+                    <input
+                      id="login-password"
+                      type={showLoginPassword ? 'text' : 'password'}
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      placeholder="••••••••"
+                      disabled={isLoginSubmitting}
+                      autoComplete="current-password"
+                      className="pill-input w-full pl-5 pr-12 py-3.5 text-sm font-medium text-navy-950 focus:outline-none"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-content-muted hover:text-navy-950 transition cursor-pointer"
+                    >
+                      {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-1 px-1">
-                  <Link
-                    href="/forgot-password"
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                  <label
-                    htmlFor="rememberMe"
-                    className="flex items-center text-xs font-medium text-slate-500 cursor-pointer select-none"
-                  >
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
                     <input
-                      id="rememberMe"
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
                       disabled={isLoginSubmitting}
-                      className="w-3.5 h-3.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 mr-1.5 cursor-pointer"
+                      className="w-4 h-4 rounded border-border text-coral-500 focus:ring-coral-500 cursor-pointer"
                     />
-                    Remember me
+                    <span className="text-xs text-content-secondary font-medium">Remember this device (30 days)</span>
                   </label>
                 </div>
 
                 <button
                   type="submit"
                   disabled={isLoginSubmitting}
-                  className="pill-btn-indigo w-full h-14 text-white text-base font-bold flex items-center justify-center gap-2 cursor-pointer mt-5 group disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="pill-btn-coral w-full h-12 text-white font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isLoginSubmitting ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin text-white" />
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
                       <span>Signing in...</span>
                     </>
                   ) : (
                     <>
-                      <LogIn className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
+                      <LogIn className="w-4 h-4" />
                       <span>Sign In</span>
                     </>
                   )}
@@ -535,189 +547,154 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
             )}
 
             {/* ========================================================= */}
-            {/* REGISTER FORM (PILL DESIGN)                               */}
+            {/* REGISTER FORM                                             */}
             {/* ========================================================= */}
             {mode === 'register' && (
               <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
                 <div>
+                  <label htmlFor="reg-fullname" className="block text-xs font-semibold text-navy-950 mb-1">
+                    Full Name
+                  </label>
                   <input
-                    id="register-fullname"
+                    id="reg-fullname"
                     type="text"
                     value={fullName}
-                    onChange={(e) => {
-                      setFullName(e.target.value);
-                      if (fieldErrors.fullName) {
-                        setFieldErrors((prev) => {
-                          const next = { ...prev };
-                          delete next.fullName;
-                          return next;
-                        });
-                      }
-                    }}
-                    placeholder="Full Name"
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Priyansh Rathod"
                     disabled={isRegisterSubmitting}
                     autoComplete="name"
-                    className="pill-input w-full px-6 py-3.5 text-sm font-medium text-slate-900 focus:outline-none"
+                    className="pill-input w-full px-5 py-3 text-sm font-medium text-navy-950 focus:outline-none"
                     required
                   />
                   {fieldErrors.fullName && (
-                    <p className="mt-1 px-4 text-xs font-semibold text-rose-600 flex items-center gap-1 animate-in fade-in">
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                      {fieldErrors.fullName}
-                    </p>
+                    <p className="text-[11px] text-danger-600 mt-1 pl-2 font-medium">{fieldErrors.fullName}</p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
+                    <label htmlFor="reg-email" className="block text-xs font-semibold text-navy-950 mb-1">
+                      Email Address
+                    </label>
                     <input
-                      id="register-email"
+                      id="reg-email"
                       type="email"
                       value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (fieldErrors.email) {
-                          setFieldErrors((prev) => {
-                            const next = { ...prev };
-                            delete next.email;
-                            return next;
-                          });
-                        }
-                      }}
-                      placeholder="Email Address"
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@store.com"
                       disabled={isRegisterSubmitting}
                       autoComplete="email"
-                      className="pill-input w-full px-6 py-3.5 text-sm font-medium text-slate-900 focus:outline-none"
+                      className="pill-input w-full px-5 py-3 text-sm font-medium text-navy-950 focus:outline-none"
                       required
                     />
                     {fieldErrors.email && (
-                      <p className="mt-1 px-4 text-xs font-semibold text-rose-600 flex items-center gap-1 animate-in fade-in">
-                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                        {fieldErrors.email}
-                      </p>
+                      <p className="text-[11px] text-danger-600 mt-1 pl-2 font-medium">{fieldErrors.email}</p>
                     )}
                   </div>
 
                   <div>
+                    <label htmlFor="reg-username" className="block text-xs font-semibold text-navy-950 mb-1">
+                      Username
+                    </label>
                     <input
-                      id="register-username"
+                      id="reg-username"
                       type="text"
                       value={username}
-                      onChange={(e) => {
-                        setUsername(e.target.value);
-                        if (fieldErrors.username) {
-                          setFieldErrors((prev) => {
-                            const next = { ...prev };
-                            delete next.username;
-                            return next;
-                          });
-                        }
-                      }}
-                      placeholder="Username"
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="priyansh"
                       disabled={isRegisterSubmitting}
                       autoComplete="username"
-                      className="pill-input w-full px-6 py-3.5 text-sm font-medium text-slate-900 focus:outline-none"
+                      className="pill-input w-full px-5 py-3 text-sm font-medium text-navy-950 focus:outline-none"
                       required
                     />
                     {fieldErrors.username && (
-                      <p className="mt-1 px-4 text-xs font-semibold text-rose-600 flex items-center gap-1 animate-in fade-in">
-                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                        {fieldErrors.username}
-                      </p>
+                      <p className="text-[11px] text-danger-600 mt-1 pl-2 font-medium">{fieldErrors.username}</p>
                     )}
                   </div>
                 </div>
 
-                <div className="relative">
-                  <input
-                    id="register-password"
-                    type={showRegisterPassword ? 'text' : 'password'}
-                    value={registerPassword}
-                    onChange={(e) => {
-                      setRegisterPassword(e.target.value);
-                      if (fieldErrors.password) {
-                        setFieldErrors((prev) => {
-                          const next = { ...prev };
-                          delete next.password;
-                          return next;
-                        });
-                      }
-                    }}
-                    placeholder="Password (min 8 characters)"
-                    disabled={isRegisterSubmitting}
-                    autoComplete="new-password"
-                    className="pill-input w-full pl-6 pr-12 py-3.5 text-sm font-medium text-slate-900 focus:outline-none"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-                    aria-label={showRegisterPassword ? 'Hide password' : 'Show password'}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-700 transition cursor-pointer"
-                  >
-                    {showRegisterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
+                <div>
+                  <label htmlFor="reg-password" className="block text-xs font-semibold text-navy-950 mb-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="reg-password"
+                      type={showRegisterPassword ? 'text' : 'password'}
+                      value={registerPassword}
+                      onChange={(e) => setRegisterPassword(e.target.value)}
+                      placeholder="Minimum 8 characters"
+                      disabled={isRegisterSubmitting}
+                      autoComplete="new-password"
+                      className="pill-input w-full pl-5 pr-12 py-3 text-sm font-medium text-navy-950 focus:outline-none"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                      aria-label={showRegisterPassword ? 'Hide password' : 'Show password'}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-content-muted hover:text-navy-950 transition cursor-pointer"
+                    >
+                      {showRegisterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {fieldErrors.password && (
+                    <p className="text-[11px] text-danger-600 mt-1 pl-2 font-medium">{fieldErrors.password}</p>
+                  )}
+
+                  {/* Password Strength Indicator */}
+                  {registerPassword && (
+                    <div className="mt-2 px-1">
+                      <div className="flex items-center justify-between text-[11px] mb-1">
+                        <span className="text-content-muted">Security:</span>
+                        <span className="font-semibold text-navy-950">{passwordStrength.label}</span>
+                      </div>
+                      <div className="grid grid-cols-4 gap-1 h-1.5 bg-surface-muted rounded-full overflow-hidden">
+                        {[1, 2, 3, 4].map((step) => (
+                          <div
+                            key={step}
+                            className={`h-full transition-all duration-300 ${
+                              passwordStrength.score >= step ? passwordStrength.color : 'bg-transparent'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Password Strength Indicator Bars */}
-                {registerPassword && (
-                  <div className="px-3 space-y-1 animate-in fade-in">
-                    <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
-                      <span>Password Strength:</span>
-                      <span className={`font-bold ${passwordStrength.score >= 3 ? (passwordStrength.score === 4 ? 'text-emerald-600' : 'text-indigo-600') : passwordStrength.score === 2 ? 'text-amber-600' : 'text-rose-600'}`}>
-                        {passwordStrength.label}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-4 gap-1.5">
-                      {[1, 2, 3, 4].map((step) => (
-                        <div
-                          key={step}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
-                            step <= passwordStrength.score
-                              ? passwordStrength.color
-                              : 'bg-slate-200'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 <div>
+                  <label htmlFor="reg-phone" className="block text-xs font-semibold text-navy-950 mb-1">
+                    Phone (Optional)
+                  </label>
                   <input
-                    id="register-phone"
+                    id="reg-phone"
                     type="tel"
                     value={phone}
-                    onChange={(e) => {
-                      setPhone(e.target.value);
-                      if (fieldErrors.phone) {
-                        setFieldErrors((prev) => {
-                          const next = { ...prev };
-                          delete next.phone;
-                          return next;
-                        });
-                      }
-                    }}
-                    placeholder="Phone Number (optional)"
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+91 98765 43210"
                     disabled={isRegisterSubmitting}
                     autoComplete="tel"
-                    className="pill-input w-full px-6 py-3.5 text-sm font-medium text-slate-900 focus:outline-none"
+                    className="pill-input w-full px-5 py-3 text-sm font-medium text-navy-950 focus:outline-none"
                   />
+                  {fieldErrors.phone && (
+                    <p className="text-[11px] text-danger-600 mt-1 pl-2 font-medium">{fieldErrors.phone}</p>
+                  )}
                 </div>
 
                 <button
                   type="submit"
                   disabled={isRegisterSubmitting}
-                  className="pill-btn-indigo w-full h-14 text-white text-base font-bold flex items-center justify-center gap-2 cursor-pointer mt-4 group disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="pill-btn-coral w-full h-12 text-white font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer mt-3 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isRegisterSubmitting ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin text-white" />
-                      <span>Creating account...</span>
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span>Creating Account...</span>
                     </>
                   ) : (
                     <>
-                      <UserPlus className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
+                      <UserPlus className="w-4 h-4" />
                       <span>Create Account</span>
                     </>
                   )}
@@ -726,57 +703,61 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
             )}
 
             {/* Divider */}
-            <div className="my-5 flex items-center gap-3">
-              <div className="flex-1 h-px bg-slate-200" />
-              <span className="text-[11px] text-slate-400 uppercase font-semibold tracking-wider">
-                or continue with
-              </span>
-              <div className="flex-1 h-px bg-slate-200" />
+            <div className="relative my-5">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-[11px] uppercase tracking-wider font-semibold">
+                <span className="bg-white px-3 text-content-muted">Or continue with</span>
+              </div>
             </div>
 
-            {/* Google Authentication Pill Button */}
+            {/* Google OAuth Button */}
             <button
               type="button"
               onClick={handleGoogleAuth}
-              disabled={isSubmitting || !isGoogleConfigured}
-              className={`pill-btn-secondary w-full h-12 flex items-center justify-center gap-3 font-semibold text-sm cursor-pointer ${
-                !isGoogleConfigured ? 'opacity-60 cursor-not-allowed' : 'disabled:opacity-70'
-              }`}
+              disabled={isSubmitting}
+              className="pill-btn-secondary w-full h-12 text-navy-950 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Image
                 src="/icons/google.png"
-                alt="Google logo"
+                alt="Google"
                 width={18}
                 height={18}
-                className="w-[18px] h-[18px] object-contain shrink-0"
+                className="shrink-0"
               />
-              <span>
-                {isGoogleConfigured
-                  ? mode === 'login'
-                    ? 'Continue with Google'
-                    : 'Sign up with Google'
-                  : 'Continue with Google'}
-              </span>
+              <span>Continue with Google</span>
             </button>
           </div>
         </div>
 
-        {/* Form Footer */}
-        <div className="mt-8 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 font-normal gap-2">
-          <span>© 2005–2026 Inventory Management System Inc.</span>
-          <div className="flex items-center gap-4">
-            <button type="button" className="hover:text-slate-700 transition cursor-pointer">
-              Contact Us
-            </button>
-            <button type="button" className="inline-flex items-center gap-1 hover:text-slate-700 transition cursor-pointer">
-              <Globe className="w-3.5 h-3.5" />
-              <span>English ▾</span>
-            </button>
-          </div>
+        {/* Bottom Switch Link */}
+        <div className="mt-6 pt-4 border-t border-border-subtle text-center text-xs text-content-secondary">
+          {mode === 'login' ? (
+            <p>
+              Don&apos;t have an account?{' '}
+              <button
+                type="button"
+                onClick={() => switchMode('register')}
+                className="font-bold text-coral-500 hover:text-coral-600 transition hover:underline cursor-pointer"
+              >
+                Sign up for free
+              </button>
+            </p>
+          ) : (
+            <p>
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => switchMode('login')}
+                className="font-bold text-coral-500 hover:text-coral-600 transition hover:underline cursor-pointer"
+              >
+                Sign in here
+              </button>
+            </p>
+          )}
         </div>
       </div>
     </div>
   );
 }
-
-
