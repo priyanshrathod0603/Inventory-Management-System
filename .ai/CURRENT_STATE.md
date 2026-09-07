@@ -432,3 +432,30 @@ PHASE 9 — API Integration (TanStack Query client, API client, error handling, 
 * **Tests**: `pnpm --filter @ims/web typecheck` (PASS), `pnpm --filter @ims/web build` (PASS), `pnpm --filter @ims/api test` (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Ready for user review and subsequent Phase 9 API Integration.
+
+### Entry 20
+* **Date**: 2026-09-07
+* **Task**: Floating Header & Top Navigation Redesign (Presentation-Style Shared Sliding Hover Animation & Dark Active Pill)
+* **Completed**:
+  1. **Floating Pill Container**:
+     - Redesigned `AppHeader` (`apps/web/src/components/layout/app-header.tsx`) into a centered floating navbar (`max-w-[1520px] w-full mx-auto`, `h-[72px] sm:h-[76px] lg:h-[80px]`, `rounded-full`, `bg-white/95 backdrop-blur-md`, `border border-[#EAE5E0]`, `shadow-[0_16px_40px_-8px_rgba(17,23,34,0.08),0_4px_16px_-2px_rgba(17,23,34,0.03)]`, `sticky top-3 sm:top-4 md:top-5 z-40`) providing generous breathing room on all sides.
+  2. **Presentation-Style Shared Sliding Hover Highlight**:
+     - Built GPU-accelerated shared sliding highlight pill within the central `<nav>` track (`transition: transform 300ms cubic-bezier(0.2, 0, 0, 1), width 300ms cubic-bezier(0.2, 0, 0, 1), opacity 180ms ease`).
+     - Gliding between `Dashboard` → `POS` → `Inventory` → `Sales` → `Purchases` → `Reports` → `More` moves the shared highlight smoothly across navigation items like a PowerPoint/Keynote slide transition with subtle vertical lift (`-translate-y-0.5`).
+  3. **Dark Filled Active Navigation State**:
+     - The active route is wrapped in a dark filled rounded pill (`bg-[#111722] text-white font-semibold rounded-full shadow-[0_4px_12px_-2px_rgba(17,23,34,0.3)]`).
+  4. **Subtle POS LIVE Badge**:
+     - Styled subtle LIVE badge (`bg-coral-500 text-white text-[9px] font-extrabold rounded-full uppercase tracking-wider`).
+  5. **Refined Right-Side Controls & More Popover**:
+     - Search trigger (`⌘K` pill), Notifications icon button (with coral unread badge), User Menu pill trigger & popover (`user-menu.tsx`), and signature coral "+ New Sale" pill CTA (`pill-btn-coral`).
+     - Modernized `MoreMenu` (`more-menu.tsx`) with 4-column master catalog popover (`rounded-[28px]`, `border border-[#EAE5E0]`, `shadow-[0_24px_60px_-12px_rgba(17,23,34,0.14)]`).
+  6. **Responsive Tablet & Mobile Support**:
+     - Compact responsive mobile header (`h-14` to `h-16`) with slide-down drawer sheet (<1024px) providing full access to all routes, search, and user actions with zero horizontal overflow across 320px–1920px.
+  7. **Automated Verification**:
+     - `tsc --noEmit` on `@ims/web` & `@ims/api`: PASS (0 errors).
+     - `next build` on `@ims/web`: PASS (all 34 static routes generated).
+     - `jest` on `@ims/api`: PASS (15/15 test suites, 85/85 tests passed).
+* **Changed**: `apps/web/src/components/layout/app-header.tsx`, `apps/web/src/components/layout/more-menu.tsx`, `apps/web/src/components/layout/user-menu.tsx`, `apps/web/src/app/(app)/layout.tsx`, `.ai/CURRENT_STATE.md`, `.ai/SESSION_STATE.md`.
+* **Tests**: `npx tsc --noEmit` (PASS), `npx next build` (PASS), `npx jest` (PASS).
+* **Known Issues**: None.
+* **Next Steps**: Ready for user review.

@@ -45,17 +45,20 @@ export default function AuthenticatedAppLayout({
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#FCF9F6] flex flex-col">
-        <header className="h-16 bg-white/90 border-b border-border px-6 flex items-center justify-between animate-pulse">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-surface-muted" />
-            <div className="w-28 h-4 bg-surface-muted rounded-full" />
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-44 h-8 bg-surface-subtle rounded-full" />
-            <div className="w-8 h-8 rounded-full bg-surface-muted" />
+        <header className="sticky top-0 z-40 w-full bg-white/95 border-b border-[#EAE5E0] h-16 sm:h-[70px] flex items-center animate-pulse">
+          <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface-muted" />
+              <div className="w-28 h-4 bg-surface-muted rounded-full hidden sm:block" />
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-40 h-9 bg-surface-subtle rounded-full hidden lg:block" />
+              <div className="w-9 h-9 rounded-full bg-surface-muted" />
+              <div className="w-24 h-9 rounded-full bg-coral-100" />
+            </div>
           </div>
         </header>
-        <main className="flex-1 max-w-[1600px] w-full mx-auto p-6">
+        <main className="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6">
           <div className="space-y-4 animate-pulse">
             <div className="h-8 bg-surface-muted rounded-full w-1/4" />
             <div className="h-4 bg-surface-subtle rounded-full w-1/3" />
