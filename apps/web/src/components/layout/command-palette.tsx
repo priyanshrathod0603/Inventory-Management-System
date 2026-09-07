@@ -367,7 +367,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             <span><kbd className="px-1 bg-white border border-slate-200 rounded text-[10px]">↵</kbd> select</span>
             <span><kbd className="px-1 bg-white border border-slate-200 rounded text-[10px]">esc</kbd> close</span>
           </div>
-          <span>SMS Command Center</span>
+          <span>Inventory Command Center</span>
         </div>
       </div>
     </div>

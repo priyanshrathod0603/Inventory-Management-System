@@ -77,7 +77,7 @@ export default function SettingsPage() {
               <label className="text-xs font-semibold text-slate-700">Company Name</label>
               <input
                 type="text"
-                defaultValue="Stock Management System"
+                defaultValue="Inventory Management System"
                 className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
               />
             </div>

@@ -6,40 +6,16 @@ import { useSearchParams } from 'next/navigation';
 import { apiClient } from '../../../lib/api-client';
 import { AlertCircle, CheckCircle2, Loader2, ArrowRight, RefreshCw } from 'lucide-react';
 
-function SpectrumLogo() {
+function InventoryLogo() {
   return (
-    <div className="flex items-center gap-2.5 justify-center mb-6 select-none">
-      <svg
-        className="w-7 h-7 shrink-0"
-        viewBox="0 0 40 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          cx="20"
-          cy="20"
-          r="15"
-          stroke="url(#spectrum_grad_ve)"
-          strokeWidth="4.5"
-          strokeLinecap="round"
-        />
-        <defs>
-          <linearGradient
-            id="spectrum_grad_ve"
-            x1="5"
-            y1="5"
-            x2="35"
-            y2="35"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#FF4E00" />
-            <stop offset="0.3" stopColor="#FFD000" />
-            <stop offset="0.6" stopColor="#00E5FF" />
-            <stop offset="0.8" stopColor="#7928CA" />
-            <stop offset="1" stopColor="#FF0080" />
-          </linearGradient>
-        </defs>
-      </svg>
+    <div className="flex items-center gap-3 justify-center mb-6 select-none">
+      <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center shadow-md shadow-indigo-500/25 shrink-0">
+        <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+          <path d="m3.3 7 8.7 5 8.7-5" />
+          <path d="M12 22V12" />
+        </svg>
+      </div>
       <span className="text-xl font-bold tracking-tight text-slate-900 font-sans">
         Inventory Management System
       </span>
@@ -126,7 +102,7 @@ function VerifyEmailContent() {
 
   return (
     <div className="bg-white text-slate-900 w-full max-w-[500px] mx-auto rounded-[36px] p-8 sm:p-10 shadow-2xl transition-all duration-300">
-      <SpectrumLogo />
+      <InventoryLogo />
 
       <div className="text-center mb-6">
         <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 font-sans">
@@ -138,8 +114,8 @@ function VerifyEmailContent() {
       </div>
 
       {status === 'loading' && (
-        <div className="mb-6 p-4 bg-orange-50 border border-orange-100 rounded-2xl flex items-center justify-center gap-3 text-orange-800 text-xs sm:text-sm animate-in fade-in">
-          <Loader2 className="w-4 h-4 animate-spin text-[#FF4E00]" />
+        <div className="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center gap-3 text-indigo-800 text-xs sm:text-sm animate-in fade-in">
+          <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
           <span className="font-semibold">{message}</span>
         </div>
       )}
@@ -165,7 +141,7 @@ function VerifyEmailContent() {
           </div>
           <Link
             href="/login"
-            className="pill-btn-coral w-full h-14 text-white font-bold flex items-center justify-center gap-2"
+            className="pill-btn-indigo w-full h-14 text-white font-bold flex items-center justify-center gap-2"
           >
             <span>Proceed to Sign In</span>
             <ArrowRight className="w-4 h-4" />
@@ -206,7 +182,7 @@ function VerifyEmailContent() {
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="pill-btn-coral w-full h-14 text-white font-bold text-base flex items-center justify-center gap-2 cursor-pointer mt-3 group disabled:opacity-60 disabled:cursor-not-allowed"
+            className="pill-btn-indigo w-full h-14 text-white font-bold text-base flex items-center justify-center gap-2 cursor-pointer mt-3 group disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {status === 'loading' ? (
               <>
@@ -232,7 +208,7 @@ function VerifyEmailContent() {
               type="button"
               onClick={handleResend}
               disabled={isResending}
-              className="inline-flex items-center gap-1.5 text-[#FF4E00] hover:text-[#E60067] font-bold transition hover:underline cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 font-bold transition hover:underline cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isResending ? 'animate-spin' : ''}`} />
               <span>{isResending ? 'Sending...' : 'Resend Code / Link'}</span>
@@ -252,7 +228,7 @@ export default function VerifyEmailPage() {
     <Suspense
       fallback={
         <div className="bg-white rounded-[36px] p-8 text-center text-slate-500 text-sm flex items-center justify-center gap-2">
-          <Loader2 className="w-5 h-5 animate-spin text-[#FF4E00]" />
+          <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
           <span className="font-semibold">Loading verification module...</span>
         </div>
       }

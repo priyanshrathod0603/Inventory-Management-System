@@ -29,7 +29,7 @@ export default function InventoryPage() {
   return (
     <div>
       <PageHeader
-        title="Inventory & Stock Management"
+        title="Inventory Management"
         subtitle="Real-time multi-warehouse stock levels, valuations, and traceability ledgers."
         breadcrumbs={[{ label: 'Inventory' }]}
       >

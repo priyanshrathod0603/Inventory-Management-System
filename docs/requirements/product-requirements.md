@@ -1,7 +1,7 @@
 # Product Requirements
 
 ## 1. Overview & Vision
-The Stock Management System (SMS) is an enterprise-ready retail Point of Sale (POS) and inventory operations platform engineered for Indian retail counters, supermarkets, pharmacies, FMCG distributors, and warehouse management.
+The Inventory Management System is an enterprise-ready retail Point of Sale (POS) and inventory operations platform engineered for Indian retail counters, supermarkets, pharmacies, FMCG distributors, and warehouse management.
 
 ### Key Objectives:
 * **High-Velocity Counter Checkout**: Sub-10-second checkout flow optimized for desktop POS terminals with barcode scanner HID input and full keyboard navigation.

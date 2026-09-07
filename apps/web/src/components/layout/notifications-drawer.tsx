@@ -92,7 +92,7 @@ export function NotificationsDrawer({ isOpen, onClose }: NotificationsDrawerProp
 
         {/* Footer */}
         <div className="p-3 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-[11px]">
-          <span className="text-slate-400">SMS Notification Center</span>
+          <span className="text-slate-400">Inventory Notification Center</span>
           <button
             type="button"
             className="text-indigo-600 font-semibold hover:text-indigo-800 transition"

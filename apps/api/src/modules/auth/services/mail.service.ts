@@ -65,7 +65,7 @@ export class MailService {
     const { to, token, otpCode } = options;
     const fromAddress =
       this.configService.get<string>('EMAIL_FROM') ||
-      'Stock Management System <noreply@sms-system.internal>';
+      'Inventory Management System <noreply@sms-system.internal>';
 
     const frontendBaseUrl =
       this.configService.get<string>('FRONTEND_URL') ||
@@ -88,7 +88,7 @@ export class MailService {
       return { success: false };
     }
 
-    const subject = 'Verify your email address — Stock Management System';
+    const subject = 'Verify your email address — Inventory Management System';
 
     const htmlContent = `
 <!DOCTYPE html>
@@ -118,12 +118,12 @@ export class MailService {
 <body>
   <div class="container">
     <div class="header">
-      <h1 class="logo">Stock Management System</h1>
+      <h1 class="logo">Inventory Management System</h1>
     </div>
     <div class="content">
       <h2 class="title">Verify Your Email Address</h2>
       <p class="text">
-        Welcome to SMS! You recently registered an account for <strong>${to}</strong>.
+        Welcome to Inventory Management System! You recently registered an account for <strong>${to}</strong>.
         Please verify your email address to complete your activation.
       </p>
 
@@ -146,8 +146,8 @@ export class MailService {
       </p>
     </div>
     <div class="footer">
-      <p style="margin: 0 0 6px 0;">If you did not create an account with SMS, you can safely ignore this email.</p>
-      <p style="margin: 0;">Stock Management System (SMS) — Secure Counter Billing &amp; Inventory Platform</p>
+      <p style="margin: 0 0 6px 0;">If you did not create an account with Inventory Management System, you can safely ignore this email.</p>
+      <p style="margin: 0;">Inventory Management System — Secure Counter Billing &amp; Inventory Platform</p>
     </div>
   </div>
 </body>
@@ -155,9 +155,9 @@ export class MailService {
     `.trim();
 
     const textContent = `
-Stock Management System (SMS) — Email Verification
+Inventory Management System — Email Verification
 
-Welcome to SMS! You registered an account for: ${to}
+Welcome to Inventory Management System! You registered an account for: ${to}
 
 Your 6-Digit Verification Code:
 ${otpCode}
@@ -201,7 +201,7 @@ If you did not request this registration, please safely disregard this email.
     const { to, token, fullName } = options;
     const fromAddress =
       this.configService.get<string>('EMAIL_FROM') ||
-      'Stock Management System <noreply@sms-system.internal>';
+      'Inventory Management System <noreply@sms-system.internal>';
 
     const frontendBaseUrl =
       this.configService.get<string>('FRONTEND_URL') ||
@@ -222,7 +222,7 @@ If you did not request this registration, please safely disregard this email.
       return { success: false };
     }
 
-    const subject = 'Reset your password — Stock Management System';
+    const subject = 'Reset your password — Inventory Management System';
 
     const htmlContent = `
 <!DOCTYPE html>
@@ -250,12 +250,12 @@ If you did not request this registration, please safely disregard this email.
 <body>
   <div class="container">
     <div class="header">
-      <h1 class="logo">Stock Management System</h1>
+      <h1 class="logo">Inventory Management System</h1>
     </div>
     <div class="content">
       <h2 class="title">Reset Your Password</h2>
       <p class="text">
-        Hi <strong>${fullName}</strong>, we received a request to reset the password for your SMS account
+        Hi <strong>${fullName}</strong>, we received a request to reset the password for your Inventory Management System account
         associated with <strong>${to}</strong>.
       </p>
       <p class="text">
@@ -281,7 +281,7 @@ If you did not request this registration, please safely disregard this email.
     </div>
     <div class="footer">
       <p style="margin: 0 0 6px 0;">For security, never share this link with anyone.</p>
-      <p style="margin: 0;">Stock Management System (SMS) — Secure Counter Billing &amp; Inventory Platform</p>
+      <p style="margin: 0;">Inventory Management System — Secure Counter Billing &amp; Inventory Platform</p>
     </div>
   </div>
 </body>
@@ -289,11 +289,11 @@ If you did not request this registration, please safely disregard this email.
     `.trim();
 
     const textContent = `
-Stock Management System (SMS) — Password Reset
+Inventory Management System — Password Reset
 
 Hi ${fullName},
 
-We received a request to reset the password for your SMS account (${to}).
+We received a request to reset the password for your Inventory Management System account (${to}).
 
 Click or paste the following link to reset your password:
 ${resetLink}

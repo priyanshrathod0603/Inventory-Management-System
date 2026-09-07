@@ -27,15 +27,15 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Payoneer / Split Master Canvas Shell */
-.payoneer-auth-shell {
-  background-color: #171413;
+/* Split Master Canvas Shell */
+.auth-split-shell {
+  background-color: #0F172A;
   box-shadow: 
-    0 35px 80px -20px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
+    0 35px 80px -20px rgba(15, 23, 42, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Payoneer Signature Pill Inputs */
+/* Modern Pill Inputs matching Dashboard Slate / Indigo Theme */
 .pill-input {
   background: #FFFFFF;
   border: 1.5px solid #E2E8F0;
@@ -46,14 +46,14 @@
 
 .pill-input:hover:not(:disabled) {
   border-color: #CBD5E1;
-  background: #FAFAFC;
+  background: #F8FAFC;
 }
 
 .pill-input:focus {
   background: #FFFFFF;
-  border-color: #FF4E00;
+  border-color: #4F46E5;
   box-shadow: 
-    0 0 0 4px rgba(255, 78, 0, 0.12),
+    0 0 0 4px rgba(79, 70, 229, 0.12),
     0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -62,33 +62,33 @@
   font-weight: 400;
 }
 
-/* Payoneer Signature Vibrant Coral/Orange-to-Rose Gradient Pill Button */
-.pill-btn-coral {
-  background: linear-gradient(90deg, #FF4500 0%, #FF2654 45%, #E60067 100%);
+/* Electric Indigo Gradient Pill CTA Button */
+.pill-btn-indigo {
+  background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
   border-radius: 9999px;
   color: #FFFFFF;
   font-weight: 700;
   box-shadow: 
-    0 12px 30px -4px rgba(255, 69, 0, 0.45),
-    0 4px 12px -2px rgba(230, 0, 103, 0.3),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
+    0 12px 28px -4px rgba(79, 70, 229, 0.4),
+    0 4px 10px -2px rgba(67, 56, 202, 0.25),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.pill-btn-coral:hover:not(:disabled) {
-  background: linear-gradient(90deg, #FF571A 0%, #FF3864 45%, #F50072 100%);
+.pill-btn-indigo:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4338CA 0%, #3730A3 100%);
   box-shadow: 
-    0 16px 36px -4px rgba(255, 69, 0, 0.55),
-    0 6px 16px -2px rgba(230, 0, 103, 0.4),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.5);
+    0 16px 36px -4px rgba(79, 70, 229, 0.5),
+    0 6px 14px -2px rgba(67, 56, 202, 0.35),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.45);
   transform: translateY(-1px);
 }
 
-.pill-btn-coral:active:not(:disabled) {
+.pill-btn-indigo:active:not(:disabled) {
   transform: translateY(0) scale(0.985);
   box-shadow: 
-    0 6px 16px -2px rgba(255, 69, 0, 0.35),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+    0 6px 14px -2px rgba(79, 70, 229, 0.3),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* Pill Secondary / Google Button */
@@ -114,30 +114,30 @@
   background: #F1F5F9;
 }
 
-/* Concentric Circular Rings in Left Panel */
-.concentric-rings {
+/* Concentric Indigo Radar Rings in Left Panel */
+.concentric-rings-indigo {
   background-image: 
-    radial-gradient(circle at 75% 35%, transparent 120px, rgba(255, 255, 255, 0.04) 121px, transparent 123px),
-    radial-gradient(circle at 75% 35%, transparent 220px, rgba(255, 255, 255, 0.04) 221px, transparent 223px),
-    radial-gradient(circle at 75% 35%, transparent 320px, rgba(255, 255, 255, 0.035) 321px, transparent 323px),
-    radial-gradient(circle at 75% 35%, transparent 440px, rgba(255, 255, 255, 0.025) 441px, transparent 443px);
+    radial-gradient(circle at 75% 35%, transparent 120px, rgba(99, 102, 241, 0.08) 121px, transparent 123px),
+    radial-gradient(circle at 75% 35%, transparent 220px, rgba(99, 102, 241, 0.07) 221px, transparent 223px),
+    radial-gradient(circle at 75% 35%, transparent 320px, rgba(99, 102, 241, 0.05) 321px, transparent 323px),
+    radial-gradient(circle at 75% 35%, transparent 440px, rgba(99, 102, 241, 0.04) 441px, transparent 443px);
 }
 
-/* Phone Mockup Subtle Bezel */
+/* Phone Mockup Frame in Slate & Titanium */
 .phone-mockup-frame {
-  background: #0B0A0A;
-  border: 4px solid #332F2D;
+  background: #0B0F19;
+  border: 4px solid #1E293B;
   border-radius: 40px;
   box-shadow: 
     0 25px 50px -12px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 0 0 2px #1E1B19;
+    0 0 0 1px rgba(99, 102, 241, 0.15),
+    inset 0 0 0 2px #0F172A;
 }
 
 /* Reduced Motion Overrides */
 @media (prefers-reduced-motion: reduce) {
   .pill-input,
-  .pill-btn-coral,
+  .pill-btn-indigo,
   .pill-btn-secondary {
     transition: none !important;
   }

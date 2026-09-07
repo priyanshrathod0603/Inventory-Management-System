@@ -20,7 +20,7 @@ describe('MailService', () => {
     SMTP_PORT: 587,
     SMTP_USER: 'testuser@gmail.com',
     SMTP_PASS: 'gmail-app-password-mock',
-    EMAIL_FROM: 'Stock Management System <testuser@gmail.com>',
+    EMAIL_FROM: 'Inventory Management System <testuser@gmail.com>',
     FRONTEND_URL: 'http://localhost:3000',
   };
 
@@ -79,7 +79,7 @@ describe('MailService', () => {
 
       const mailOptions = mockSendMail.mock.calls[0][0];
       expect(mailOptions.to).toBe('rahul@example.com');
-      expect(mailOptions.from).toBe('Stock Management System <testuser@gmail.com>');
+      expect(mailOptions.from).toBe('Inventory Management System <testuser@gmail.com>');
       expect(mailOptions.subject).toContain('Verify your email address');
 
       // Verify OTP is present in both text and html

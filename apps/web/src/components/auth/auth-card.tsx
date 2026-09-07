@@ -23,42 +23,18 @@ interface AuthCardProps {
   initialMode?: 'login' | 'register';
 }
 
-// Spectrum Ring Logo matching Payoneer aesthetic
-function SpectrumLogo() {
+// Inventory Management System Brand Emblem
+function InventoryLogo() {
   return (
     <div className="flex items-center gap-3 select-none">
-      <svg
-        className="w-7 h-7 shrink-0"
-        viewBox="0 0 40 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          cx="20"
-          cy="20"
-          r="15"
-          stroke="url(#spectrum_grad)"
-          strokeWidth="4.5"
-          strokeLinecap="round"
-        />
-        <defs>
-          <linearGradient
-            id="spectrum_grad"
-            x1="5"
-            y1="5"
-            x2="35"
-            y2="35"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#FF4E00" />
-            <stop offset="0.3" stopColor="#FFD000" />
-            <stop offset="0.6" stopColor="#00E5FF" />
-            <stop offset="0.8" stopColor="#7928CA" />
-            <stop offset="1" stopColor="#FF0080" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <span className="text-xl font-bold tracking-tight text-slate-900 font-sans">
+      <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center shadow-md shadow-indigo-500/25 shrink-0">
+        <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+          <path d="m3.3 7 8.7 5 8.7-5" />
+          <path d="M12 22V12" />
+        </svg>
+      </div>
+      <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 font-sans">
         Inventory Management System
       </span>
     </div>
@@ -116,7 +92,7 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
       case 2:
         return { score: 2, label: 'Fair', color: 'bg-amber-500' };
       case 3:
-        return { score: 3, label: 'Good', color: 'bg-orange-500' };
+        return { score: 3, label: 'Good', color: 'bg-indigo-500' };
       case 4:
         return { score: 4, label: 'Strong', color: 'bg-emerald-500' };
       default:
@@ -289,11 +265,11 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
   const isSubmitting = isLoginSubmitting || isRegisterSubmitting;
 
   return (
-    <div className="payoneer-auth-shell relative w-full max-w-[1240px] rounded-[32px] sm:rounded-[44px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[720px] transition-all duration-300">
+    <div className="auth-split-shell relative w-full max-w-[1240px] rounded-[32px] sm:rounded-[44px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[720px] transition-all duration-300">
       {/* ========================================================= */}
-      {/* LEFT COLUMN: HERO PANEL (DARK CHARCOAL WITH MOCKUP)      */}
+      {/* LEFT COLUMN: HERO PANEL (DEEP SLATE/INDIGO WITH MOCKUP)   */}
       {/* ========================================================= */}
-      <div className="lg:col-span-6 xl:col-span-6 concentric-rings bg-[#171413] text-white p-7 sm:p-10 lg:p-12 flex flex-col justify-between relative overflow-hidden">
+      <div className="lg:col-span-6 xl:col-span-6 concentric-rings-indigo bg-[#0B0F19] text-white p-7 sm:p-10 lg:p-12 flex flex-col justify-between relative overflow-hidden border-r border-slate-800/60">
         {/* Top Tagline */}
         <div className="relative z-10">
           <p className="text-xs sm:text-sm text-slate-400 font-normal tracking-wide max-w-sm leading-relaxed">
@@ -351,8 +327,8 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                     <span className="text-[8px] text-slate-400">Thu</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1 relative">
-                    <div className="w-full bg-gradient-to-t from-[#FF4500] to-[#FF2654] rounded-t h-12 shadow-md shadow-rose-500/30" />
-                    <span className="text-[8px] text-rose-400 font-bold">Fri</span>
+                    <div className="w-full bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t h-12 shadow-md shadow-indigo-500/40" />
+                    <span className="text-[8px] text-indigo-400 font-bold">Fri</span>
                   </div>
                   <div className="flex-1 flex flex-col items-center gap-1">
                     <div className="w-full bg-slate-700/80 rounded-t h-5" />
@@ -383,11 +359,11 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                 </div>
               </div>
 
-              {/* Phone Dock with Spectrum Indicator */}
+              {/* Phone Dock with Indicator */}
               <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-around">
                 <div className="w-4 h-4 rounded bg-white/10" />
-                <div className="w-5 h-5 rounded-full p-0.5 bg-gradient-to-tr from-[#FF4500] via-[#FF2654] to-[#00E5FF] flex items-center justify-center">
-                  <div className="w-full h-full bg-black rounded-full" />
+                <div className="w-5 h-5 rounded-full p-0.5 bg-gradient-to-tr from-indigo-500 to-emerald-400 flex items-center justify-center shadow-xs shadow-indigo-500/50">
+                  <div className="w-full h-full bg-[#0B0F19] rounded-full" />
                 </div>
                 <div className="w-4 h-4 rounded bg-white/10" />
               </div>
@@ -396,11 +372,11 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
         </div>
 
         {/* Bottom Left Subtle Indicator */}
-        <div className="relative z-10 flex items-center gap-2 text-xs text-slate-500">
-          <div className="w-5 h-5 rounded-full border border-orange-500/50 flex items-center justify-center text-orange-400 text-[10px]">
+        <div className="relative z-10 flex items-center gap-2 text-xs text-slate-400">
+          <div className="w-5 h-5 rounded-full border border-indigo-500/40 bg-indigo-950/50 flex items-center justify-center text-indigo-400 text-[10px]">
             ⚡
           </div>
-          <span>Enterprise Stock Workstation Cloud</span>
+          <span>Enterprise Inventory Cloud Platform</span>
         </div>
       </div>
 
@@ -409,18 +385,18 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
       {/* ========================================================= */}
       <div className="lg:col-span-6 xl:col-span-6 bg-white text-slate-900 p-7 sm:p-10 lg:p-14 flex flex-col justify-between relative rounded-t-[36px] lg:rounded-t-none lg:rounded-l-[44px] shadow-2xl">
         <div>
-          {/* Top Bar: Spectrum Logo + Top-Right Switch Button */}
+          {/* Top Bar: Brand Logo + Top-Right Switch Button */}
           <div className="flex items-center justify-between mb-10">
-            <SpectrumLogo />
+            <InventoryLogo />
 
             {/* Quick Switch Button (Sign Up / Sign In) */}
             <button
               type="button"
               onClick={() => switchMode(mode === 'login' ? 'register' : 'login')}
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-950 transition cursor-pointer group"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:text-indigo-600 transition cursor-pointer group"
             >
-              <User className="w-4 h-4 text-slate-500 group-hover:text-slate-900" />
+              <User className="w-4 h-4 text-slate-500 group-hover:text-indigo-600 transition-colors" />
               <span>{mode === 'login' ? 'Sign Up' : 'Sign In'}</span>
             </button>
           </div>
@@ -518,7 +494,7 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                 <div className="flex items-center justify-between pt-1 px-1">
                   <Link
                     href="/forgot-password"
-                    className="text-xs font-semibold text-[#FF4E00] hover:text-[#E60067] transition hover:underline"
+                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition hover:underline"
                   >
                     Forgot password?
                   </Link>
@@ -532,7 +508,7 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
                       disabled={isLoginSubmitting}
-                      className="w-3.5 h-3.5 rounded border-slate-300 text-[#FF4E00] focus:ring-orange-500 mr-1.5 cursor-pointer"
+                      className="w-3.5 h-3.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 mr-1.5 cursor-pointer"
                     />
                     Remember me
                   </label>
@@ -541,7 +517,7 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                 <button
                   type="submit"
                   disabled={isLoginSubmitting}
-                  className="pill-btn-coral w-full h-14 text-white text-base font-bold flex items-center justify-center gap-2 cursor-pointer mt-5 group disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="pill-btn-indigo w-full h-14 text-white text-base font-bold flex items-center justify-center gap-2 cursor-pointer mt-5 group disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isLoginSubmitting ? (
                     <>
@@ -688,7 +664,7 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                   <div className="px-3 space-y-1 animate-in fade-in">
                     <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
                       <span>Password Strength:</span>
-                      <span className={`font-bold ${passwordStrength.score >= 3 ? 'text-emerald-600' : passwordStrength.score === 2 ? 'text-amber-600' : 'text-rose-600'}`}>
+                      <span className={`font-bold ${passwordStrength.score >= 3 ? (passwordStrength.score === 4 ? 'text-emerald-600' : 'text-indigo-600') : passwordStrength.score === 2 ? 'text-amber-600' : 'text-rose-600'}`}>
                         {passwordStrength.label}
                       </span>
                     </div>
@@ -732,7 +708,7 @@ export function AuthCard({ initialMode = 'login' }: AuthCardProps) {
                 <button
                   type="submit"
                   disabled={isRegisterSubmitting}
-                  className="pill-btn-coral w-full h-14 text-white text-base font-bold flex items-center justify-center gap-2 cursor-pointer mt-4 group disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="pill-btn-indigo w-full h-14 text-white text-base font-bold flex items-center justify-center gap-2 cursor-pointer mt-4 group disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isRegisterSubmitting ? (
                     <>

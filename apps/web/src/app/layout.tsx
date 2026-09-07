@@ -3,7 +3,7 @@ import './globals.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: 'Stock Management System (SMS)',
+  title: 'Inventory Management System',
   description: 'Production-grade retail POS and inventory management system',
 };
 

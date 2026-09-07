@@ -156,7 +156,7 @@ export function MoreMenu({ isOpen, onToggle, onClose }: MoreMenuProps) {
 
           <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
             <span>Press <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[10px]">⌘K</kbd> to quickly search all commands</span>
-            <span className="text-slate-400">SMS Master Catalog</span>
+            <span className="text-slate-400">Inventory Master Catalog</span>
           </div>
         </div>
       )}

@@ -5,40 +5,16 @@ import Link from 'next/link';
 import { apiClient } from '../../../lib/api-client';
 import { Mail, AlertCircle, CheckCircle2, Loader2, ArrowLeft, ArrowRight } from 'lucide-react';
 
-function SpectrumLogo() {
+function InventoryLogo() {
   return (
-    <div className="flex items-center gap-2.5 justify-center mb-6 select-none">
-      <svg
-        className="w-7 h-7 shrink-0"
-        viewBox="0 0 40 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          cx="20"
-          cy="20"
-          r="15"
-          stroke="url(#spectrum_grad_fp)"
-          strokeWidth="4.5"
-          strokeLinecap="round"
-        />
-        <defs>
-          <linearGradient
-            id="spectrum_grad_fp"
-            x1="5"
-            y1="5"
-            x2="35"
-            y2="35"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#FF4E00" />
-            <stop offset="0.3" stopColor="#FFD000" />
-            <stop offset="0.6" stopColor="#00E5FF" />
-            <stop offset="0.8" stopColor="#7928CA" />
-            <stop offset="1" stopColor="#FF0080" />
-          </linearGradient>
-        </defs>
-      </svg>
+    <div className="flex items-center gap-3 justify-center mb-6 select-none">
+      <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center shadow-md shadow-indigo-500/25 shrink-0">
+        <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+          <path d="m3.3 7 8.7 5 8.7-5" />
+          <path d="M12 22V12" />
+        </svg>
+      </div>
       <span className="text-xl font-bold tracking-tight text-slate-900 font-sans">
         Inventory Management System
       </span>
@@ -79,7 +55,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="bg-white text-slate-900 w-full max-w-[500px] mx-auto rounded-[36px] p-8 sm:p-10 shadow-2xl transition-all duration-300">
-      <SpectrumLogo />
+      <InventoryLogo />
 
       <div className="text-center mb-6">
         <h2 className="text-3xl font-extrabold tracking-tight text-slate-950 font-sans">
@@ -136,7 +112,7 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="pill-btn-coral w-full h-14 text-white font-bold text-base flex items-center justify-center gap-2 cursor-pointer mt-3 group disabled:opacity-60 disabled:cursor-not-allowed"
+            className="pill-btn-indigo w-full h-14 text-white font-bold text-base flex items-center justify-center gap-2 cursor-pointer mt-3 group disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {status === 'loading' ? (
               <>
@@ -155,7 +131,7 @@ export default function ForgotPasswordPage() {
             Remembered your password?{' '}
             <Link
               href="/login"
-              className="text-[#FF4E00] hover:text-[#E60067] font-bold transition hover:underline"
+              className="text-indigo-600 hover:text-indigo-700 font-bold transition hover:underline"
             >
               Sign In here
             </Link>

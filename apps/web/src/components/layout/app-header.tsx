@@ -43,12 +43,16 @@ export function AppHeader({ onOpenSearch, onOpenNotifications }: AppHeaderProps)
         {/* Left: Brand Identity */}
         <div className="flex items-center gap-6 shrink-0">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white font-bold text-sm flex items-center justify-center shadow-xs shadow-indigo-200 group-hover:bg-indigo-700 transition">
-              SMS
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-indigo-700 text-white font-bold text-sm flex items-center justify-center shadow-xs shadow-indigo-200 group-hover:from-indigo-700 group-hover:to-indigo-800 transition">
+              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                <path d="m3.3 7 8.7 5 8.7-5" />
+                <path d="M12 22V12" />
+              </svg>
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900 leading-tight tracking-tight">SMS</div>
-              <div className="text-[10px] text-slate-400 font-medium leading-none">Stock Management System</div>
+              <div className="text-sm font-bold text-slate-900 leading-tight tracking-tight">Inventory Management System</div>
+              <div className="text-[10px] text-slate-400 font-medium leading-none">Enterprise POS &amp; Inventory Hub</div>
             </div>
           </Link>
 

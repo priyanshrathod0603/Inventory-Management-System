@@ -1,8 +1,8 @@
-# Stock Management System (SMS)
+# Inventory Management System
 
 > **Production-grade retail Point of Sale (POS) and inventory operations platform.**
 
-SMS is engineered for Indian retail counters, supermarkets, pharmacies, FMCG distributors, and multi-warehouse operations.
+Inventory Management System is engineered for Indian retail counters, supermarkets, pharmacies, FMCG distributors, and multi-warehouse operations.
 
 ---
 
