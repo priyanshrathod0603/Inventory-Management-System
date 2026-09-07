@@ -5,6 +5,12 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { UsersModule } from './modules/users/users.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { BrandsModule } from './modules/brands/brands.module';
+import { WarehousesModule } from './modules/warehouses/warehouses.module';
+import { ProductsModule } from './modules/products/products.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
+import { BatchesModule } from './modules/batches/batches.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 
 @Module({
@@ -18,6 +24,12 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     PermissionsModule,
     AuthModule,
     UsersModule,
+    CategoriesModule,
+    BrandsModule,
+    WarehousesModule,
+    ProductsModule,
+    InventoryModule,
+    BatchesModule,
   ],
 })
 export class AppModule implements NestModule {

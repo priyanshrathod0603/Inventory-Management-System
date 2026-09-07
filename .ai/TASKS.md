@@ -1,12 +1,11 @@
 # Project Tasks
 
 ## In Progress
-*None* — Phase 9 API Integration is complete. Ready for Phase 10 Products + Inventory.
+*None* — Phase 10 Products + Inventory is complete. Ready for Phase 11 Purchase + Sales + POS.
 
 ---
 
 ## Pending Phases (Master Roadmap)
-- [ ] **PHASE 10** → Products + Inventory (Master data, stock movements, adjustments, inter-warehouse transfers, batches)
 - [ ] **PHASE 11** → Purchase + Sales + POS (Counter billing UI, barcode scanner, purchase bills, interactive transactions)
 - [ ] **PHASE 12** → Payments + Ledger (Double-entry customer/supplier khata, split payments, credit limits)
 - [ ] **PHASE 13** → Invoices + Barcode + Batch (58mm/80mm thermal receipts, A4 GST tax invoices, thermal labels, expiry)
@@ -29,3 +28,4 @@
 - [x] **PHASE 7** → Frontend / Next.js (App router architecture, `(auth)` and `(app)` separation, 64px Top Navigation bar, 4-column More Mega-Menu, Command Palette `⌘K`, Notification slide-over drawer, PageHeader with breadcrumbs, and 26 modular page shells with empty states)
 - [x] **PHASE 8** → UI Design System (Warm luxury SaaS aesthetic, `#FCF9F6` canvas, coral primary `#FF7048`, rounded card tokens 20px–32px, pill buttons/inputs, soft multi-layer SaaS shadows, modernized Auth card, App header, Dashboard, POS, and 24 operational page shells)
 - [x] **PHASE 9** → API Integration (Central API client with HTTP helpers, TanStack Query provider with smart retry, hierarchical query key factory, RBAC permission evaluation utilities, Settings/Profile real data integration, System Health telemetry integration, and Documentation Consistency Gate)
+- [x] **PHASE 10** → Products + Inventory (Product master CRUD, SKUs, barcodes, categories hierarchy, brands, multi-warehouse stock, immutable StockMovement ledger, atomic StockAdjustment with negative protection, inter-warehouse StockTransfer state machine, batch & expiry tracking)

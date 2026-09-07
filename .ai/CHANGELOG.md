@@ -498,3 +498,28 @@ Removed the multi-role RBAC system (Admin / Manager / Cashier / Staff) and repla
 | `npm test --prefix apps/api` | ✅ PASS — 15/15 suites, 86/86 tests |
 | `npm run typecheck --prefix apps/web` | ✅ PASS — 0 errors |
 | `npm run build --prefix apps/web` | ✅ PASS |
+
+## Phase 10 — Products + Inventory Implementation
+- **Date**: 2026-09-07
+- **Scope**: Implemented full products catalog and multi-warehouse inventory engine across NestJS backend and Next.js frontend.
+- **Backend Modules Created**:
+  - `CategoriesModule` (`CategoriesService`, `CategoriesController`, DTOs, unit tests)
+  - `BrandsModule` (`BrandsService`, `BrandsController`, DTOs, unit tests)
+  - `WarehousesModule` (`WarehousesService`, `WarehousesController`, DTOs, unit tests)
+  - `ProductsModule` (`ProductsService`, `ProductsController`, DTOs, unit tests)
+  - `InventoryModule` (`InventoryService`, `InventoryController`, DTOs, unit tests)
+  - `BatchesModule` (`BatchesService`, `BatchesController`, DTOs, unit tests)
+- **Frontend Components & Hooks Created**:
+  - Hooks: `useCategories`, `useBrands`, `useWarehouses`, `useProducts`, `useInventory`, `useBatches`
+  - Modals: `CategoryFormModal`, `BrandFormModal`, `WarehouseFormModal`, `ProductFormModal`, `ProductDetailsDrawer`, `StockAdjustmentModal`, `StockTransferModal`, `BatchFormModal`
+  - Operational Pages Connected: `categories`, `brands`, `warehouses`, `products`, `inventory`, `stock-movements`, `stock-adjustments`, `stock-transfers`, `batches`
+- **Invariants Enforced**:
+  - Negative inventory strictly prevented via database constraints and transaction pre-checks
+  - Immutable stock movement ledger (`StockMovement`)
+  - Stock transfer state machine (`DRAFT` -> `IN_TRANSIT` -> `COMPLETED` / `CANCELLED`)
+  - Universal Admin Access Model preserved
+- **Test Results**:
+  - Backend Jest: 21 test suites, 115 tests passing (100% pass)
+  - TypeScript Typechecks: 0 errors across API and Web
+  - Next.js Build: All 33 static routes compiled cleanly
+

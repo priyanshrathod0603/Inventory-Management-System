@@ -23,23 +23,53 @@ export const healthKeys = {
   readiness: () => [...healthKeys.all, 'readiness'] as const,
 };
 
-// Future module query key definitions (ready for subsequent phases)
-export const productKeys = {
-  all: ['products'] as const,
-  lists: () => [...productKeys.all, 'list'] as const,
-  list: (filters: Record<string, any>) => [...productKeys.lists(), filters] as const,
-  details: () => [...productKeys.all, 'detail'] as const,
-  detail: (id: string) => [...productKeys.details(), id] as const,
-};
-
 export const categoryKeys = {
   all: ['categories'] as const,
-  list: () => [...categoryKeys.all, 'list'] as const,
+  lists: () => [...categoryKeys.all, 'list'] as const,
+  list: (filters?: Record<string, any>) => [...categoryKeys.lists(), filters ?? {}] as const,
+  details: () => [...categoryKeys.all, 'detail'] as const,
+  detail: (id: string) => [...categoryKeys.details(), id] as const,
 };
 
 export const brandKeys = {
   all: ['brands'] as const,
-  list: () => [...brandKeys.all, 'list'] as const,
+  lists: () => [...brandKeys.all, 'list'] as const,
+  list: (filters?: Record<string, any>) => [...brandKeys.lists(), filters ?? {}] as const,
+  details: () => [...brandKeys.all, 'detail'] as const,
+  detail: (id: string) => [...brandKeys.details(), id] as const,
+};
+
+export const warehouseKeys = {
+  all: ['warehouses'] as const,
+  lists: () => [...warehouseKeys.all, 'list'] as const,
+  list: () => [...warehouseKeys.lists()] as const,
+  details: () => [...warehouseKeys.all, 'detail'] as const,
+  detail: (id: string) => [...warehouseKeys.details(), id] as const,
+};
+
+export const productKeys = {
+  all: ['products'] as const,
+  lists: () => [...productKeys.all, 'list'] as const,
+  list: (filters?: Record<string, any>) => [...productKeys.lists(), filters ?? {}] as const,
+  details: () => [...productKeys.all, 'detail'] as const,
+  detail: (id: string) => [...productKeys.details(), id] as const,
+  barcode: (barcode: string) => [...productKeys.all, 'barcode', barcode] as const,
+};
+
+export const inventoryKeys = {
+  all: ['inventory'] as const,
+  overview: (filters?: Record<string, any>) => [...inventoryKeys.all, 'overview', filters ?? {}] as const,
+  movements: (filters?: Record<string, any>) => [...inventoryKeys.all, 'movements', filters ?? {}] as const,
+  adjustments: (filters?: Record<string, any>) => [...inventoryKeys.all, 'adjustments', filters ?? {}] as const,
+  transfers: (filters?: Record<string, any>) => [...inventoryKeys.all, 'transfers', filters ?? {}] as const,
+  transferDetail: (id: string) => [...inventoryKeys.all, 'transfers', id] as const,
+};
+
+export const batchKeys = {
+  all: ['batches'] as const,
+  lists: () => [...batchKeys.all, 'list'] as const,
+  list: (filters?: Record<string, any>) => [...batchKeys.lists(), filters ?? {}] as const,
+  byProduct: (productId: string) => [...batchKeys.all, 'product', productId] as const,
 };
 
 export const salesKeys = {
