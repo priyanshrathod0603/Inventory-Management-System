@@ -18,7 +18,6 @@ import {
   CreditCard,
   BookOpen,
   UserCheck,
-  Shield,
   FileText,
   Bell,
   Settings,
@@ -95,7 +94,6 @@ export function MoreMenu({
       title: 'ADMINISTRATION',
       items: [
         { label: 'Users & Staff', href: '/users', icon: UserCheck },
-        { label: 'Roles & Permissions', href: '/roles', icon: Shield },
         { label: 'Audit Logs', href: '/audit-logs', icon: FileText },
         { label: 'Notifications', href: '/notifications', icon: Bell },
         { label: 'Business Settings', href: '/settings', icon: Settings },

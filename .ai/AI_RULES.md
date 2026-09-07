@@ -34,7 +34,7 @@ Before writing or editing a single line of code or documentation, AI MUST:
   * If a task is Frontend-only: Inspect API contracts, but DO NOT modify backend controllers/services.
   * Cross-layer modifications require explicit justification and minimal scope.
 * **Locked Visual Design System**:
-  * The approved fonts (`Plus Jakarta Sans`, `IBM Plex Mono`), palette (Refined Indigo, Emerald, Amber, Rose), Top-Navigation layout, and Desktop-first scope are **STRICTLY LOCKED**.
+  * The approved fonts (`Plus Jakarta Sans`, `IBM Plex Mono`), Warm Luxury SaaS palette (Coral primary `#FF7048`, Warm Canvas `#FCF9F6`, Dark Navy `#111722`), Fixed Top-Navigation layout, and Desktop-first scope are **STRICTLY LOCKED**.
   * Never introduce new fonts, dark themes, sidebars, mobile layouts, or neon glassmorphism.
 
 ---
@@ -204,3 +204,17 @@ git push
 
 The human owns Git history and release control.
 The AI owns implementation and validation only unless explicitly authorized otherwise.
+---
+
+## CONSTITUTIONAL RULE — Universal Admin Access Model (Added: 2026-09-07)
+
+**This rule has the same weight as all other cardinal rules in this document.**
+
+1. IMS uses a **Single Universal Admin Access Model**. All authenticated users have all permissions.
+2. There is **NO multi-role RBAC system**. Roles Admin/Manager/Cashier/Staff do NOT exist.
+3. You must **NEVER reintroduce** a multi-role hierarchy, role assignment field, or role-based permission filtering.
+4. The `permissions` table is the canonical permission catalog. Every authenticated session receives all permission codes via `Permission.findMany()`.
+5. `accessLevel: 'Admin'` is a **fixed presentational constant** — NOT a database field, NOT a role, NOT a privilege level.
+6. `hasRole()` does NOT exist in the frontend codebase. Do NOT create it.
+7. The `PermissionsGuard` remains active for server-side enforcement — but since all authenticated users carry the full catalog, all pass naturally.
+8. See **DECISION-016** in `DECISIONS.md` for full context and rationale.

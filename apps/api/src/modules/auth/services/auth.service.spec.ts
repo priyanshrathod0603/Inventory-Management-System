@@ -6,9 +6,14 @@ import { SessionService } from './session.service';
 import { EmailVerificationService } from './email-verification.service';
 import { GoogleOAuthService } from './google-oauth.service';
 import { MailService } from './mail.service';
-import { RolesService } from '../../roles/roles.service';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 
+/**
+ * AuthService Test Suite — IMS Universal Admin Access Model
+ *
+ * No role assignment, no role lookup, no RolesService dependency.
+ * Every registered user gets universal Admin access.
+ */
 describe('AuthService', () => {
   let service: AuthService;
 
@@ -18,6 +23,13 @@ describe('AuthService', () => {
       findFirst: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+    },
+    permission: {
+      findMany: jest.fn().mockResolvedValue([
+        { code: 'create_sale' },
+        { code: 'view_products' },
+        { code: 'manage_users' },
+      ]),
     },
     passwordResetToken: {
       create: jest.fn(),
@@ -59,10 +71,6 @@ describe('AuthService', () => {
     sendPasswordResetEmail: jest.fn().mockResolvedValue({ success: true }),
   };
 
-  const mockRolesService = {
-    getDefaultRole: jest.fn().mockResolvedValue({ id: 'role-cashier-id', name: 'Cashier' }),
-  };
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -73,22 +81,26 @@ describe('AuthService', () => {
         { provide: EmailVerificationService, useValue: mockEmailVerificationService },
         { provide: GoogleOAuthService, useValue: mockGoogleOAuthService },
         { provide: MailService, useValue: mockMailService },
-        { provide: RolesService, useValue: mockRolesService },
       ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
     jest.clearAllMocks();
+    // Re-set the default mock for permission.findMany after clearAllMocks
+    mockPrisma.permission.findMany.mockResolvedValue([
+      { code: 'create_sale' },
+      { code: 'view_products' },
+      { code: 'manage_users' },
+    ]);
   });
 
   describe('register', () => {
-    it('should register a new user successfully and dispatch verification', async () => {
+    it('should register a new user successfully and dispatch verification (no role assigned)', async () => {
       mockPrisma.user.findUnique.mockResolvedValue(null);
       mockPrisma.user.create.mockResolvedValue({
         id: 'new-user-id',
         email: 'rahul@example.com',
         username: 'rahul_c',
-        role: { name: 'Cashier' },
       });
 
       const result = await service.register({
@@ -104,6 +116,7 @@ describe('AuthService', () => {
         'new-user-id',
         'rahul@example.com',
       );
+      // CRITICAL: No role service should be called
     });
 
     it('should throw ConflictException if email already registered', async () => {
@@ -136,7 +149,7 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('should authenticate valid credentials and issue session cookie', async () => {
+    it('should authenticate valid credentials and issue session cookie with full permissions', async () => {
       const mockUser = {
         id: 'user-1',
         username: 'rahul_c',
@@ -147,14 +160,15 @@ describe('AuthService', () => {
         isDeleted: false,
         isEmailVerified: true,
         avatarUrl: null,
-        role: {
-          name: 'Cashier',
-          rolePermissions: [{ permission: { code: 'create_sale' } }],
-        },
       };
 
       mockPrisma.user.findFirst.mockResolvedValue(mockUser);
       mockPasswordService.verifyPassword.mockResolvedValue(true);
+      mockPrisma.permission.findMany.mockResolvedValue([
+        { code: 'create_sale' },
+        { code: 'view_products' },
+        { code: 'manage_users' },
+      ]);
 
       const mockReq: any = { ip: '127.0.0.1', headers: {} };
       const mockRes: any = {};
@@ -168,6 +182,8 @@ describe('AuthService', () => {
 
       expect(result.message).toBe('Login successful');
       expect(result.user.username).toBe('rahul_c');
+      expect(result.user.accessLevel).toBe('Admin');
+      expect(result.user.permissions).toContain('create_sale');
       expect(mockSessionService.createSession).toHaveBeenCalled();
       expect(mockSessionService.setSessionCookie).toHaveBeenCalled();
     });
@@ -213,7 +229,7 @@ describe('AuthService', () => {
   });
 
   describe('googleLogin (POST ID token flow)', () => {
-    it('should authenticate verified Google OAuth user and create session', async () => {
+    it('should authenticate verified Google OAuth user and create session with full permissions', async () => {
       mockGoogleOAuthService.verifyIdToken.mockResolvedValue({
         googleId: 'google-sub-123',
         email: 'googleuser@gmail.com',
@@ -232,13 +248,10 @@ describe('AuthService', () => {
         isDeleted: false,
         isEmailVerified: true,
         avatarUrl: 'https://avatar.url',
-        role: {
-          name: 'Cashier',
-          rolePermissions: [],
-        },
       };
 
       mockPrisma.user.findFirst.mockResolvedValue(existingUser);
+      mockPrisma.permission.findMany.mockResolvedValue([{ code: 'create_sale' }]);
       mockSessionService.createSession.mockResolvedValue({ sessionId: 'session-google', expiresAt: new Date() });
 
       const mockReq: any = { headers: {} };
@@ -247,6 +260,7 @@ describe('AuthService', () => {
       const result = await service.googleLogin({ idToken: 'valid-google-id-token' }, mockReq, mockRes);
       expect(result.message).toBe('Google authentication successful');
       expect(result.user.email).toBe('googleuser@gmail.com');
+      expect(result.user.accessLevel).toBe('Admin');
       expect(mockSessionService.setSessionCookie).toHaveBeenCalled();
     });
   });

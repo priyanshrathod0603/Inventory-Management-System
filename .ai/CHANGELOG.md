@@ -407,3 +407,94 @@ Executed a comprehensive project-wide product branding, package metadata, and do
   - `pnpm --filter @ims/web build` (PASS, all 34 static routes generated).
   - `pnpm --filter @ims/api test` (PASS, 15/15 test suites, 85/85 tests).
   - `pnpm --filter @ims/api build` (PASS, NestJS backend build).
+
+---
+
+## [Phase 9] - 2026-09-07: Phase 9 — API Integration Milestone
+
+Completed full implementation and verification of Phase 9 — API Integration, connecting the Next.js frontend to the NestJS backend with TanStack Query, centralized API client, granular RBAC utilities, and real data integration:
+
+- **Documentation Consistency Gate**:
+  - Harmonized `.ai/AI_RULES.md`, `.ai/UI_RULES.md`, `docs/architecture/frontend-architecture.md`, `docs/design/design-system.md`, and `docs/design/components.md` to lock the Warm Luxury SaaS design system (Coral `#FF7048`, Warm Canvas `#FCF9F6`, Dark Navy `#111722`, pill geometry, soft layered shadows).
+- **Central API Client Layer (`apps/web/src/lib/api-client.ts`)**:
+  - Implemented typed `ApiResponse<T>` and robust `ApiError` class with `status`, `code`, `message`, and structured validation `details`.
+  - Added type-safe request helper methods: `apiClient.get`, `apiClient.post`, `apiClient.patch`, `apiClient.put`, `apiClient.delete`.
+  - Maintained mandatory `credentials: 'include'` on all network calls for automatic `sms_session` HttpOnly cookie propagation.
+- **TanStack Query & Query Keys Infrastructure**:
+  - Created `apps/web/src/lib/query-keys.ts` defining hierarchical, type-safe query key factories (`authKeys`, `userKeys`, `healthKeys`, `inventoryKeys`, `salesKeys`, `purchaseKeys`, `reportKeys`).
+  - Configured global `QueryClient` in `apps/web/src/app/providers.tsx` with smart retry strategy (never retries 4xx client/auth errors, max 1 retry for transient 5xx/network errors), 5-minute stale time, and window focus refetching disabled.
+- **Granular RBAC Utilities (`apps/web/src/lib/auth/permissions.ts`)**:
+  - Implemented `hasPermission(user, code)`, `hasAnyPermission(user, codes)`, `hasAllPermissions(user, codes)`, and `hasRole(user, role)`.
+  - Built-in unconditional bypass for `ADMIN` role and safe handling for null/unauthenticated users.
+- **Custom React Query Hooks (`apps/web/src/hooks/`)**:
+  - `useCurrentUser()`: Queries `GET /api/v1/auth/me` with session caching and `enabled` conditional guard.
+  - `useUserProfile(userId)`: Queries `GET /api/v1/users/:id` or `GET /api/v1/users/me` with IDOR safety.
+  - `useHealthLiveness()` and `useHealthReadiness()`: Queries `GET /api/v1/health` and `GET /api/v1/health/ready` for live system diagnostics and database connectivity telemetry.
+- **AuthContext Query Synchronization**:
+  - Integrated `useQueryClient` in `apps/web/src/lib/auth/auth-context.tsx` to actively synchronize TanStack Query cache on login, Google OAuth redirect, and logout (`queryClient.clear()`).
+- **Page Integration & Real Data UI States**:
+  - `settings/page.tsx`: Integrated real user profile data, role badge, email verification badge, active permissions list, and live system diagnostics telemetry with loading skeletons and retry error states.
+  - `users/page.tsx`: Integrated real user session and permission-aware view states (`manage_users`).
+  - `command-palette.tsx`: Added permission filtering (`requiredPermission`) so quick actions reflect user permissions.
+- **Unit & Security Testing**:
+  - Created `apps/web/src/lib/__tests__/permissions.test.ts` (10 tests) and `apps/web/src/lib/__tests__/api-client.test.ts` (7 tests).
+- **Automated Verification**:
+  - `pnpm --filter @ims/web typecheck` (PASS, 0 TypeScript errors).
+  - `pnpm --filter @ims/web build` (PASS, all 34 static routes generated).
+  - `pnpm --filter @ims/api test` (PASS, 15/15 test suites, 85/85 tests).
+  - `pnpm --filter @ims/api build` (PASS, NestJS backend compilation clean).
+---
+
+## [Pre-Phase 10] — Single Universal Admin Access Migration — 2026-09-07
+
+### Summary
+Removed the multi-role RBAC system (Admin / Manager / Cashier / Staff) and replaced it with a Single Universal Admin Access Model. Every authenticated user now has full system access — all 39 permission codes granted per session via the canonical `permissions` table.
+
+### Breaking Changes (Architecture)
+- **Database**: Dropped `roles` table, `role_permissions` table, and `users.roleId` FK column. `permissions` table preserved.
+- **Backend Session Payload**: Removed `role`, `roleId` from `UserSessionPayload`. Added `accessLevel: 'Admin'` (fixed constant).
+- **API Response Shape**: `login`, `googleLogin`, `getMe`, `getUserById` — replaced `role: 'Cashier'` with `accessLevel: 'Admin'` and full permission array.
+- **Frontend**: Removed `hasRole()` from `permissions.ts`. Removed `roleId` from `UserProfileResponse`. 
+
+### Files Changed (Backend)
+- `apps/api/prisma/schema.prisma` — Removed `Role`, `RolePermission`, `User.roleId`
+- `apps/api/prisma/migrations/20260907000000_remove_role_system/migration.sql` — New destructive migration
+- `apps/api/src/modules/roles/roles.service.ts` — Rewritten as `PermissionsSeederService`
+- `apps/api/src/modules/roles/roles.module.ts` — Rewritten as `PermissionsModule`
+- `apps/api/src/modules/auth/services/session.service.ts` — Permission resolution via `Permission.findMany()`
+- `apps/api/src/modules/auth/services/auth.service.ts` — Removed RolesService, roleId, role joins
+- `apps/api/src/modules/users/users.service.ts` — IDOR check via permissions, returns accessLevel
+- `apps/api/src/common/guards/permissions.guard.ts` — Simplified; no Admin role bypass
+- `apps/api/src/modules/auth/auth.module.ts` — PermissionsModule imported
+- `apps/api/src/app.module.ts` — PermissionsModule imported
+
+### Files Changed (Backend Tests)
+- `apps/api/src/modules/auth/services/auth.service.spec.ts`
+- `apps/api/src/modules/auth/services/session.service.spec.ts`
+- `apps/api/src/modules/auth/security.spec.ts`
+- `apps/api/src/common/guards/permissions.guard.spec.ts`
+- `apps/api/src/common/guards/session-auth.guard.spec.ts`
+- `apps/api/src/modules/users/users.service.spec.ts`
+
+### Files Changed (Frontend)
+- `apps/web/src/lib/auth/permissions.ts` — Removed hasRole(), simplified permission checks
+- `apps/web/src/components/layout/user-menu.tsx` — Fixed coral Admin badge for all users
+- `apps/web/src/app/(app)/settings/page.tsx` — Universal permissions display, Admin badge
+- `apps/web/src/app/(app)/roles/page.tsx` — Replaced with universal access informational page
+- `apps/web/src/components/layout/more-menu.tsx` — Removed Roles & Permissions nav item
+- `apps/web/src/hooks/use-user-profile.ts` — Removed roleId, added accessLevel: 'Admin'
+- `apps/web/src/lib/__tests__/permissions.test.ts` — Rewritten for universal model
+
+### Files Changed (Documentation)
+- `.ai/AI_RULES.md` — Constitutional rule added
+- `.ai/DECISIONS.md` — DECISION-016 added
+- `.ai/CURRENT_STATE.md` — Entry 22 added
+- `.ai/CHANGELOG.md` — This entry
+
+### Test Results
+| Suite | Status |
+|---|---|
+| `npm run build --prefix apps/api` | ✅ PASS |
+| `npm test --prefix apps/api` | ✅ PASS — 15/15 suites, 86/86 tests |
+| `npm run typecheck --prefix apps/web` | ✅ PASS — 0 errors |
+| `npm run build --prefix apps/web` | ✅ PASS |

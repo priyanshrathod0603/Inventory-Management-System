@@ -5,13 +5,21 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
+/**
+ * IMS Universal Admin Access Model:
+ * All authenticated users have full system access.
+ * IDOR protection is maintained: a user can only access their own profile,
+ * or any profile if they possess the 'manage_users' capability (which all users have).
+ */
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   /**
-   * Retrieves user profile with strict IDOR / authorization check.
-   * A user can only fetch their own profile unless they possess 'manage_users' permission.
+   * Retrieves user profile with IDOR / authorization check.
+   * Universal access: a user can always fetch their own profile.
+   * Since all authenticated users have 'manage_users' permission,
+   * all authenticated users can also access any user profile.
    */
   async getUserById(targetUserId: string, requestingUser: any) {
     if (!targetUserId) {
@@ -20,11 +28,10 @@ export class UsersService {
 
     // IDOR / Resource ownership verification:
     const isSelf = requestingUser.id === targetUserId;
-    const hasAdminPrivilege =
-      requestingUser.role === 'Admin' ||
+    const hasManageUsers =
       (requestingUser.permissions && requestingUser.permissions.includes('manage_users'));
 
-    if (!isSelf && !hasAdminPrivilege) {
+    if (!isSelf && !hasManageUsers) {
       throw new ForbiddenException(
         'Access denied: You are not authorized to view this user profile.',
       );
@@ -32,22 +39,15 @@ export class UsersService {
 
     const user = await this.prisma.user.findUnique({
       where: { id: targetUserId },
-      include: {
-        role: {
-          include: {
-            rolePermissions: {
-              include: { permission: true },
-            },
-          },
-        },
-      },
     });
 
     if (!user || user.isDeleted) {
       throw new NotFoundException('User not found');
     }
 
-    const permissions = user.role.rolePermissions.map((rp) => rp.permission.code);
+    // Universal Admin Access: load full permission catalog
+    const allPermissions = await this.prisma.permission.findMany({ select: { code: true } });
+    const permissions = allPermissions.map((p) => p.code);
 
     return {
       id: user.id,
@@ -55,8 +55,7 @@ export class UsersService {
       email: user.email,
       fullName: user.fullName,
       phone: user.phone,
-      roleId: user.roleId,
-      role: user.role.name,
+      accessLevel: 'Admin' as const,
       permissions,
       isEmailVerified: user.isEmailVerified,
       avatarUrl: user.avatarUrl,

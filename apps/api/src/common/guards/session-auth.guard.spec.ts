@@ -44,13 +44,12 @@ describe('SessionAuthGuard', () => {
   it('should authenticate with valid session cookie and attach user to request', async () => {
     const mockUser = {
       id: 'u1',
-      username: 'cashier1',
-      email: 'c1@example.com',
-      fullName: 'Rahul S',
+      username: 'ims_user',
+      email: 'user@example.com',
+      fullName: 'IMS User',
       phone: null,
-      roleId: 'r1',
-      role: 'Cashier',
-      permissions: ['create_sale'],
+      accessLevel: 'Admin' as const,
+      permissions: ['create_sale', 'manage_users'],
       isEmailVerified: true,
       isActive: true,
       isDeleted: false,

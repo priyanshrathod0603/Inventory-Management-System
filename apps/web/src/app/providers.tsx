@@ -12,7 +12,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
           queries: {
             staleTime: 1000 * 60 * 5, // 5 minutes
             refetchOnWindowFocus: false,
-            retry: 1,
+            retry: (failureCount, error: any) => {
+              // Never retry permanent 4xx client / auth errors
+              if (error?.status && error.status >= 400 && error.status < 500) {
+                return false;
+              }
+              return failureCount < 1;
+            },
+          },
+          mutations: {
+            retry: false,
           },
         },
       }),

@@ -11,7 +11,6 @@ import { SessionService } from './session.service';
 import { EmailVerificationService } from './email-verification.service';
 import { GoogleOAuthService } from './google-oauth.service';
 import { MailService } from './mail.service';
-import { RolesService } from '../../roles/roles.service';
 import {
   LoginDto,
   RegisterDto,
@@ -25,6 +24,12 @@ import {
 import { Request, Response } from 'express';
 import * as crypto from 'crypto';
 
+/**
+ * IMS Universal Admin Access Model:
+ * Every registered user has full system access (accessLevel: 'Admin').
+ * No role assignment, no default role, no role lookup.
+ * Permissions are loaded from the canonical permissions table on every session validation.
+ */
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -36,11 +41,11 @@ export class AuthService {
     private readonly emailVerificationService: EmailVerificationService,
     private readonly googleOAuthService: GoogleOAuthService,
     private readonly mailService: MailService,
-    private readonly rolesService: RolesService,
   ) {}
 
   /**
    * Common registration for all users.
+   * No role is assigned — every user has universal Admin access.
    */
   async register(dto: RegisterDto) {
     const email = dto.email.toLowerCase().trim();
@@ -65,10 +70,7 @@ export class AuthService {
     // Hash password using Argon2id
     const passwordHash = await this.passwordService.hashPassword(dto.password);
 
-    // Get default role (Cashier / Staff)
-    const defaultRole = await this.rolesService.getDefaultRole();
-
-    // Create user
+    // Create user — no roleId, universal access model
     const user = await this.prisma.user.create({
       data: {
         username,
@@ -76,13 +78,9 @@ export class AuthService {
         passwordHash,
         fullName: dto.fullName.trim(),
         phone: dto.phone ? dto.phone.trim() : null,
-        roleId: defaultRole.id,
         isEmailVerified: false,
         isActive: true,
         isDeleted: false,
-      },
-      include: {
-        role: true,
       },
     });
 
@@ -108,15 +106,6 @@ export class AuthService {
     const user = await this.prisma.user.findFirst({
       where: {
         OR: [{ email: identifier }, { username: identifier }],
-      },
-      include: {
-        role: {
-          include: {
-            rolePermissions: {
-              include: { permission: true },
-            },
-          },
-        },
       },
     });
 
@@ -156,7 +145,9 @@ export class AuthService {
     // Set HttpOnly cookie
     this.sessionService.setSessionCookie(res, sessionId, expiresAt);
 
-    const permissions = user.role.rolePermissions.map((rp) => rp.permission.code);
+    // Universal Admin Access: load full permission catalog
+    const allPermissions = await this.prisma.permission.findMany({ select: { code: true } });
+    const permissions = allPermissions.map((p) => p.code);
 
     return {
       user: {
@@ -164,7 +155,7 @@ export class AuthService {
         username: user.username,
         email: user.email,
         fullName: user.fullName,
-        role: user.role.name,
+        accessLevel: 'Admin' as const,
         permissions,
         isEmailVerified: user.isEmailVerified,
         avatarUrl: user.avatarUrl,
@@ -183,15 +174,6 @@ export class AuthService {
     let user = await this.prisma.user.findFirst({
       where: {
         OR: [{ googleId: googleProfile.googleId }, { email: googleProfile.email }],
-      },
-      include: {
-        role: {
-          include: {
-            rolePermissions: {
-              include: { permission: true },
-            },
-          },
-        },
       },
     });
 
@@ -213,20 +195,10 @@ export class AuthService {
             emailVerifiedAt: user.emailVerifiedAt || new Date(),
             avatarUrl: user.avatarUrl || googleProfile.avatarUrl || null,
           },
-          include: {
-            role: {
-              include: {
-                rolePermissions: {
-                  include: { permission: true },
-                },
-              },
-            },
-          },
         });
       }
     } else {
-      // Create new user with Google identity
-      const defaultRole = await this.rolesService.getDefaultRole();
+      // Create new user with Google identity — no roleId
       const baseUsername = googleProfile.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_');
       const uniqueSuffix = crypto.randomInt(100, 999).toString();
       const username = `${baseUsername}_${uniqueSuffix}`.substring(0, 50);
@@ -238,20 +210,10 @@ export class AuthService {
           fullName: googleProfile.fullName,
           googleId: googleProfile.googleId,
           avatarUrl: googleProfile.avatarUrl || null,
-          roleId: defaultRole.id,
           isEmailVerified: true,
           emailVerifiedAt: new Date(),
           isActive: true,
           isDeleted: false,
-        },
-        include: {
-          role: {
-            include: {
-              rolePermissions: {
-                include: { permission: true },
-              },
-            },
-          },
         },
       });
     }
@@ -267,7 +229,9 @@ export class AuthService {
 
     this.sessionService.setSessionCookie(res, sessionId, expiresAt);
 
-    const permissions = user.role.rolePermissions.map((rp) => rp.permission.code);
+    // Universal Admin Access: load full permission catalog
+    const allPermissions = await this.prisma.permission.findMany({ select: { code: true } });
+    const permissions = allPermissions.map((p) => p.code);
 
     return {
       user: {
@@ -275,7 +239,7 @@ export class AuthService {
         username: user.username,
         email: user.email,
         fullName: user.fullName,
-        role: user.role.name,
+        accessLevel: 'Admin' as const,
         permissions,
         isEmailVerified: user.isEmailVerified,
         avatarUrl: user.avatarUrl,
@@ -305,15 +269,6 @@ export class AuthService {
       where: {
         OR: [{ googleId: googleProfile.googleId }, { email: googleProfile.email }],
       },
-      include: {
-        role: {
-          include: {
-            rolePermissions: {
-              include: { permission: true },
-            },
-          },
-        },
-      },
     });
 
     if (user) {
@@ -337,20 +292,10 @@ export class AuthService {
             emailVerifiedAt: user.emailVerifiedAt || new Date(),
             avatarUrl: user.avatarUrl || googleProfile.avatarUrl || null,
           },
-          include: {
-            role: {
-              include: {
-                rolePermissions: {
-                  include: { permission: true },
-                },
-              },
-            },
-          },
         });
       }
     } else {
-      // CASE 3: New user — create with Google identity
-      const defaultRole = await this.rolesService.getDefaultRole();
+      // CASE 3: New user — create with Google identity, no roleId
       const baseUsername = googleProfile.email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_');
       const uniqueSuffix = crypto.randomInt(100, 999).toString();
       const username = `${baseUsername}_${uniqueSuffix}`.substring(0, 50);
@@ -363,20 +308,10 @@ export class AuthService {
             fullName: googleProfile.fullName,
             googleId: googleProfile.googleId,
             avatarUrl: googleProfile.avatarUrl || null,
-            roleId: defaultRole.id,
             isEmailVerified: true,
             emailVerifiedAt: new Date(),
             isActive: true,
             isDeleted: false,
-          },
-          include: {
-            role: {
-              include: {
-                rolePermissions: {
-                  include: { permission: true },
-                },
-              },
-            },
           },
         });
         this.logger.log(`New Google user registered: ${user.id} (${user.email})`);
@@ -392,20 +327,10 @@ export class AuthService {
               fullName: googleProfile.fullName,
               googleId: googleProfile.googleId,
               avatarUrl: googleProfile.avatarUrl || null,
-              roleId: defaultRole.id,
               isEmailVerified: true,
               emailVerifiedAt: new Date(),
               isActive: true,
               isDeleted: false,
-            },
-            include: {
-              role: {
-                include: {
-                  rolePermissions: {
-                    include: { permission: true },
-                  },
-                },
-              },
             },
           });
           this.logger.log(`New Google user registered (retry): ${user.id} (${user.email})`);
@@ -543,26 +468,20 @@ export class AuthService {
 
   /**
    * Get authenticated user profile.
+   * Returns the full permission catalog — universal Admin access.
    */
   async getMe(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: {
-        role: {
-          include: {
-            rolePermissions: {
-              include: { permission: true },
-            },
-          },
-        },
-      },
     });
 
     if (!user || user.isDeleted || !user.isActive) {
       throw new UnauthorizedException('User not found or inactive');
     }
 
-    const permissions = user.role.rolePermissions.map((rp) => rp.permission.code);
+    // Universal Admin Access: load full permission catalog
+    const allPermissions = await this.prisma.permission.findMany({ select: { code: true } });
+    const permissions = allPermissions.map((p) => p.code);
 
     return {
       id: user.id,
@@ -570,8 +489,7 @@ export class AuthService {
       email: user.email,
       fullName: user.fullName,
       phone: user.phone,
-      roleId: user.roleId,
-      role: user.role.name,
+      accessLevel: 'Admin' as const,
       permissions,
       isEmailVerified: user.isEmailVerified,
       avatarUrl: user.avatarUrl,

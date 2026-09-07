@@ -46,12 +46,8 @@ export function UserMenu({ user }: UserMenuProps) {
         .toUpperCase()
     : 'U';
 
-  const roleBadgeColor =
-    user.role === 'Admin'
-      ? 'bg-coral-50 text-coral-700 border-coral-200'
-      : user.role === 'Manager'
-      ? 'bg-amber-50 text-amber-700 border-amber-200'
-      : 'bg-[#FAF7F4] text-[#111722] border-[#EAE5E0]';
+  // Universal Admin Access Model: all authenticated users display fixed Admin badge
+  const adminBadgeColor = 'bg-coral-50 text-coral-700 border-coral-200';
 
   return (
     <div className="relative" ref={menuRef}>
@@ -71,9 +67,9 @@ export function UserMenu({ user }: UserMenuProps) {
             {user.fullName}
           </span>
           <span
-            className={`px-1.5 py-0.5 text-[8.5px] font-extrabold rounded-full border uppercase tracking-wider leading-none ${roleBadgeColor}`}
+            className={`px-1.5 py-0.5 text-[8.5px] font-extrabold rounded-full border uppercase tracking-wider leading-none ${adminBadgeColor}`}
           >
-            {user.role}
+            Admin
           </span>
         </div>
         <ChevronDown
@@ -94,10 +90,10 @@ export function UserMenu({ user }: UserMenuProps) {
               <p className="text-[11px] text-[#8C9097] font-mono truncate">{user.email}</p>
               <div className="mt-1 flex items-center gap-1">
                 <span
-                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-bold rounded-full border ${roleBadgeColor}`}
+                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-bold rounded-full border ${adminBadgeColor}`}
                 >
                   <Shield className="w-2.5 h-2.5" />
-                  {user.role}
+                  Admin
                 </span>
               </div>
             </div>

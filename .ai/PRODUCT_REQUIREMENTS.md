@@ -78,7 +78,7 @@ Customers        view_customers, create_customer, edit_customer, manage_credit_l
 Suppliers        view_suppliers, create_supplier, edit_supplier
 Payments         record_payment, view_payments, reconcile_cash_drawer
 Reports          view_reports, view_profit_reports, export_reports
-Administration   manage_users, manage_roles, view_audit_logs, manage_settings
+Administration   manage_users, view_audit_logs, manage_settings
 ```
 
 ### 3.3 Explicit Prohibitions for Cashier / Staff Role:

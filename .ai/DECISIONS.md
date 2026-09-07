@@ -177,3 +177,21 @@
   4. Email dispatch failures degrade gracefully without revealing account existence or crashing requests.
 * **Reason**: User requirement to use dedicated Gmail SMTP instead of third-party SaaS email APIs, and security best practice to prevent credential leakage in logs.
 * **Impact**: Eliminates Resend dependency for auth, standardizes Nodemailer on Gmail SMTP, and secures password reset tokens end-to-end.
+---
+
+## DECISION-016
+* **Title**: Single Universal Admin Access Model — Removal of Multi-Role RBAC System
+* **Status**: Accepted
+* **Context**: Architectural / Authorization Correction
+* **Decision**:
+  1. The multi-role RBAC system (Admin, Manager, Cashier, Staff roles) is permanently removed from the IMS.
+  2. The final authorization model is: **AUTHENTICATED USER → ALL PERMISSIONS GRANTED**.
+  3. The `roles` table, `role_permissions` table, and `User.roleId` FK column are dropped from the database schema (Migration: `20260907000000_remove_role_system`).
+  4. The `permissions` table is **preserved** as the canonical permission catalog (38 codes). Every authenticated user receives the full catalog via `Permission.findMany()` on session validation.
+  5. The `PermissionsSeederService` (formerly `RolesService`) seeds only the `permissions` table on startup — no role records, no role-permission assignments.
+  6. The `PermissionsGuard` remains active as the server-side authorization surface, checking `user.permissions` — which always contains the full catalog for authenticated users.
+  7. Frontend UI uses `accessLevel: 'Admin'` as a fixed presentational constant. All role-based badge branching (Cashier/Manager/Staff) is removed.
+  8. `hasRole()` function removed from frontend `permissions.ts`. All authenticated users pass `hasPermission()` checks naturally.
+  9. `AuditLog.userRole` column preserved as historical audit field; will receive the fixed string `'Admin'` for all future entries.
+* **Reason**: User explicitly changed the requirement: "there will be only one role: Admin — interpreted as no role system, just a fixed Admin presentational label." This corrects the over-engineered RBAC architecture for the current single-operator use case.
+* **Impact**: Simplified session validation (no role join), simpler user creation (no default role lookup), simpler frontend (no role-based UI branching). Permission codes remain as capability vocabulary for endpoint documentation. Future AI agents and developers must NOT reintroduce a multi-role RBAC system.

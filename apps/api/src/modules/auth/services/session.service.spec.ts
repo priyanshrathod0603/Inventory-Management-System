@@ -3,9 +3,14 @@ import { SessionService, SESSION_COOKIE_NAME } from './session.service';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Response } from 'express';
 
+/**
+ * SessionService Tests — Universal Admin Access Model
+ *
+ * validateSession now loads all permissions from the permissions table (not via role join).
+ * User payload contains accessLevel: 'Admin' (fixed constant) instead of a DB role.
+ */
 describe('SessionService', () => {
   let service: SessionService;
-  let prisma: PrismaService;
 
   const mockPrisma = {
     session: {
@@ -16,6 +21,13 @@ describe('SessionService', () => {
     },
     user: {
       update: jest.fn(),
+    },
+    permission: {
+      findMany: jest.fn().mockResolvedValue([
+        { code: 'create_sale' },
+        { code: 'view_products' },
+        { code: 'manage_users' },
+      ]),
     },
   };
 
@@ -31,8 +43,13 @@ describe('SessionService', () => {
     }).compile();
 
     service = module.get<SessionService>(SessionService);
-    prisma = module.get<PrismaService>(PrismaService);
     jest.clearAllMocks();
+    // Re-set the permission mock after clearAllMocks
+    mockPrisma.permission.findMany.mockResolvedValue([
+      { code: 'create_sale' },
+      { code: 'view_products' },
+      { code: 'manage_users' },
+    ]);
   });
 
   it('should generate a 128-character hex session ID', () => {
@@ -67,7 +84,7 @@ describe('SessionService', () => {
     });
   });
 
-  it('should validate and return user payload for active valid session', async () => {
+  it('should validate session and return user with full permission catalog (universal access)', async () => {
     const validSession = {
       id: 'session-id-123',
       userId: 'user-id-123',
@@ -75,32 +92,32 @@ describe('SessionService', () => {
       createdAt: new Date(),
       user: {
         id: 'user-id-123',
-        username: 'cashier1',
-        email: 'cashier@example.com',
-        fullName: 'Rahul Sharma',
+        username: 'ims_user',
+        email: 'user@example.com',
+        fullName: 'IMS User',
         phone: null,
-        roleId: 'role-id-123',
         isActive: true,
         isDeleted: false,
         isEmailVerified: true,
         avatarUrl: null,
-        role: {
-          name: 'Cashier',
-          rolePermissions: [
-            { permission: { code: 'create_sale' } },
-            { permission: { code: 'view_products' } },
-          ],
-        },
       },
     };
 
     mockPrisma.session.findUnique.mockResolvedValue(validSession);
+    mockPrisma.permission.findMany.mockResolvedValue([
+      { code: 'create_sale' },
+      { code: 'view_products' },
+      { code: 'manage_users' },
+    ]);
 
     const result = await service.validateSession('session-id-123');
     expect(result).toBeDefined();
-    expect(result?.user.username).toBe('cashier1');
-    expect(result?.user.role).toBe('Cashier');
-    expect(result?.user.permissions).toEqual(['create_sale', 'view_products']);
+    expect(result?.user.username).toBe('ims_user');
+    expect(result?.user.accessLevel).toBe('Admin');
+    expect(result?.user.permissions).toEqual(['create_sale', 'view_products', 'manage_users']);
+    // No role field, no roleId field
+    expect((result?.user as any).role).toBeUndefined();
+    expect((result?.user as any).roleId).toBeUndefined();
   });
 
   it('should return null and revoke expired session', async () => {
@@ -113,7 +130,6 @@ describe('SessionService', () => {
         id: 'user-id-123',
         isActive: true,
         isDeleted: false,
-        role: { name: 'Cashier', rolePermissions: [] },
       },
     };
 
@@ -137,7 +153,6 @@ describe('SessionService', () => {
         id: 'user-id-123',
         isActive: false, // Inactive
         isDeleted: false,
-        role: { name: 'Cashier', rolePermissions: [] },
       },
     };
 

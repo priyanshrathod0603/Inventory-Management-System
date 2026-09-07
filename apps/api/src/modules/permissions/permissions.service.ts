@@ -1,6 +1,17 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
+/**
+ * Canonical system permission catalog.
+ *
+ * IMS uses a single universal Admin access model:
+ * ALL authenticated users receive ALL permissions listed here.
+ * There is no role hierarchy, role assignment, or per-user permission restriction.
+ *
+ * This constant is the authoritative permission vocabulary for the entire system.
+ * Permission codes are used by @RequirePermissions() decorators to declare
+ * endpoint capability requirements (auditing / documentation purpose).
+ */
 export const SYSTEM_PERMISSIONS = [
   // Products
   { code: 'view_products', module: 'Products', description: 'View product catalog and prices' },
@@ -47,27 +58,27 @@ export const SYSTEM_PERMISSIONS = [
   { code: 'export_reports', module: 'Reports', description: 'Export reports to CSV/Excel/PDF' },
   // Administration
   { code: 'manage_users', module: 'Administration', description: 'Manage employee users and access' },
-  { code: 'manage_roles', module: 'Administration', description: 'Manage roles and permission matrix' },
   { code: 'view_audit_logs', module: 'Administration', description: 'View system audit trails' },
   { code: 'manage_settings', module: 'Administration', description: 'Manage store settings and GST config' },
 ];
 
 @Injectable()
-export class RolesService implements OnModuleInit {
-  private readonly logger = new Logger(RolesService.name);
+export class PermissionsSeederService implements OnModuleInit {
+  private readonly logger = new Logger(PermissionsSeederService.name);
 
   constructor(private readonly prisma: PrismaService) {}
 
   async onModuleInit() {
-    await this.seedDefaultRolesAndPermissions();
+    await this.seedSystemPermissions();
   }
 
   /**
-   * Seeds permissions and default system roles in database if missing.
+   * Seeds the system permission catalog into the database.
+   * All permissions listed in SYSTEM_PERMISSIONS are upserted on startup.
+   * Every authenticated user receives the full catalog — no role assignment needed.
    */
-  async seedDefaultRolesAndPermissions(): Promise<void> {
+  async seedSystemPermissions(): Promise<void> {
     try {
-      // 1. Seed Permissions
       for (const perm of SYSTEM_PERMISSIONS) {
         await this.prisma.permission.upsert({
           where: { code: perm.code },
@@ -75,111 +86,20 @@ export class RolesService implements OnModuleInit {
           create: perm,
         });
       }
-
-      // 2. Fetch all permissions map
-      const allPermissions = await this.prisma.permission.findMany();
-      const permMap = new Map(allPermissions.map((p) => [p.code, p.id]));
-
-      // 3. Define Roles
-      const adminRole = await this.prisma.role.upsert({
-        where: { name: 'Admin' },
-        update: { description: 'Super administrator with unrestricted access', isSystem: true },
-        create: { name: 'Admin', description: 'Super administrator with unrestricted access', isSystem: true },
-      });
-
-      const managerRole = await this.prisma.role.upsert({
-        where: { name: 'Manager' },
-        update: { description: 'Store manager with operational and inventory access', isSystem: true },
-        create: { name: 'Manager', description: 'Store manager with operational and inventory access', isSystem: true },
-      });
-
-      const cashierRole = await this.prisma.role.upsert({
-        where: { name: 'Cashier' },
-        update: { description: 'Counter staff for billing, sales, and payments', isSystem: true },
-        create: { name: 'Cashier', description: 'Counter staff for billing, sales, and payments', isSystem: true },
-      });
-
-      const staffRole = await this.prisma.role.upsert({
-        where: { name: 'Staff' },
-        update: { description: 'General floor staff', isSystem: true },
-        create: { name: 'Staff', description: 'General floor staff', isSystem: true },
-      });
-
-      // 4. Assign Admin all permissions
-      for (const perm of allPermissions) {
-        await this.prisma.rolePermission.upsert({
-          where: { roleId_permissionId: { roleId: adminRole.id, permissionId: perm.id } },
-          update: {},
-          create: { roleId: adminRole.id, permissionId: perm.id },
-        });
-      }
-
-      // 5. Assign Cashier permissions
-      const cashierPermCodes = [
-        'view_products',
-        'create_sale',
-        'view_sales',
-        'hold_resume_bill',
-        'apply_manual_discount',
-        'create_sales_return',
-        'view_returns',
-        'view_customers',
-        'create_customer',
-        'record_payment',
-        'view_payments',
-        'reconcile_cash_drawer',
-      ];
-
-      for (const code of cashierPermCodes) {
-        const permId = permMap.get(code);
-        if (permId) {
-          await this.prisma.rolePermission.upsert({
-            where: { roleId_permissionId: { roleId: cashierRole.id, permissionId: permId } },
-            update: {},
-            create: { roleId: cashierRole.id, permissionId: permId },
-          });
-        }
-      }
-
-      this.logger.log('Roles and permissions seeded successfully');
+      this.logger.log(`System permission catalog seeded: ${SYSTEM_PERMISSIONS.length} permissions`);
     } catch (err: any) {
-      this.logger.error(`Failed to seed roles and permissions: ${err.message}`);
+      this.logger.error(`Failed to seed system permissions: ${err.message}`);
     }
   }
 
   /**
-   * Retrieves default role for new registrations (Cashier or Staff).
+   * Returns the full permission catalog as an array of codes.
+   * Used by session validation to grant all permissions to every authenticated user.
    */
-  async getDefaultRole(): Promise<{ id: string; name: string }> {
-    let defaultRole = await this.prisma.role.findFirst({
-      where: { name: 'Cashier' },
+  async getAllPermissionCodes(): Promise<string[]> {
+    const permissions = await this.prisma.permission.findMany({
+      select: { code: true },
     });
-
-    if (!defaultRole) {
-      defaultRole = await this.prisma.role.findFirst();
-    }
-
-    if (!defaultRole) {
-      // Create if none exists
-      defaultRole = await this.prisma.role.create({
-        data: { name: 'Cashier', description: 'Default counter billing role', isSystem: true },
-      });
-    }
-
-    return { id: defaultRole.id, name: defaultRole.name };
-  }
-
-  /**
-   * Finds role by name.
-   */
-  async findByName(name: string) {
-    return this.prisma.role.findUnique({
-      where: { name },
-      include: {
-        rolePermissions: {
-          include: { permission: true },
-        },
-      },
-    });
+    return permissions.map((p) => p.code);
   }
 }

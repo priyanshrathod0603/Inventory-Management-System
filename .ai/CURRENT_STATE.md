@@ -4,13 +4,13 @@
 Inventory Management System (IMS)
 
 ## Stage:
-Phase 8 UI Design System Completed (Ready for Phase 9 API Integration)
+Phase 9 API Integration Completed (Ready for Phase 10 Products + Inventory)
 
 ## Application Status:
-Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), full production-grade Authentication & RBAC foundation, and complete desktop-first Next.js App Router layout shell with Top Navigation, More Mega-Menu, Command Palette (⌘K), Notification Drawer, and 34 static page shells.
+Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), full production-grade Authentication & RBAC foundation, centralized API client layer with standard envelopes & HTTP method helpers, TanStack Query provider integration with intelligent error retry and query key factory, granular RBAC permission evaluation utilities, real user profile & system health telemetry integration, and complete desktop-first Next.js App Router layout shell.
 
 ## Documentation Status:
-Complete: Authoritative Project Brain in `.ai/` + Human-readable engineering/product documentation in `docs/` (Requirements, Architecture, API, Database, Security, Design, Testing, Deployment, Infrastructure, User Guides).
+Complete: Authoritative Project Brain in `.ai/` + Human-readable engineering/product documentation in `docs/` (Requirements, Architecture, API, Database, Security, Design, Testing, Deployment, Infrastructure, User Guides). Harmonized with approved Phase 8 UI design system.
 
 ## Requirements Status:
 Finalized, Synchronized & Frozen: Single Common Authentication System (One primary login `/login`, one common signup `/register`, Email+Password with Argon2id, Google OAuth with ID token verification, Email Verification with secure link and 6-digit OTP; downstream RBAC authorization decoupled) in `PRODUCT_REQUIREMENTS.md` and detailed in `docs/requirements/*`.
@@ -19,7 +19,7 @@ Finalized, Synchronized & Frozen: Single Common Authentication System (One prima
 Finalized and Frozen in `ARCHITECTURE.md` and detailed in `docs/architecture/*`
 
 ## Technology Stack:
-Active & Verified: Next.js + React + TypeScript (Frontend), NestJS + TypeScript (Backend), PostgreSQL 16+ (Database), Prisma ORM, Docker, and pnpm package manager (`TECH_STACK.md`)
+Active & Verified: Next.js + React + TypeScript + TanStack Query (Frontend), NestJS + TypeScript (Backend), PostgreSQL 16+ (Database), Prisma ORM, Docker, and pnpm package manager (`TECH_STACK.md`)
 
 ## Database Specification:
 Finalized, Migrated & Extended: Comprehensive PostgreSQL relational schema (26 entities including `EmailVerificationToken` and `PasswordResetToken`) and migrations (`20260904000000_init`, `20260905000000_auth_phase6`) in `apps/api/prisma/migrations/` with Prisma 6 Client generated and verified against `.ai/DATABASE.md`.
@@ -28,7 +28,7 @@ Finalized, Migrated & Extended: Comprehensive PostgreSQL relational schema (26 e
 Operational & Standardized: Common backend infrastructure (`apps/api/src/common/`), standard API response contracts, request ID middleware, logging with sensitive data redaction, global exception filter, SessionAuthGuard (`sms_session` cookie verification), PermissionsGuard (RBAC authorization), Argon2id password hashing, high-entropy 64-byte session token management, Google OAuth token verification, email verification service (tokens & 6-digit OTP), password reset workflow, roles seeding, and user profile management with strict IDOR protection.
 
 ## Frontend Foundation, Layout & Shells:
-Operational: Typed API client (`lib/api-client.ts`) with credentials inclusion, `AuthContext` React provider (`lib/auth/auth-context.tsx`), Next.js App Router structure (`(auth)` public routes and `(app)` authenticated routes), fixed 64px Top Navigation bar (`AppHeader`), 4-column More Mega-Menu (`MoreMenu`), global Command Palette (`⌘K` / `Ctrl+K`), slide-over Notification Drawer (`NotificationsDrawer`), User Menu with role badge & logout (`UserMenu`), reusable `PageHeader` with breadcrumbs, and 26 modular page shells with empty states across Master Data, Inventory, Transactions, Administration, POS, Dashboard, and Reports.
+Operational: Typed API client (`lib/api-client.ts`) with standard response/error envelope handling and HTTP helpers (`.get`, `.post`, `.patch`, `.put`, `.delete`), centralized query key factory (`lib/query-keys.ts`), custom hooks (`useCurrentUser`, `useUserProfile`, `useHealthLiveness`, `useHealthReadiness`), `AuthContext` React provider integrated with TanStack Query cache, RBAC permission utilities (`lib/auth/permissions.ts`), Next.js App Router structure with fixed Top Navigation bar (`AppHeader`), 4-column More Mega-Menu (`MoreMenu`), permission-filtered Command Palette (`⌘K`), Notifications Drawer, User Menu, and 34 static page shells with honest empty states.
 
 ## Testing Status:
 Operational: All backend unit and security test suites passing (`jest` 15/15 suites, 85/85 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@ims/api` and `@ims/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
@@ -37,10 +37,10 @@ Operational: All backend unit and security test suites passing (`jest` 15/15 sui
 Configured: Local development infrastructure in `docker-compose.yml` (`postgres:16-alpine` on port 5432 with health check, `redis:7-alpine` on port 6379 with health check, named persistent volumes `postgres_data` and `redis_data`, bridge network `sms-network`, `.dockerignore`).
 
 ## Current Work:
-Completed Visual Design System Transformation and Project-Wide Product Name Migration to Inventory Management System (IMS).
+Completed Phase 9 API Integration: Central API client, TanStack Query integration, AuthContext cache synchronization, RBAC permission evaluation utilities, Settings/Profile real data integration, System Health telemetry integration, and Documentation Consistency Gate.
 
 ## Next Major Step:
-PHASE 9 — API Integration (TanStack Query client, API client, error handling, loading states). [Awaiting user authorization].
+PHASE 10 — Products + Inventory (Catalog management, SKUs, barcodes, categories, brands, stock levels, adjustments, and warehouse transfers). [Awaiting user authorization].
 
 ---
 
@@ -459,3 +459,70 @@ PHASE 9 — API Integration (TanStack Query client, API client, error handling, 
 * **Tests**: `npx tsc --noEmit` (PASS), `npx next build` (PASS), `npx jest` (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Ready for user review.
+
+### Entry 21
+* **Date**: 2026-09-07
+* **Task**: Phase 9 — API Integration (Central API Client, TanStack Query, RBAC Permissions, Health Telemetry, Documentation Consistency Gate)
+* **Completed**:
+  1. **Documentation Consistency Gate**:
+     - Audited and synchronized stale UI color/token references across `.ai/AI_RULES.md`, `.ai/UI_RULES.md`, `docs/architecture/frontend-architecture.md`, `docs/design/design-system.md`, and `docs/design/components.md` to reflect approved Phase 8 tokens (Coral `#FF7048`, Warm Canvas `#FCF9F6`, Dark Navy `#111722`, soft borders `#EAE5E0`, pill controls). Preserved historical changelog chronology intact.
+  2. **Centralized API Client Layer (`apps/web/src/lib/api-client.ts`)**:
+     - Standardized typed response envelope `ApiResponse<T>` (`success`, `data`, `meta`, `message`) and `ApiError` (`status`, `code`, `message`, `details`).
+     - Added standard HTTP helper methods: `apiClient.get`, `apiClient.post`, `apiClient.patch`, `apiClient.put`, `apiClient.delete`.
+     - Enforced `credentials: 'include'` for HttpOnly `sms_session` cookie transmission with zero tokens in `localStorage` or `sessionStorage`.
+  3. **TanStack Query & Query Keys Architecture (`apps/web/src/lib/query-keys.ts`)**:
+     - Built centralized hierarchical query key factory for `authKeys`, `userKeys`, and `healthKeys`.
+     - Configured `QueryClientProvider` in `apps/web/src/app/providers.tsx` with smart retry policies (ignoring permanent 4xx errors, retrying transient network/5xx errors at most once), 5-minute stale time, and window focus refetching disabled.
+  4. **Granular RBAC Evaluation Utilities (`apps/web/src/lib/auth/permissions.ts`)**:
+     - Implemented `hasPermission(user, code)`, `hasAnyPermission(user, codes)`, `hasAllPermissions(user, codes)`, and `hasRole(user, role)` helper functions with Super Admin bypass and null-safety.
+  5. **Custom Query Hooks (`apps/web/src/hooks/`)**:
+     - Created `useCurrentUser()` consuming `GET /api/v1/auth/me`.
+     - Created `useUserProfile(userId)` consuming `GET /api/v1/users/:id` or `GET /api/v1/users/me` with IDOR protection awareness.
+     - Created `useHealthLiveness()` and `useHealthReadiness()` consuming `GET /api/v1/health` and `GET /api/v1/health/ready`.
+  6. **AuthContext & Query Cache Synchronization (`apps/web/src/lib/auth/auth-context.tsx`)**:
+     - Integrated `useQueryClient` so login, google login, and logout synchronously update and invalidate the TanStack Query cache.
+  7. **Real Data Consumption & Permission-Aware Screen States**:
+     - Updated Settings/Profile (`apps/web/src/app/(app)/settings/page.tsx`) to display real authenticated user info, role badges, verified status, granted RBAC permissions list, and live system health telemetry with loading skeletons and retry error states.
+     - Updated User Management (`apps/web/src/app/(app)/users/page.tsx`) with permission checking for `manage_users`, displaying real current user session info and restricted access notices.
+     - Updated Command Palette (`apps/web/src/components/layout/command-palette.tsx`) to filter quick actions and administrative tools by user permissions.
+  8. **Unit Tests & Automated Verification**:
+     - Added comprehensive unit tests for permissions logic and API client error/key structures.
+     - `tsc --noEmit` on `@ims/web` & `@ims/api`: PASS (0 errors).
+     - `next build` on `@ims/web`: PASS (34/34 static routes generated).
+     - `nest build` on `@ims/api`: PASS (0 errors).
+     - `jest` on `@ims/api`: PASS (15/15 test suites, 85/85 tests passed).
+* **Changed**: `.ai/AI_RULES.md`, `.ai/UI_RULES.md`, `docs/architecture/frontend-architecture.md`, `docs/design/design-system.md`, `docs/design/components.md`, `apps/web/src/lib/api-client.ts`, `apps/web/src/lib/query-keys.ts`, `apps/web/src/lib/auth/permissions.ts`, `apps/web/src/hooks/use-current-user.ts`, `apps/web/src/hooks/use-user-profile.ts`, `apps/web/src/hooks/use-health.ts`, `apps/web/src/app/providers.tsx`, `apps/web/src/lib/auth/auth-context.tsx`, `apps/web/src/app/(app)/settings/page.tsx`, `apps/web/src/app/(app)/users/page.tsx`, `apps/web/src/components/layout/command-palette.tsx`, `apps/web/src/lib/__tests__/permissions.test.ts`, `apps/web/src/lib/__tests__/api-client.test.ts`, `.ai/CURRENT_STATE.md`.
+* **Tests**: `npm run typecheck --prefix apps/web` (PASS), `npm run build --prefix apps/web` (PASS), `npm run build --prefix apps/api` (PASS), `npm test --prefix apps/api` (PASS).
+* **Known Issues**: None.
+* **Next Steps**: Ready for Phase 10 Products + Inventory upon user authorization.
+---
+
+## Entry 22 — Single Universal Admin Access Migration (2026-09-07)
+
+* **Status**: COMPLETE
+* **Phase**: Authorization Architecture Correction (pre-Phase 10)
+* **Summary**: Removed the multi-role RBAC system entirely and established the Single Universal Admin Access Model.
+* **Database**:
+  - Applied migration `20260907000000_remove_role_system`: dropped `role_permissions` table, dropped `roles` table, dropped `users.roleId` column. Prisma client regenerated.
+  - `permissions` table preserved — canonical catalog of 38 permission codes seeded on startup.
+  - `AuditLog.userRole` column preserved as historical audit field.
+* **Backend Changes**:
+  - `roles.service.ts` → rewritten as `PermissionsSeederService`: seeds only `permissions` table, exposes `getAllPermissionCodes()`. No role seeding.
+  - `roles.module.ts` → rewritten as `PermissionsModule`: exports `PermissionsSeederService`.
+  - `session.service.ts` → `validateSession()` now calls `Permission.findMany()` to grant the full catalog to every session. `UserSessionPayload` has `accessLevel: 'Admin'` (fixed), no `roleId`/`role`.
+  - `auth.service.ts` → no `RolesService` dependency. `register()`, `googleLogin()`, `googleCallback()` create users without `roleId`. Responses use `accessLevel: 'Admin'` + full permission array.
+  - `users.service.ts` → IDOR check uses `permissions.includes('manage_users')`. Returns `accessLevel: 'Admin'` + full permission catalog.
+  - `permissions.guard.ts` → simplified: checks `user.permissions` includes required codes. No Admin role bypass (not needed — all users have all permissions).
+  - `app.module.ts` + `auth.module.ts` → replaced `RolesModule` with `PermissionsModule`.
+* **Frontend Changes**:
+  - `permissions.ts` → `hasRole()` removed. `hasPermission/hasAnyPermission/hasAllPermissions` simplified (no Admin bypass — full catalog in array).
+  - `user-menu.tsx` → fixed coral Admin badge for all users. No Cashier/Manager/Staff branching.
+  - `settings/page.tsx` → all users see full permission catalog display. Section heading updated to "System Access".
+  - `roles/page.tsx` → replaced with Universal Admin Access informational page.
+  - `more-menu.tsx` → removed "Roles & Permissions" navigation entry from ADMINISTRATION group.
+  - `use-user-profile.ts` → `roleId` removed, `accessLevel: 'Admin'` added.
+  - `permissions.test.ts` → rewritten for universal model. `cashierUser` fixture removed.
+* **Tests**: `npm test --prefix apps/api` → **15/15 suites, 86/86 tests PASS**. `npm run typecheck --prefix apps/web` → **PASS**. `npm run build --prefix apps/web` → **PASS**. `npm run build --prefix apps/api` → **PASS**.
+* **Documentation Updated**: `AI_RULES.md` (constitutional rule), `DECISIONS.md` (DECISION-016), `CHANGELOG.md`, `CURRENT_STATE.md`.
+* **Known Issues**: None.
+* **Next Steps**: Phase 10 — Products & Inventory module upon user authorization.

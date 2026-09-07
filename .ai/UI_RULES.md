@@ -22,7 +22,7 @@ CAREOPS-INSPIRED OPERATIONS DASHBOARD STRUCTURE
 * **Professional & Trustworthy**: Serious business software engineered for mission-critical operations.
 * **Operational & Scannable**: High information density balanced with generous whitespace, structured cards, and high-contrast typographic hierarchy.
 * **Fast & Tactile**: Instant feedback, rapid keyboard-driven billing, clear focus states, and zero unnecessary decorative clutter.
-* **Refined & Modern**: Subtle border definitions, soft multi-layer drop shadows, clean cool neutrals, and refined indigo primary accents.
+* **Refined & Modern**: Soft border definitions (`#EAE5E0`), multi-layer drop shadows (`shadow-card`), warm ivory canvas (`#FCF9F6`), and vibrant coral primary accents (`#FF7048`).
 
 ### Strict Anti-Patterns (What IMS Is NOT)
 * **NOT** a generic flat Bootstrap/AdminLTE template.
@@ -87,11 +87,11 @@ The authenticated application shell consists of a top header, optional sub-navig
   * **Keyboard Help**: `?` shortcut helper overlay trigger.
   * **Notification Bell**: Lucide `Bell` icon with unread count indicator pill.
   * **User Profile Menu**: User avatar (`36×36px`) with initials/photo, Full Name (`text-sm font-semibold`), User Role badge (`Admin`, `Manager`, `Cashier`), and dropdown arrow.
-  * **Primary Header CTA**: `+ New Sale` (`bg-indigo-600 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm hover:bg-indigo-700`).
+  * **Primary Header CTA**: `+ New Sale` (`.pill-btn-coral h-9 px-4 text-white font-semibold text-xs rounded-full shadow-coral`).
 
 ### Active Navigation Rules:
-* Active nav link state: `text-indigo-600 font-semibold bg-indigo-50/80 rounded-md border-b-2 border-indigo-600`.
-* Inactive nav link state: `text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium`.
+* Active nav link state: `bg-[#111722] text-white font-semibold rounded-full shadow-xs px-3.5 py-1.5 text-xs sm:text-sm`.
+* Inactive nav link state: `text-[#5F636B] hover:text-[#111722] hover:bg-black/[0.04] font-medium rounded-full px-3.5 py-1.5 text-xs sm:text-sm transition-colors`.
 * Active navigation state must strictly match the current active route. Never display stale or unrelated navigation items as active.
 
 ### "More" Navigation Mega-Menu Structure
@@ -145,12 +145,12 @@ Numeric / Financial:    Plus Jakarta Sans with OpenType Tabular Numerals (tabula
 
 ## 5. Color System & Semantic Tokens
 
-The color system utilizes a refined cool-neutral base paired with an authoritative indigo primary accent and distinct semantic feedback colors.
+The color system utilizes a Warm Luxury SaaS aesthetic with an editorial warm ivory canvas, deep dark navy typography, vibrant coral primary accents, and distinct semantic feedback tokens.
 
 ```
 ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
 │     PRIMARY      │  │     SUCCESS      │  │     WARNING      │  │      DANGER      │
-│  Indigo (#4F46E5)│  │ Emerald (#16A34A)│  │  Amber (#D97706) │  │   Rose (#DC2626) │
+│   Coral (#FF7048)│  │ Emerald (#16A34A)│  │  Amber (#D97706) │  │   Rose (#DC2626) │
 └──────────────────┘  └──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
@@ -158,24 +158,26 @@ The color system utilizes a refined cool-neutral base paired with an authoritati
 
 ```scss
 // Base Canvas & Surfaces
-$bg-canvas:        #F8FAFC; // slate-50  (Main application background)
+$bg-canvas:        #FCF9F6; // Warm ivory/off-white (Main application background)
 $surface-white:    #FFFFFF; // Pure white (Card backgrounds, tables, modal surfaces)
-$surface-subtle:   #F1F5F9; // slate-100 (Input background, table header, zebra rows)
-$border-light:     #E2E8F0; // slate-200 (Standard card, table, and input borders)
-$border-subtle:    #F1F5F9; // slate-100 (Internal row dividers)
+$surface-subtle:   #F8F5F2; // Warm neutral (Container backgrounds, table header)
+$surface-muted:    #F1ECE7; // Muted chip & hover surfaces
+$border-light:     #EAE5E0; // Soft neutral (Standard card, table, and input borders)
+$border-subtle:    #F4EFEA; // Subtle internal row dividers
 
 // Typography & Content
-$text-primary:     #0F172A; // slate-900 (High contrast headers, primary labels)
-$text-secondary:   #475569; // slate-600 (Body text, regular table values)
-$text-muted:       #94A3B8; // slate-400 (Placeholders, inactive icons, timestamps)
+$text-primary:     #111722; // Deep Dark Navy (High contrast headers, primary labels)
+$text-secondary:   #5F636B; // Neutral secondary (Body text, regular table values)
+$text-muted:       #8C9097; // Neutral muted (Placeholders, inactive icons, timestamps)
 
-// Primary Brand Palette (Refined Indigo)
-$primary-50:       #EEF2FF; // Subtle tint background for active nav, chips
-$primary-100:      #E0E7FF; // Hover tint
-$primary-500:      #6366F1; // Accent highlights, focus rings
-$primary-600:      #4F46E5; // PRIMARY CTA BUTTONS, active icons, selected radio
-$primary-700:      #4338CA; // Button hover state
-$primary-900:      #312E81; // Deep brand text
+// Primary Brand Palette (Vibrant Coral)
+$primary-50:       #FFF5F2; // Subtle tint background for chips & badges
+$primary-100:      #FFEAE4; // Hover tint
+$primary-200:      #FFD5C8; // Border tint
+$primary-500:      #FF7048; // PRIMARY CTA BUTTONS, active brand badges, focus rings
+$primary-600:      #F55F34; // Button hover state
+$primary-700:      #D9481E; // Button active state
+$primary-900:      #7F240A; // Deep brand accent text
 
 // Semantic: SUCCESS (In Stock, Paid, Active, Completed, Profit)
 $success-50:       #F0FDF4; // emerald-50  (Badge bg)
@@ -297,7 +299,7 @@ Buttons represent operational velocity. Visual weight must clearly reflect inten
 ┌─────────────────────────┐  ┌─────────────────────────┐  ┌─────────────────────────┐
 │       PRIMARY CTA       │  │        SECONDARY        │  │      DANGER ACTION      │
 │  [ + Complete Sale ]    │  │    [ Hold Bill (F6) ]   │  │   [ Void Invoice ]      │
-│  bg-indigo-600 text-fff │  │  bg-white border-slate   │  │  bg-rose-600 text-fff   │
+│   pill-btn-coral (#FF7) │  │  pill-btn-secondary     │  │   pill-btn-danger       │
 └─────────────────────────┘  └─────────────────────────┘  └─────────────────────────┘
 ```
 
@@ -305,15 +307,13 @@ Buttons represent operational velocity. Visual weight must clearly reflect inten
 
 | Variant | Styles | Primary Usage |
 | :--- | :--- | :--- |
-| **Primary** | `bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 shadow-sm font-semibold` | `Complete Sale (F8)`, `Add Product`, `Save Purchase`, `Record Payment`, `New Sale` |
-| **Secondary** | `bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 active:bg-slate-100 shadow-sm font-medium` | `Hold Bill (F6)`, `Cancel`, `Back to List`, `Export CSV`, `Filter` |
-| **Tertiary / Subtle**| `bg-slate-100 text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-medium` | `Reset Filters`, `View Receipt`, `Add Item Row` |
-| **Ghost** | `bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium` | Table row action toggles, Pagination controls, Tab triggers |
-| **Danger** | `bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 shadow-sm font-semibold` | `Cancel Invoice`, `Void Sale`, `Deactivate User`, `Delete Product` |
-| **Danger Outline**| `bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 font-medium` | `Remove Cart Item`, `Clear Bill`, `Reject Transfer` |
+| **Primary** | `.pill-btn-coral` (`bg-[#FF7048] hover:bg-[#F55F34] text-white rounded-full shadow-coral font-semibold`) | `Complete Sale (F8)`, `Add Product`, `Save Purchase`, `Record Payment`, `New Sale` |
+| **Secondary** | `.pill-btn-secondary` (`bg-white border border-[#EAE5E0] text-[#111722] hover:bg-[#F8F5F2] rounded-full font-semibold`) | `Hold Bill (F6)`, `Cancel`, `Back to List`, `Export CSV`, `Filter` |
+| **Ghost** | `.pill-btn-ghost` (`bg-transparent text-[#5F636B] hover:text-[#111722] hover:bg-[#F8F5F2] rounded-full font-medium`) | Table row action toggles, Pagination controls, Tab triggers |
+| **Danger** | `.pill-btn-danger` (`bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 rounded-full font-semibold`) | `Cancel Invoice`, `Void Sale`, `Deactivate User`, `Delete Product` |
 
 ### Button States & Micro-interactions
-* **Focus Ring**: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2`
+* **Focus Ring**: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500`
 * **Loading State**: Displays a spinning `Loader2` icon (`16px`), disables pointer events, and maintains fixed button dimensions to prevent layout jitter.
 * **Single Primary Rule**: Each screen or modal may have at most **ONE** prominent Primary CTA.
 
@@ -335,21 +335,21 @@ Standard Form Field Layout:
 ```
 
 ### Form Input Components
-* **Text Input / Number Input / Select**:
-  * Height: `38px` (`h-[38px] px-3 py-2 text-sm`)
-  * Surface: `bg-white border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-400`
-  * Focus State: `focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all`
+* **Pill Input / Form Input**:
+  * Pill style: `.pill-input` (`px-5 py-3.5 bg-white border border-[#EAE5E0] rounded-full text-xs sm:text-sm text-[#111722] placeholder:text-[#8C9097]`)
+  * Warm form style: `.form-input-warm` (`px-4 py-2.5 bg-white border border-[#EAE5E0] rounded-[14px] text-xs sm:text-sm text-[#111722] placeholder:text-[#8C9097]`)
+  * Focus State: `focus:border-[#FF7048] focus:ring-4 focus:ring-[#FF7048]/14 focus:outline-none transition-all`
 * **Currency Input (₹)**:
-  * Left adornment: Fixed `₹` symbol prefix (`bg-slate-50 border-r border-slate-300 px-3 text-slate-500 font-semibold`).
+  * Left adornment: Fixed `₹` symbol prefix (`bg-[#F8F5F2] border-r border-[#EAE5E0] px-3 text-[#5F636B] font-semibold`).
   * Content: `font-variant-numeric: tabular-nums; text-right font-medium`.
 * **Barcode Scan Field**:
   * Left icon: `Barcode` scanner glyph.
-  * Border: Distinct subtle indigo border indicating it is active and listening for USB scanner input.
+  * Border: Distinct subtle coral border indicating it is active and listening for USB scanner input.
 * **Form Validation States**:
-  * **Default**: `border-slate-300`
-  * **Focus**: `border-indigo-600 ring-2 ring-indigo-100`
-  * **Invalid / Error**: `border-rose-500 ring-2 ring-rose-100`. Displays an inline error message with `AlertCircle` icon below the field (`text-xs text-rose-600 font-medium mt-1`).
-  * **Disabled**: `bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed`
+  * **Default**: `border-[#EAE5E0]`
+  * **Focus**: `border-[#FF7048] ring-4 ring-[#FF7048]/14`
+  * **Invalid / Error**: `border-rose-500 ring-4 ring-rose-500/15`. Displays an inline error message with `AlertCircle` icon below the field (`text-xs text-rose-600 font-medium mt-1`).
+  * **Disabled**: `bg-[#F8F5F2] text-[#8C9097] border-[#EAE5E0] cursor-not-allowed`
 
 ---
 
@@ -928,7 +928,7 @@ IMS is optimized for high-speed counter operation with minimal mouse reliance.
 | `↑` / `↓` | Navigate autocomplete lists & table rows | Search / Tables |
 
 ### Focus Ring Accessibility:
-* Every interactive button, input, tab, and menu item displays a distinct, high-contrast focus ring when navigated via keyboard: `focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 outline-none`.
+* Every interactive button, input, tab, and menu item displays a distinct, high-contrast focus ring when navigated via keyboard: `focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 outline-none`.
 
 ---
 
@@ -961,23 +961,23 @@ Payment Modes:         Cash, UPI, Card, Bank Transfer, Credit / Khata
 > **Architectural Standard**: IMS uses **ONE Common Login System** and **ONE Common Registration Flow**. All users (Admin, Manager, Cashier, Staff, etc.) access the application through the exact same authentication screens. There are **NO separate role-based login screens**. Downstream role/permission authorization takes effect inside the application shell after login.
 
 ### 36.1 Common Login Screen (`/login`)
-* **Card Container**: Centered branded glass card (`w-full max-w-md bg-white border border-slate-200 shadow-xl rounded-2xl p-8`).
-* **Header**: Brand Logo, Application Name ("Inventory Management System"), Subtitle ("Sign in to your counter or management terminal").
+* **Card Container**: High-elevation split-canvas shell with editorial typography (`auth-split-shell bg-white border border-[#EAE5E0] rounded-[32px] sm:rounded-[36px] p-8 sm:p-10 shadow-popover`).
+* **Header**: Brand Logo ("IMS"), Title ("Welcome Back"), Subtitle ("Sign in to your counter terminal or management dashboard").
 * **Elements**:
-  * `Identifier Field`: Input for username or email address with left icon (`User` / `Mail`).
-  * `Password Field`: Input with eye toggle (`Eye` / `EyeOff`) to show/hide plaintext.
+  * `Identifier Field`: Pill input (`.pill-input`) for username or email address.
+  * `Password Field`: Pill input with eye toggle (`Eye` / `EyeOff`) to show/hide plaintext.
   * `Remember Me`: Checkbox extending session duration for counter terminals.
-  * `Primary CTA`: `Sign In` button (`h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg w-full`).
-  * `Divider`: Visual "or continue with" horizontal separator.
-  * `Google Sign-In CTA`: `Continue with Google` button (`h-11 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded-lg w-full flex items-center justify-center gap-2`).
+  * `Primary CTA`: `Sign In` button (`.pill-btn-coral h-12 text-white font-semibold rounded-full w-full`).
+  * `Divider`: Visual "Or continue with" horizontal separator.
+  * `Google Sign-In CTA`: `Continue with Google` button (`.pill-btn-secondary h-12 text-[#111722] rounded-full w-full flex items-center justify-center gap-2`).
   * `Footer Links`: "Forgot Password?" (`/forgot-password`) and "Create an account" (`/register`).
 
 ### 36.2 Common Registration Screen (`/register`)
-* **Card Container**: Centered branded card (`max-w-md bg-white border border-slate-200 shadow-xl rounded-2xl p-8`).
+* **Card Container**: Branded split-canvas shell (`auth-split-shell bg-white border border-[#EAE5E0] rounded-[32px] sm:rounded-[36px] p-8 sm:p-10 shadow-popover`).
 * **Elements**:
-  * Full Name, Email, Username, Password, and Password Confirmation fields.
-  * "Sign up with Google" alternative button.
-  * "Already have an account? Sign In" link (`/login`).
+  * Full Name, Email, Username, Password (with visual strength indicator), and Optional Phone fields.
+  * "Continue with Google" alternative button.
+  * "Already registered? Sign In" link (`/login`).
 
 ### 36.3 Email Verification Screen (`/verify-email`)
 * **Card Container**: Centered confirmation card (`max-w-md bg-white border border-slate-200 shadow-xl rounded-2xl p-8 text-center`).

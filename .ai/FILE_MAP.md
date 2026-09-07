@@ -94,9 +94,9 @@ apps/
 │   │       │   └── services/     # PasswordService, SessionService, EmailVerificationService, GoogleOAuthService, AuthService, MailService
 │   │       │       ├── mail.service.ts
 │   │       │       └── mail.service.spec.ts
-│   │       ├── roles/            # Roles & permissions module
-│   │       │   ├── roles.service.ts
-│   │       │   └── roles.module.ts
+│   │       ├── permissions/      # System permissions catalog & seeder module
+│   │       │   ├── permissions.service.ts
+│   │       │   └── permissions.module.ts
 │   │       └── users/            # User profile & IDOR protected management module
 │   │           ├── users.controller.ts
 │   │           ├── users.service.ts
@@ -168,7 +168,6 @@ apps/
                 ├── invoices/page.tsx        # Invoices & thermal receipts
                 ├── ledger/page.tsx          # Double-entry accounts ledger
                 ├── users/page.tsx           # User management administration
-                ├── roles/page.tsx           # RBAC roles & permissions
                 ├── audit-logs/page.tsx      # System audit & activity trail
                 ├── notifications/page.tsx   # Notification center
                 └── settings/page.tsx        # Company & system configuration

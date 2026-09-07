@@ -7,11 +7,11 @@ import { EmailVerificationService } from './services/email-verification.service'
 import { GoogleOAuthService } from './services/google-oauth.service';
 import { MailService } from './services/mail.service';
 import { PrismaModule } from '../../prisma/prisma.module';
-import { RolesModule } from '../roles/roles.module';
+import { PermissionsModule } from '../permissions/permissions.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, RolesModule, ConfigModule],
+  imports: [PrismaModule, PermissionsModule, ConfigModule],
   controllers: [AuthController],
   providers: [
     AuthService,

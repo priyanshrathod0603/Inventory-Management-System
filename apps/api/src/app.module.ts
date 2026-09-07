@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { RolesModule } from './modules/roles/roles.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
 import { UsersModule } from './modules/users/users.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 
@@ -15,7 +15,7 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     }),
     PrismaModule,
     HealthModule,
-    RolesModule,
+    PermissionsModule,
     AuthModule,
     UsersModule,
   ],
@@ -25,4 +25,3 @@ export class AppModule implements NestModule {
     consumer.apply(RequestIdMiddleware).forRoutes('*');
   }
 }
-

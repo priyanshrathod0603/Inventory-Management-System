@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCurrentUser } from '../../hooks/use-current-user';
+import { hasPermission } from '../../lib/auth/permissions';
 import {
   Search,
   LayoutDashboard,
@@ -20,7 +22,6 @@ import {
   RotateCcw,
   CreditCard,
   UserCheck,
-  Shield,
   FileText,
   Settings,
   X,
@@ -40,6 +41,7 @@ interface CommandItem {
   icon: React.ElementType;
   shortcut?: string;
   description?: string;
+  requiredPermission?: string;
 }
 
 const COMMAND_ITEMS: CommandItem[] = [
@@ -52,6 +54,7 @@ const COMMAND_ITEMS: CommandItem[] = [
     icon: ShoppingCart,
     shortcut: 'F2',
     description: 'Open billing counter terminal',
+    requiredPermission: 'create_sale',
   },
   {
     id: 'add-product',
@@ -60,6 +63,7 @@ const COMMAND_ITEMS: CommandItem[] = [
     href: '/products',
     icon: Package,
     description: 'Create new catalog SKU & barcode',
+    requiredPermission: 'create_product',
   },
   {
     id: 'stock-adjustment',
@@ -68,6 +72,7 @@ const COMMAND_ITEMS: CommandItem[] = [
     href: '/stock-adjustments',
     icon: Sliders,
     description: 'Audit damage, shrinkage, or physical count',
+    requiredPermission: 'adjust_stock',
   },
   {
     id: 'record-purchase',
@@ -76,6 +81,7 @@ const COMMAND_ITEMS: CommandItem[] = [
     href: '/purchases',
     icon: Truck,
     description: 'Inward inventory shipment',
+    requiredPermission: 'create_purchase',
   },
   {
     id: 'record-payment',
@@ -84,6 +90,7 @@ const COMMAND_ITEMS: CommandItem[] = [
     href: '/payments',
     icon: CreditCard,
     description: 'Credit khata settlement or vendor payout',
+    requiredPermission: 'record_payment',
   },
 
   // Navigation
@@ -186,13 +193,6 @@ const COMMAND_ITEMS: CommandItem[] = [
     icon: UserCheck,
   },
   {
-    id: 'nav-roles',
-    title: 'Roles & Granular Permissions',
-    category: 'Navigation',
-    href: '/roles',
-    icon: Shield,
-  },
-  {
     id: 'nav-audit',
     title: 'System Audit Logs',
     category: 'Navigation',
@@ -214,6 +214,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const { data: user } = useCurrentUser();
 
   useEffect(() => {
     if (isOpen) {
@@ -226,6 +227,9 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   }, [isOpen]);
 
   const filteredItems = COMMAND_ITEMS.filter((item) => {
+    if (item.requiredPermission && !hasPermission(user, item.requiredPermission)) {
+      return false;
+    }
     const q = query.toLowerCase().trim();
     if (!q) return true;
     return (

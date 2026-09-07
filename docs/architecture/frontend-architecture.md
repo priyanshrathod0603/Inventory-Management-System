@@ -34,8 +34,8 @@ apps/web/
 ## 5. UI Design System Alignment
 * Adheres strictly to [.ai/UI_RULES.md](../../.ai/UI_RULES.md):
   * **Typography**: `Plus Jakarta Sans` for UI; `IBM Plex Mono` for SKUs/barcodes/invoices; `tabular-nums` for all financial figures.
-  * **Color Palette**: Solid white surfaces, `#F8FAFC` canvas, `#4F46E5` Refined Indigo primary brand, and semantic status colors.
-  * **Liquid Glass**: Restrained to floating overlays (`⌘K`, notification drawers, popovers).
+  * **Color Palette**: Solid white surfaces, `#FCF9F6` warm canvas, `#FF7048` Coral primary brand accent, `#111722` Dark Navy typography, and semantic status colors.
+  * **Surfaces & Borders**: Soft neutral borders (`#EAE5E0`), pill-shaped interactive controls (`rounded-full`), and high-elevation modals.
 
 ---
 

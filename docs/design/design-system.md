@@ -27,13 +27,16 @@ CAREOPS-INSPIRED OPERATIONS DASHBOARD STRUCTURE
 
 ```scss
 // Backgrounds & Canvas
-$canvas-bg:      #F8FAFC; // slate-50 (Main application background)
+$canvas-bg:      #FCF9F6; // Warm canvas (Main application background)
 $surface-white:  #FFFFFF; // Solid white card & table surfaces
-$border-light:   #E2E8F0; // slate-200 standard borders
+$surface-subtle: #F8F5F2; // Subtle neutral container surfaces
+$border-light:   #EAE5E0; // Soft neutral standard borders
 
-// Primary Brand
-$primary-600:    #4F46E5; // Refined Indigo (Primary buttons, active nav)
-$primary-50:     #EEF2FF; // Subtle tint background
+// Primary Brand & Typography
+$primary-500:    #FF7048; // Coral (Primary CTA buttons, brand badges)
+$primary-600:    #F55F34; // Coral hover
+$text-navy:      #111722; // Deep Dark Navy (Primary headings & numbers)
+$text-secondary: #5F636B; // Neutral secondary content
 
 // Semantic Tokens
 $success-600:    #16A34A; // Emerald (In Stock, Paid, Active, Net Profit)
@@ -44,9 +47,10 @@ $info-600:       #2563EB; // Blue (Info alerts, UPI badges)
 
 ---
 
-## 4. Subtle Liquid Glass Utility
-* **Approved Surfaces**: Command Palette (`⌘K`), notification drawers, filter popovers, date pickers, confirmation modals.
-* **Prohibited Surfaces**: Data tables, entire background canvases, POS billing item grids.
+## 4. Surfaces & Rounded Pill Controls
+* **Pill Buttons & Inputs**: Fully rounded (`rounded-full`) controls with signature coral focus rings.
+* **Elevated Cards**: `rounded-[20px]` to `rounded-[24px]` cards with soft multi-layer drop shadows (`shadow-card`).
+* **Approved Popovers & Overlays**: Floating modal dialogs, notifications drawer, and command palette (`⌘K`).
 
 ---
 

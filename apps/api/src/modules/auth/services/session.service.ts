@@ -5,6 +5,14 @@ import { Response } from 'express';
 
 export const SESSION_COOKIE_NAME = 'sms_session';
 
+/**
+ * UserSessionPayload — the authenticated user context attached to every request.
+ *
+ * IMS Universal Admin Access Model:
+ * - accessLevel is always 'Admin' (fixed presentational constant)
+ * - permissions is always the full system permission catalog
+ * - No roleId, no role hierarchy
+ */
 export interface UserSessionPayload {
   session: {
     id: string;
@@ -18,8 +26,7 @@ export interface UserSessionPayload {
     email: string;
     fullName: string;
     phone: string | null;
-    roleId: string;
-    role: string;
+    accessLevel: 'Admin';
     permissions: string[];
     isEmailVerified: boolean;
     isActive: boolean;
@@ -78,7 +85,10 @@ export class SessionService {
   }
 
   /**
-   * Validates an active session ID and returns the hydrated user with role and permissions.
+   * Validates an active session ID and returns the authenticated user with full permission catalog.
+   *
+   * Universal Admin Access: every validated session receives ALL system permissions.
+   * No role join — permissions are loaded directly from the permissions table.
    */
   async validateSession(sessionId: string): Promise<UserSessionPayload | null> {
     if (!sessionId || typeof sessionId !== 'string') {
@@ -88,19 +98,7 @@ export class SessionService {
     const session = await this.prisma.session.findUnique({
       where: { id: sessionId },
       include: {
-        user: {
-          include: {
-            role: {
-              include: {
-                rolePermissions: {
-                  include: {
-                    permission: true,
-                  },
-                },
-              },
-            },
-          },
-        },
+        user: true,
       },
     });
 
@@ -120,7 +118,11 @@ export class SessionService {
       return null;
     }
 
-    const permissions = user.role.rolePermissions.map((rp) => rp.permission.code);
+    // Universal Admin Access: load the complete permission catalog for every session
+    const allPermissions = await this.prisma.permission.findMany({
+      select: { code: true },
+    });
+    const permissions = allPermissions.map((p) => p.code);
 
     return {
       session: {
@@ -135,8 +137,7 @@ export class SessionService {
         email: user.email,
         fullName: user.fullName,
         phone: user.phone,
-        roleId: user.roleId,
-        role: user.role.name,
+        accessLevel: 'Admin',
         permissions,
         isEmailVerified: user.isEmailVerified,
         isActive: user.isActive,

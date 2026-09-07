@@ -8,8 +8,12 @@ generator client {
 }
 
 // -------------------------------------------------------------
-// Authentication & RBAC
+// Authentication & Universal Admin Access
 // -------------------------------------------------------------
+// NOTE: IMS uses a single universal Admin access model.
+// All authenticated users receive all system permissions.
+// There is no role hierarchy, role assignment, or role-based restriction.
+// The permissions table is preserved as the canonical permission catalog.
 
 model User {
   id               String    @id @default(uuid()) @db.Uuid
@@ -18,7 +22,6 @@ model User {
   passwordHash     String?   @db.VarChar(255)
   fullName         String    @db.VarChar(100)
   phone            String?   @db.VarChar(20)
-  roleId           String    @db.Uuid
   googleId         String?   @unique @db.VarChar(100)
   isEmailVerified  Boolean   @default(false)
   emailVerifiedAt  DateTime? @db.Timestamptz
@@ -29,7 +32,6 @@ model User {
   createdAt        DateTime  @default(now()) @db.Timestamptz
   updatedAt        DateTime  @default(now()) @updatedAt @db.Timestamptz
 
-  role                    Role                     @relation(fields: [roleId], references: [id])
   sessions                Session[]
   emailVerificationTokens EmailVerificationToken[]
   passwordResetTokens     PasswordResetToken[]
@@ -50,41 +52,15 @@ model User {
   @@map("users")
 }
 
-model Role {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String   @unique @db.VarChar(50)
-  description String?  @db.Text
-  isSystem    Boolean  @default(false)
-  createdAt   DateTime @default(now()) @db.Timestamptz
-  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz
-
-  users           User[]
-  rolePermissions RolePermission[]
-
-  @@map("roles")
-}
-
 model Permission {
   id          String  @id @default(uuid()) @db.Uuid
   code        String  @unique @db.VarChar(100)
   module      String  @db.VarChar(50)
   description String? @db.Text
 
-  rolePermissions RolePermission[]
-
   @@map("permissions")
 }
 
-model RolePermission {
-  roleId       String @db.Uuid
-  permissionId String @db.Uuid
-
-  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-
-  @@id([roleId, permissionId])
-  @@map("role_permissions")
-}
 
 model Session {
   id        String   @id @db.VarChar(128)

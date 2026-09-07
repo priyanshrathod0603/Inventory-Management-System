@@ -1,12 +1,11 @@
 # Project Tasks
 
 ## In Progress
-*None* — Phase 8 UI Design System is complete. Ready for Phase 9 API Integration.
+*None* — Phase 9 API Integration is complete. Ready for Phase 10 Products + Inventory.
 
 ---
 
 ## Pending Phases (Master Roadmap)
-- [ ] **PHASE 9** → API Integration (TanStack Query client, API client, error handling, loading states)
 - [ ] **PHASE 10** → Products + Inventory (Master data, stock movements, adjustments, inter-warehouse transfers, batches)
 - [ ] **PHASE 11** → Purchase + Sales + POS (Counter billing UI, barcode scanner, purchase bills, interactive transactions)
 - [ ] **PHASE 12** → Payments + Ledger (Double-entry customer/supplier khata, split payments, credit limits)
@@ -29,3 +28,4 @@
 - [x] **PHASE 6** → Authentication + RBAC (Single Common Login/Signup, Email+Password, Google OAuth, Email Verification link + 6-digit OTP, Password Reset, Argon2id hashing, 64-byte session cookies, SessionAuthGuard, PermissionsGuard, IDOR protection, Roles/Users modules, security test suites)
 - [x] **PHASE 7** → Frontend / Next.js (App router architecture, `(auth)` and `(app)` separation, 64px Top Navigation bar, 4-column More Mega-Menu, Command Palette `⌘K`, Notification slide-over drawer, PageHeader with breadcrumbs, and 26 modular page shells with empty states)
 - [x] **PHASE 8** → UI Design System (Warm luxury SaaS aesthetic, `#FCF9F6` canvas, coral primary `#FF7048`, rounded card tokens 20px–32px, pill buttons/inputs, soft multi-layer SaaS shadows, modernized Auth card, App header, Dashboard, POS, and 24 operational page shells)
+- [x] **PHASE 9** → API Integration (Central API client with HTTP helpers, TanStack Query provider with smart retry, hierarchical query key factory, RBAC permission evaluation utilities, Settings/Profile real data integration, System Health telemetry integration, and Documentation Consistency Gate)
