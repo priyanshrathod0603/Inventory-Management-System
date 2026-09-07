@@ -2,7 +2,7 @@
 
 ## 1. High-Level Architectural Pattern
 
-SMS is structured around a decoupled multi-tier architecture with clear separation between presentation, API gateway, domain services, and persistence layers.
+IMS is structured around a decoupled multi-tier architecture with clear separation between presentation, API gateway, domain services, and persistence layers.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐

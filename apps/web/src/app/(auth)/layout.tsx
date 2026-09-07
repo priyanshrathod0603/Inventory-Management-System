@@ -16,7 +16,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       {/* Minimal Warm Enterprise Footer */}
       <footer className="relative z-10 mt-8 text-center text-xs text-content-muted">
-        <p>© 2026 Stock Management System (SMS). High-Velocity Inventory &amp; Retail POS Platform.</p>
+        <p>© 2026 Inventory Management System (IMS). High-Velocity Inventory &amp; Retail POS Platform.</p>
       </footer>
     </div>
   );

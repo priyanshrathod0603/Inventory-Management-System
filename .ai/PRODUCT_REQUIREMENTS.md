@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary & Core Business Principles
 
-The Stock Management System (SMS) is an enterprise-ready retail POS and inventory management platform tailored for Indian retail, wholesale, pharmacy, supermarket, and FMCG businesses.
+The Inventory Management System (IMS) is an enterprise-ready retail POS and inventory management platform tailored for Indian retail, wholesale, pharmacy, supermarket, and FMCG businesses.
 
 ### Non-Negotiable Core Business Principles:
 1. **Transactional Integrity**: Critical operations (Sales, Purchases, Returns, Stock Adjustments, Payments) execute as atomic, single-unit database transactions. No partial state is permitted.
@@ -16,7 +16,7 @@ The Stock Management System (SMS) is an enterprise-ready retail POS and inventor
 ## 2. Authentication & Session Management
 
 ### 2.1 Core Architectural Principles
-* **Single Common Authentication System**: SMS uses exactly ONE unified authentication system. All users—regardless of role (Admin, Super Admin, Manager, Cashier, Staff, Accountant)—authenticate through the exact same login entry point. There are NO separate Admin, Manager, Staff, or role-specific login pages or portals.
+* **Single Common Authentication System**: IMS uses exactly ONE unified authentication system. All users—regardless of role (Admin, Super Admin, Manager, Cashier, Staff, Accountant)—authenticate through the exact same login entry point. There are NO separate Admin, Manager, Staff, or role-specific login pages or portals.
 * **Single Common Registration System**: A single unified signup flow (`/register`) for new account registration. There are NO role-specific signup portals.
 * **Planned Authentication Methods**:
   1. **Email + Password**: Standard credential authentication with strong hashing (Argon2id) and validation.

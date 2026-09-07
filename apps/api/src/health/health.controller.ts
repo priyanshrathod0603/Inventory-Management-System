@@ -14,7 +14,7 @@ export class HealthController {
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
-      service: 'sms-api',
+      service: 'ims-api',
       environment: process.env.NODE_ENV || 'development',
     };
   }

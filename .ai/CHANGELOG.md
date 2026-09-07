@@ -1,7 +1,7 @@
 # Changelog
 
 ## Project Brain Initialization
-Created the initial documentation architecture for Stock Management System (SMS).
+Created the initial documentation architecture for Inventory Management System (IMS).
 Included:
 - project context
 - product requirements
@@ -26,7 +26,7 @@ Updated CODING_RULES.md with production-grade coding enhancements.
 Appended CURRENT_STATE.md with a new state entry.
 
 ## Finalize Technology Stack Decisions and Docker Documentation
-Finalized the technology stack for SMS: Next.js + React + TypeScript (frontend), NestJS + TypeScript (backend), PostgreSQL (database), Prisma ORM, Docker, and pnpm package manager.
+Finalized the technology stack for IMS: Next.js + React + TypeScript (frontend), NestJS + TypeScript (backend), PostgreSQL (database), Prisma ORM, Docker, and pnpm package manager.
 Added architectural principle: Frontend → Backend → Database → ORM flow.
 Updated DECISIONS.md with technology stack selection rationale.
 Updated TECH_STACK.md with approved stack details and architectural principles.
@@ -122,7 +122,7 @@ Established and verified common NestJS backend architectural foundation:
 
 ## Single Common Authentication System Standardization
 Synchronized the project authentication architecture to standard single common authentication:
-- **Unified Identity & Access**: Explicitly formalized that SMS uses ONE single common login entry point (`/login`, `POST /api/v1/auth/login`) and ONE single common registration flow (`/register`, `POST /api/v1/auth/register`).
+- **Unified Identity & Access**: Explicitly formalized that IMS uses ONE single common login entry point (`/login`, `POST /api/v1/auth/login`) and ONE single common registration flow (`/register`, `POST /api/v1/auth/register`).
 - **Elimination of Role-Specific Login Portals**: Confirmed there are NO separate Admin, Manager, Staff, Cashier, or role-specific login portals/pages. All users authenticate through the same entry point.
 - **Planned Authentication Methods**: Documented planned Email + Password, Google Authentication (Google OAuth 2.0 / Sign-In), and Email Verification.
 - **Decoupled Authorization**: Clarified separation between identity authentication (*"Who is this user?"*) and downstream RBAC authorization (*"What is this user permitted to do?"*).
@@ -169,7 +169,7 @@ Enforced strict HttpOnly session cookie transport across all protected routes:
 Established complete Next.js App Router layout shell, navigation architecture, and modular page shells:
 - **Asset Integration**: Embedded Google brand asset into `apps/web/public/icons/google.png` and integrated with `next/image` in `/login` and `/register`.
 - **Application Layout Architecture**:
-  - `AppHeader`: Fixed 64px (`h-16`) desktop-first top navigation bar (NO sidebars) with SMS brand mark, primary route navigation (`/dashboard`, `/pos`, `/inventory`, `/sales`, `/purchases`, `/reports`), active state indicators, More Mega-Menu trigger, Command Palette trigger (`⌘K`), Notifications trigger with unread badge, User profile menu, and `+ New Sale` shortcut.
+  - `AppHeader`: Fixed 64px (`h-16`) desktop-first top navigation bar (NO sidebars) with IMS brand mark, primary route navigation (`/dashboard`, `/pos`, `/inventory`, `/sales`, `/purchases`, `/reports`), active state indicators, More Mega-Menu trigger, Command Palette trigger (`⌘K`), Notifications trigger with unread badge, User profile menu, and `+ New Sale` shortcut.
   - `UserMenu`: User avatar initials, name, email, role badge (`Admin`, `Manager`, `Cashier`), profile/settings navigation, and Phase 6 session logout integration.
   - `MoreMenu`: 4-column mega-menu covering Master Data, Inventory, Transactions, and Administration with route-aware active state highlighting and liquid glass backdrop.
   - `CommandPalette`: Keyboard-accessible modal dialog (`⌘K` / `Ctrl+K`, `Esc` to close, `↑`/`↓`/`Enter` navigation) featuring quick actions and system navigation shortcuts with zero fake business data.
@@ -182,16 +182,16 @@ Established complete Next.js App Router layout shell, navigation architecture, a
   - Root `/` route client-side router directing authenticated users to `/dashboard` or unauthenticated users to `/login`.
 - **Quality Gates**:
   - `next build` passing with 34 static routes generated.
-  - `tsc --noEmit` passing across `@sms/web` and `@sms/api`.
+  - `tsc --noEmit` passing across `@ims/web` and `@ims/api`.
   - Backend unit and security test suites passing (`jest` 14/14 suites, 65/65 tests).
   - NestJS production build passing (`nest build`).
 
 ## Real Email Delivery via Resend SMTP Milestone
 Integrated outbound SMTP mail delivery with Nodemailer for email verification and OTP codes:
-- **Dependencies**: Added `nodemailer` and `@types/nodemailer` to `@sms/api`.
+- **Dependencies**: Added `nodemailer` and `@types/nodemailer` to `@ims/api`.
 - **Mail Service (`apps/api/src/modules/auth/services/mail.service.ts`)**:
   - Implemented `MailService` using `nodemailer.createTransport` reading `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`, `FRONTEND_URL` from `ConfigService`.
-  - Created structured HTML and plain text email templates containing SMS branding, recipient email context, 6-digit OTP code, verification link (`/verify-email?token=<token>&email=<email>`), 15-minute expiration notice, and security instructions.
+  - Created structured HTML and plain text email templates containing IMS branding, recipient email context, 6-digit OTP code, verification link (`/verify-email?token=<token>&email=<email>`), 15-minute expiration notice, and security instructions.
   - Implemented safe error handling and dev-mode fallback without credential leakage.
 - **Service Integration**:
   - Connected `EmailVerificationService` to `MailService` for user registration and resend verification flows.
@@ -226,11 +226,11 @@ Comprehensive repository audit, security hardening, validation repair, and UI al
   - Preserved all user menu actions (Profile & Account, Store Settings, Sign Out).
 - **UI Repairs & Tailwind CSS Bug Fixes**:
   - Fixed invalid Tailwind class `py-0.2` to `py-0.5` across `app-header.tsx`, `user-menu.tsx`, and `dashboard/page.tsx`.
-  - Maintained frozen SMS color palette (Indigo, Emerald, Amber, Rose) and typography system (Plus Jakarta Sans + IBM Plex Mono).
+  - Maintained frozen IMS color palette (Indigo, Emerald, Amber, Rose) and typography system (Plus Jakarta Sans + IBM Plex Mono).
   - Verified zero mock business data across all 26 page shells.
 - **Quality Gate Results**:
   - Backend tests: 15/15 test suites passed (70/70 tests).
-  - TypeScript typechecks: 0 errors across `@sms/api` and `@sms/web`.
+  - TypeScript typechecks: 0 errors across `@ims/api` and `@ims/web`.
   - NestJS build: PASS.
   - Next.js build: PASS (34 static routes).
 
@@ -244,7 +244,7 @@ Completed full audit and repair of the authentication lifecycle and frontend typ
   - Added `@import` for `Plus Jakarta Sans` and `IBM Plex Mono` in `apps/web/src/app/globals.css`, configured CSS variables in `:root`, and applied body font cascade.
   - Verified clean Next.js build with 34 static routes.
 - **Production Google OAuth 2.0 Authorization-Code Flow**:
-  - Added `google-auth-library` dependency to `@sms/api`.
+  - Added `google-auth-library` dependency to `@ims/api`.
   - Upgraded `GoogleOAuthService` to use `OAuth2Client` with full cryptographic ID token verification (`verifyIdToken` validating signature, audience, issuer, expiration, sub, email, and email_verified).
   - Implemented `generateAuthUrl()` for authorization-code flow with `openid`, `email`, and `profile` scopes.
   - Implemented `exchangeCodeAndVerify()` for exchanging codes with Google token endpoints.
@@ -261,7 +261,7 @@ Completed full audit and repair of the authentication lifecycle and frontend typ
 - **Automated Testing & Full Verification**:
   - Updated and expanded unit tests across `google-oauth.service.spec.ts`, `mail.service.spec.ts`, `auth.service.spec.ts`, and `auth.controller.spec.ts`.
   - All 15 backend test suites passing (85/85 tests, up from 70).
-  - TypeScript typechecks passing with 0 errors across `@sms/api` and `@sms/web`.
+  - TypeScript typechecks passing with 0 errors across `@ims/api` and `@ims/web`.
   - NestJS API build passing (`nest build`).
   - Next.js Web build passing (`next build` with 34 static routes).
 
@@ -269,7 +269,7 @@ Completed full audit and repair of the authentication lifecycle and frontend typ
 
 ## [Phase 7+] - 2026-09-06: Production-Grade Liquid Glass Authentication Experience
 
-Polished and unified the entire Stock Management System (SMS) authentication experience with modern Liquid Glass / Glassmorphism visual language and seamless animated transitions:
+Polished and unified the entire Inventory Management System (IMS) authentication experience with modern Liquid Glass / Glassmorphism visual language and seamless animated transitions:
 
 - **Liquid Glass Design System**:
   - Added `.surface-liquid-glass-auth` with high-contrast translucent white glass (`rgba(255,255,255,0.88)`), heavy backdrop blur (`blur(24px) saturate(190%)`), top specular inner border highlight, and soft multi-layer depth drop shadows.
@@ -292,33 +292,33 @@ Polished and unified the entire Stock Management System (SMS) authentication exp
   - Modernized `apps/web/src/app/(auth)/forgot-password/page.tsx` and `apps/web/src/app/(auth)/verify-email/page.tsx` with identical Liquid Glass aesthetics, focus states, OTP code styling, and navigation.
 
 - **Automated Verification**:
-  - `tsc --noEmit` on `@sms/web` (PASS, 0 errors).
-  - `next build` on `@sms/web` (PASS, 34 static routes generated).
-  - `jest` test suite on `@sms/api` (PASS, 15/15 suites, 85/85 tests).
+  - `tsc --noEmit` on `@ims/web` (PASS, 0 errors).
+  - `next build` on `@ims/web` (PASS, 34 static routes generated).
+  - `jest` test suite on `@ims/api` (PASS, 15/15 suites, 85/85 tests).
 
 ---
 
 ## [Phase 7+] - 2026-09-06: Widescreen 2-Column Split Liquid Glass Authentication Redesign with 3D Character Hero
 
-Redesigned the Stock Management System (SMS) authentication UI from a single centered card into a structured, two-column split composition inspired by the user reference image:
+Redesigned the Inventory Management System (IMS) authentication UI from a single centered card into a structured, two-column split composition inspired by the user reference image:
 
 - **Two-Column Split Architecture**:
   - Transformed `AuthCard` into a widescreen surface container (`max-w-5xl`) with responsive desktop grid (`grid-cols-1 lg:grid-cols-12`).
-  - **Left Column (`lg:col-span-6 xl:col-span-5`)**: Clean Liquid Glass authentication form containing SMS Brand Header, Segmented Tab Switcher (Sign In | Create Account), Dynamic Heading, Input Fields with micro-interaction icon illumination, Primary Action CTA, Google OAuth button with official Google asset, and Bottom Mode Switch Link.
-  - **Right Column (`lg:col-span-6 xl:col-span-7`)**: Dedicated Hero Illustration Container with soft translucent glass backing, ambient background lighting, clean typography, live SMS functional capabilities (Live Sync, Multi-Location, Instant POS), and high-resolution rendering of the user's 3D character group illustration asset (`/images/auth-characters.png`).
+  - **Left Column (`lg:col-span-6 xl:col-span-5`)**: Clean Liquid Glass authentication form containing IMS Brand Header, Segmented Tab Switcher (Sign In | Create Account), Dynamic Heading, Input Fields with micro-interaction icon illumination, Primary Action CTA, Google OAuth button with official Google asset, and Bottom Mode Switch Link.
+  - **Right Column (`lg:col-span-6 xl:col-span-7`)**: Dedicated Hero Illustration Container with soft translucent glass backing, ambient background lighting, clean typography, live IMS functional capabilities (Live Sync, Multi-Location, Instant POS), and high-resolution rendering of the user's 3D character group illustration asset (`/images/auth-characters.png`).
 
 - **Asset Integration & Sub-Route Modernization**:
   - Copied user-uploaded character illustration asset into `apps/web/public/images/auth-characters.png` and rendered using Next.js `<Image />` with balanced framing and zero distortion.
-  - Modernized `AuthLayout` (`apps/web/src/app/(auth)/layout.tsx`), `forgot-password/page.tsx`, and `verify-email/page.tsx` with consistent branding and minimal enterprise footer (`© 2026 Stock Management System (SMS). All rights reserved.`).
+  - Modernized `AuthLayout` (`apps/web/src/app/(auth)/layout.tsx`), `forgot-password/page.tsx`, and `verify-email/page.tsx` with consistent branding and minimal enterprise footer (`© 2026 Inventory Management System (IMS). All rights reserved.`).
 
 - **Strict Preservation of Architecture & Security**:
   - Zero backend or API contract changes; 100% preservation of Argon2id password hashing, `sms_session` HttpOnly cookie verification, Google OAuth 2.0 flow, and real-time client-side error mapping.
   - Retained smooth 300–450ms animated transitions between Login and Sign Up with browser URL synchronization via `window.history.pushState`.
 
 - **Automated Quality Verification**:
-  - `pnpm --filter @sms/web typecheck` (PASS, 0 errors).
-  - `pnpm --filter @sms/web build` (PASS, 34 static routes).
-  - `pnpm --filter @sms/api test` (PASS, 15/15 test suites, 85/85 tests).
+  - `pnpm --filter @ims/web typecheck` (PASS, 0 errors).
+  - `pnpm --filter @ims/web build` (PASS, 34 static routes).
+  - `pnpm --filter @ims/api test` (PASS, 15/15 test suites, 85/85 tests).
 
 ---
 
@@ -331,7 +331,7 @@ Executed a pure frontend visual design system transformation across all screens,
   - `apps/web/src/app/globals.css`: Base canvas styling (`#FCF9F6`, `#111722`), 32px fine dot grid texture (`.bg-subtle-grid`), pill input classes (`.pill-input`, `.form-input-warm`), pill button classes (`.pill-btn-coral`, `.pill-btn-secondary`, `.pill-btn-ghost`, `.pill-btn-danger`), and warm smartphone mockup frame styling.
   - `apps/web/src/app/layout.tsx`: Updated root body classes to `bg-[#FCF9F6] text-[#111722] font-sans antialiased`.
 
-- **Reusable UI Primitives (`@sms/web/components/ui`)**:
+- **Reusable UI Primitives (`@ims/web/components/ui`)**:
   - `button.tsx`: CVA component supporting coral pill (`default`), `secondary`, `outline`, `ghost`, `danger`, `success`, size variants (`sm`, `default`, `lg`, `xl`, `icon`), and loading spinner state.
   - `badge.tsx`: CVA component with `coral`, `solidCoral`, `success`, `warning`, `danger`, `info`, `neutral`, and `outline` variants.
   - `card.tsx`: Warm `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter` with `rounded-[20px]` / `rounded-[24px]` and soft borders.
@@ -342,7 +342,7 @@ Executed a pure frontend visual design system transformation across all screens,
   - `forgot-password/page.tsx` & `verify-email/page.tsx`: Warm white cards `rounded-[32px]`, coral brand mark, coral OTP pin inputs and verify actions.
 
 - **Navigation Shell & Global Overlays**:
-  - `app-header.tsx`: Fixed 64px header with warm white backdrop blur, coral SMS logo mark, pill nav links with coral active badges, warm search trigger (`⌘K`), and coral `+ New Sale` action button.
+  - `app-header.tsx`: Fixed 64px header with warm white backdrop blur, coral IMS logo mark, pill nav links with coral active badges, warm search trigger (`⌘K`), and coral `+ New Sale` action button.
   - `more-menu.tsx`: 4-column mega-menu popover `rounded-[24px]` with soft borders and coral hover highlights.
   - `user-menu.tsx`: Warm card `rounded-2xl` with role badges and sign-out action.
   - `command-palette.tsx`: Modal `rounded-[24px]` with coral selected highlights and keyboard navigation.
@@ -358,7 +358,52 @@ Executed a pure frontend visual design system transformation across all screens,
   - Modernized `inventory`, `products`, `categories`, `brands`, `sales`, `purchases`, `reports`, `customers`, `suppliers`, `warehouses`, `stock-movements`, `stock-adjustments`, `stock-transfers`, `batches`, `sales-returns`, `purchase-returns`, `payments`, `invoices`, `ledger`, `users`, `roles`, `audit-logs`, `notifications`, `settings`, and root redirector `page.tsx`.
 
 - **Automated Verification & Zero Backend Drift**:
-  - `pnpm --filter @sms/web typecheck` (PASS, 0 errors).
-  - `pnpm --filter @sms/web build` (PASS, all 34 static routes generated).
-  - `pnpm --filter @sms/api test` (PASS, 15/15 test suites, 85/85 tests).
+  - `pnpm --filter @ims/web typecheck` (PASS, 0 errors).
+  - `pnpm --filter @ims/web build` (PASS, all 34 static routes generated).
+  - `pnpm --filter @ims/api test` (PASS, 15/15 test suites, 85/85 tests).
   - 100% preservation of all backend schemas, API contracts, and security rules.
+
+---
+
+## [Phase 9] - 2026-09-07: Complete Project-Wide Product Name Migration to Inventory Management System (IMS)
+
+Executed a comprehensive project-wide product branding, package metadata, and documentation migration establishing Inventory Management System (IMS) across the entire codebase, documentation, configuration, and monorepo metadata:
+
+- **Frontend Application & UI Brand Consistency**:
+  - `apps/web/src/components/layout/app-header.tsx`: Updated brand title to `IMS` and subtitle to `Inventory Management System`.
+  - `apps/web/src/components/auth/auth-card.tsx`: Updated brand header to `IMS` / `Inventory Management System`.
+  - `apps/web/src/app/(auth)/layout.tsx`: Updated footer to `© 2026 Inventory Management System (IMS). High-Velocity Inventory & Retail POS Platform.`.
+  - `apps/web/src/app/(auth)/forgot-password/page.tsx`: Updated brand header to `IMS` / `Inventory Management System`.
+  - `apps/web/src/app/(auth)/verify-email/page.tsx`: Updated brand header to `IMS` / `Inventory Management System`.
+  - `apps/web/src/app/page.tsx`: Updated root splash loading message to `Loading Inventory Management System...`.
+  - `apps/web/src/app/(app)/settings/page.tsx`: Updated default company name to `Inventory Management System` and internal billing domain placeholder.
+
+- **Backend & Service Layer Brand Consistency**:
+  - `apps/api/src/main.ts`: Updated Swagger OpenAPI document builder title to `Inventory Management System API`, description, and bootstrap log prefix `[IMS-API]`.
+  - `apps/api/src/health/health.controller.ts`: Updated health check response `service` field to `ims-api`.
+  - `apps/api/src/health/health.controller.spec.ts`: Updated unit test assertions for health check payload.
+  - `apps/api/src/modules/auth/services/auth.service.ts`: Updated JSDoc comments to document IMS session management.
+  - `apps/api/src/modules/auth/services/mail.service.ts`: Updated fallback sender address domain to `noreply@ims-system.internal`.
+
+- **Monorepo Packages & Configuration**:
+  - `package.json`: Updated root workspace name to `ims-monorepo` and pnpm filter scripts (`build:web`, `build:api`, `dev:web`, `dev:api`) to `@ims/web` and `@ims/api`.
+  - `apps/api/package.json`: Updated package name to `@ims/api`.
+  - `apps/web/package.json`: Updated package name to `@ims/web`.
+  - `.env.example`: Updated device naming to `IMS` and default `EMAIL_FROM` to `Inventory Management System`.
+  - `.env` & `apps/api/.env`: Updated sample `EMAIL_FROM` comments.
+  - `README.md`: Updated directory tree root to `IMS/`.
+
+- **Documentation & AI Project Brain Overhaul**:
+  - Updated all 24 human-readable documentation files across `docs/` (`docs/api/`, `docs/architecture/`, `docs/database/`, `docs/deployment/`, `docs/design/`, `docs/infrastructure/`, `docs/requirements/`, `docs/security/`, `docs/testing/`, `docs/user-guides/`).
+  - Updated all `.ai/` Project Brain specifications (`AI_RULES.md`, `PROJECT_CONTEXT.md`, `PRODUCT_REQUIREMENTS.md`, `ARCHITECTURE.md`, `UI_RULES.md`, `CODING_RULES.md`, `DECISIONS.md`, `API_CONTRACTS.md`, `CURRENT_STATE.md`, `SESSION_STATE.md`, `TASKS.md`, `CHANGELOG.md`).
+
+- **Intentionally Preserved Technical Identifiers**:
+  - Preserved session cookie identifier (`sms_session`) across backend guards, services, and API contracts to maintain session compatibility.
+  - Preserved database name (`sms_db`) in `DATABASE_URL` and Docker container names (`sms-postgres`, `sms-redis`, `sms-network`) to prevent breaking local Docker containers and volumes.
+  - Preserved business domain entities (`stock_movements`, `stock_adjustments`, `stock_transfers`, `inStock`, `stockQty`).
+
+- **Automated Verification**:
+  - `pnpm typecheck` (PASS, 0 TypeScript errors across `@ims/api` and `@ims/web`).
+  - `pnpm --filter @ims/web build` (PASS, all 34 static routes generated).
+  - `pnpm --filter @ims/api test` (PASS, 15/15 test suites, 85/85 tests).
+  - `pnpm --filter @ims/api build` (PASS, NestJS backend build).

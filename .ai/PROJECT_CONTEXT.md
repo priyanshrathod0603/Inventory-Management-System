@@ -1,7 +1,7 @@
 # Project Context
 
 ## Project
-**Project Name:** Stock Management System (SMS)
+**Project Name:** Inventory Management System (IMS)
 
 **Project Type:** Production-grade inventory / stock management and retail POS system.
 

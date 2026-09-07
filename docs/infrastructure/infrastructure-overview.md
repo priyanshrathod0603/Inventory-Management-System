@@ -1,7 +1,7 @@
 # Infrastructure Overview
 
 ## 1. Scope & Architecture
-SMS is designed to run on self-hosted Linux/macOS server hardware, on-premises retail server nodes, or cloud virtual private servers (VPS) using standard Docker containerization.
+IMS is designed to run on self-hosted Linux/macOS server hardware, on-premises retail server nodes, or cloud virtual private servers (VPS) using standard Docker containerization.
 
 ## 2. Infrastructure Components
 * **Host OS**: Linux (Ubuntu 22.04+ / Debian 12+) or macOS.

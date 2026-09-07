@@ -1,7 +1,7 @@
 # Testing Strategy
 
 ## 1. Quality Assurance Philosophy
-SMS is a business-critical system. Financial amounts, inventory quantities, and authorization checks must achieve high automated test reliability.
+IMS is a business-critical system. Financial amounts, inventory quantities, and authorization checks must achieve high automated test reliability.
 
 ---
 

@@ -30,7 +30,7 @@ services:
 
 ## 3. Node.js & Package Management Foundation
 * **Node Runtime**: Node.js 20+ (Active LTS) / Node 24.
-* **Package Manager**: pnpm v11 workspace managing `@sms/api` and `@sms/web`.
+* **Package Manager**: pnpm v11 workspace managing `@ims/api` and `@ims/web`.
 
 ## 4. Production Deployment Topology (Planned)
 * **API Service**: Containerized standalone Node.js production server running NestJS compiled artifacts.

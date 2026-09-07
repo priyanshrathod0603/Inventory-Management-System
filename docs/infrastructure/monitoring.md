@@ -7,7 +7,7 @@
 {
   "status": "ok",
   "timestamp": "2026-09-04T20:58:37.000Z",
-  "service": "sms-api",
+  "service": "ims-api",
   "environment": "production"
 }
 ```

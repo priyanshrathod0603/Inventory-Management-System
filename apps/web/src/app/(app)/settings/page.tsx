@@ -79,7 +79,7 @@ export default function SettingsPage() {
               <label className="text-xs font-bold text-navy-950">Company Name</label>
               <input
                 type="text"
-                defaultValue="Stock Management System"
+                defaultValue="Inventory Management System"
                 className="w-full px-4 py-2.5 text-xs bg-white border border-border rounded-xl text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 shadow-xs transition"
               />
             </div>
@@ -97,7 +97,7 @@ export default function SettingsPage() {
               <label className="text-xs font-bold text-navy-950">Support Email</label>
               <input
                 type="email"
-                placeholder="billing@sms-system.internal"
+                placeholder="billing@ims-system.internal"
                 className="w-full px-4 py-2.5 text-xs bg-white border border-border rounded-xl text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 shadow-xs transition"
               />
             </div>

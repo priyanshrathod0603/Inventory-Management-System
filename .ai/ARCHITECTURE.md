@@ -2,7 +2,7 @@
 
 ## 1. High-Level Architectural Topology
 
-The Stock Management System (SMS) adheres to a multi-tier, modular client-server architecture with strict separation of concerns, server-authoritative business logic, and transactional consistency.
+The Inventory Management System (IMS) adheres to a multi-tier, modular client-server architecture with strict separation of concerns, server-authoritative business logic, and transactional consistency.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────┐

@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-This document catalogs all environment variables used across SMS.
+This document catalogs all environment variables used across IMS.
 
 ## 1. Backend Environment Variables (`apps/api`)
 

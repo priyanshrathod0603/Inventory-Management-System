@@ -14,7 +14,7 @@ Unit tests focus on testing pure domain logic in isolation, mocking all database
 it('should return health status ok', () => {
   const result = controller.check();
   expect(result.status).toBe('ok');
-  expect(result.service).toBe('sms-api');
+  expect(result.service).toBe('ims-api');
   expect(result.timestamp).toBeDefined();
 });
 ```

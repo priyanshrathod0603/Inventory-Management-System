@@ -287,7 +287,7 @@ export class AuthService {
   /**
    * Google OAuth callback for authorization-code flow (GET /auth/google/callback).
    * Called after Google redirects back with ?code= and ?state= parameters.
-   * Handles all three user provisioning cases and sets the SMS session cookie.
+   * Handles all three user provisioning cases and sets the IMS session cookie.
    */
   async googleCallback(code: string, req: Request, res: Response): Promise<void> {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
@@ -415,7 +415,7 @@ export class AuthService {
       }
     }
 
-    // Create SMS session — same mechanism as email/password login
+    // Create IMS session — same mechanism as email/password login
     const ip = req?.ip || req?.socket?.remoteAddress || undefined;
     const userAgent = (req?.headers && req.headers['user-agent']) || undefined;
     const { sessionId, expiresAt } = await this.sessionService.createSession(

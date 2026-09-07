@@ -1,6 +1,6 @@
 # UI Components Specification
 
-This document details the core component library rules for SMS.
+This document details the core component library rules for IMS.
 
 ## 1. Buttons & Actions
 * **Primary CTA**: `bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm font-semibold rounded-lg` (`Complete Sale`, `New Sale`, `Save`).

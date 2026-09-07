@@ -1,6 +1,6 @@
 # Acceptance Criteria
 
-This document defines formal verification rules and acceptance criteria for all core features in SMS.
+This document defines formal verification rules and acceptance criteria for all core features in IMS.
 
 ## 1. Authentication & RBAC
 * **AC-AUTH-01**: Given valid credentials, when a user logs in, then a secure `HttpOnly` session cookie (`sms_session`) is returned with status `200 OK` and active role permissions payload.

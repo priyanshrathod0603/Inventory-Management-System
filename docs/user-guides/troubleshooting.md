@@ -15,7 +15,7 @@ This document assists developers and counter staff in diagnosing and resolving c
 ### Issue: `Prisma client out of sync with schema`
 * **Resolution**: Regenerate the Prisma client after any schema changes:
   ```bash
-  pnpm --filter @sms/api prisma:generate
+  pnpm --filter @ims/api prisma:generate
   ```
 
 ---

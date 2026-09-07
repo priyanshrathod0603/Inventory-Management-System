@@ -1,7 +1,7 @@
 # Release Process
 
 ## 1. Versioning Standard
-SMS follows Semantic Versioning (`MAJOR.MINOR.PATCH`):
+IMS follows Semantic Versioning (`MAJOR.MINOR.PATCH`):
 * `MAJOR`: Breaking architectural changes or complete database restructuring.
 * `MINOR`: New business modules (e.g. Sales Returns, Stock Transfers) without breaking previous API contracts.
 * `PATCH`: Bug fixes, calculation optimizations, and UI refinements.

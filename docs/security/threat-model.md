@@ -1,6 +1,6 @@
 # Threat Model & Mitigation Matrix
 
-This document identifies potential security threats to SMS and documents approved mitigations.
+This document identifies potential security threats to IMS and documents approved mitigations.
 
 | Threat / Vector | Risk Level | Mitigation Strategy |
 | :--- | :--- | :--- |

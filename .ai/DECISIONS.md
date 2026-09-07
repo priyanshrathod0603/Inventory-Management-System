@@ -21,10 +21,10 @@
 ---
 
 ## DECISION-003
-* **Title**: Technology Stack Selection for SMS
+* **Title**: Technology Stack Selection for IMS
 * **Status**: Accepted
 * **Context**: Technology Stack Finalization
-* **Decision**: Adopt the following technology stack for the Stock Management System:
+* **Decision**: Adopt the following technology stack for the Inventory Management System:
   * Frontend: Next.js + React + TypeScript with Tailwind CSS, shadcn/ui, Lucide Icons, TanStack Query, React Hook Form, and Zod
   * Backend: NestJS + TypeScript with modular architecture
   * Database: PostgreSQL 16+
@@ -40,7 +40,7 @@
 * **Title**: Global UI/UX Design System & Visual Identity Freeze
 * **Status**: Accepted
 * **Context**: UI/UX Specification Finalization
-* **Decision**: Lock the visual identity and interaction design for SMS:
+* **Decision**: Lock the visual identity and interaction design for IMS:
   * Visual Architecture: CareOps-inspired operations dashboard structure with top navigation (no sidebars).
   * Typography: `Plus Jakarta Sans` (UI/Forms/Headings) + `IBM Plex Mono` (Technical Identifiers: SKU, Barcodes, Invoice #) + OpenType `tabular-nums` for all numeric/financial values.
   * Color Palette: Solid white surfaces on cool neutral canvas (`#F8FAFC`), Refined Indigo primary brand (`#4F46E5`), and strict semantic tokens (Emerald for success/in-stock, Amber for low-stock/warning, Rose for danger/out-of-stock, Blue for info/UPI).
@@ -127,7 +127,7 @@
 * **Title**: Single Common Authentication System (One Primary Login & One Common Signup)
 * **Status**: Accepted
 * **Context**: Authentication Model Standardization & Clarification
-* **Decision**: SMS adopts ONE single common authentication system across the entire application:
+* **Decision**: IMS adopts ONE single common authentication system across the entire application:
   1. **One Primary Login**: All users (regardless of role: Admin, Super Admin, Manager, Cashier, Staff, Accountant, etc.) authenticate through the exact same single login entry point (`/login` and `POST /api/v1/auth/login`). There are NO separate Admin login, Manager login, Staff login, Super Admin login, or role-specific login pages/flows.
   2. **One Common Signup**: A single common registration flow (`/register` and `POST /api/v1/auth/register`). There are NO role-specific signup portals.
   3. **Supported / Planned Auth Methods**: Email + Password and Google Authentication (Google OAuth / Sign-In), with Email Verification planned as an integral part of the core authentication lifecycle.

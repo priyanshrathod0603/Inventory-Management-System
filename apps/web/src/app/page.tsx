@@ -28,7 +28,7 @@ export default function RootPage() {
             <path d="M12 22V12" />
           </svg>
         </div>
-        <p className="text-xs text-content-secondary font-semibold">Loading Stock Management System...</p>
+        <p className="text-xs text-content-secondary font-semibold">Loading Inventory Management System...</p>
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ Inventory Management System is engineered for Indian retail counters, supermarke
 The repository is organized as a `pnpm` monorepo:
 
 ```text
-SMS/
+IMS/
 ├── .ai/                    # Authoritative Project Brain (Single Source of Truth)
 ├── apps/
 │   ├── web/                # Future Next.js 15 frontend application boundary

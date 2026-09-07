@@ -1,6 +1,6 @@
 # User Flows
 
-This document visualizes key operational workflows across SMS.
+This document visualizes key operational workflows across IMS.
 
 ## 1. High-Velocity POS Counter Checkout Flow
 

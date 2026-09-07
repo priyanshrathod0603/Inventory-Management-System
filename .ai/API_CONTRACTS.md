@@ -48,7 +48,7 @@
 
 ## 2. Authentication & Session Endpoints (`/auth`)
 
-> **Architectural Standard**: SMS utilizes **ONE Single Common Authentication System**. All users (Admin, Manager, Cashier, Staff, etc.) authenticate through these exact common endpoints. There are no role-specific login/registration endpoints. Downstream authorization is governed by RBAC after authentication. Implementation is scheduled for Phase 6.
+> **Architectural Standard**: IMS utilizes **ONE Single Common Authentication System**. All users (Admin, Manager, Cashier, Staff, etc.) authenticate through these exact common endpoints. There are no role-specific login/registration endpoints. Downstream authorization is governed by RBAC after authentication. Implementation is scheduled for Phase 6.
 
 ### `POST /api/v1/auth/login`
 * **Purpose**: Universal common login endpoint for all users. Authenticates credentials and issues secure HttpOnly session cookie.

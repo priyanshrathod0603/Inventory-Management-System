@@ -1,6 +1,6 @@
 # Feature Specifications
 
-This document outlines detailed engineering specifications for each approved module in SMS.
+This document outlines detailed engineering specifications for each approved module in IMS.
 
 ## 1. Authentication & Session Management
 * **Credentials Validation**: Validates `identifier` (username or email) and `password` against salted Argon2id hashes.

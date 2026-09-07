@@ -1,7 +1,7 @@
 # API Overview
 
 ## 1. Introduction
-The SMS API is a RESTful API serving all Point of Sale, Inventory, Procurement, and Financial management operations.
+The IMS API is a RESTful API serving all Point of Sale, Inventory, Procurement, and Financial management operations.
 
 * **Base URL**: `/api/v1`
 * **Transport**: HTTPS (in production), JSON payloads (`Content-Type: application/json`).

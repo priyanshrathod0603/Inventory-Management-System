@@ -2,7 +2,7 @@
 
 ## 1. Core Engineering Philosophy
 
-1. **Production-Grade Standard**: Treat SMS as a mission-critical, production enterprise system. Prioritize correctness, transactional integrity, security, data preservation, and maintainability above quick hacks.
+1. **Production-Grade Standard**: Treat IMS as a mission-critical, production enterprise system. Prioritize correctness, transactional integrity, security, data preservation, and maintainability above quick hacks.
 2. **Separation of Concerns**: Strict architectural flow:
    ```
    Frontend (Next.js / React) → REST API Layer → Backend Domain Services (NestJS) → ORM Layer (Prisma) → Database (PostgreSQL)

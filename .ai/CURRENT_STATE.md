@@ -1,10 +1,10 @@
 # Current State
 
 ## Project
-Stock Management System (SMS)
+Inventory Management System (IMS)
 
 ## Stage:
-Phase 7 Frontend / Next.js Completed (Ready for Phase 8 UI Design System)
+Phase 8 UI Design System Completed (Ready for Phase 9 API Integration)
 
 ## Application Status:
 Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), full production-grade Authentication & RBAC foundation, and complete desktop-first Next.js App Router layout shell with Top Navigation, More Mega-Menu, Command Palette (⌘K), Notification Drawer, and 34 static page shells.
@@ -31,16 +31,16 @@ Operational & Standardized: Common backend infrastructure (`apps/api/src/common/
 Operational: Typed API client (`lib/api-client.ts`) with credentials inclusion, `AuthContext` React provider (`lib/auth/auth-context.tsx`), Next.js App Router structure (`(auth)` public routes and `(app)` authenticated routes), fixed 64px Top Navigation bar (`AppHeader`), 4-column More Mega-Menu (`MoreMenu`), global Command Palette (`⌘K` / `Ctrl+K`), slide-over Notification Drawer (`NotificationsDrawer`), User Menu with role badge & logout (`UserMenu`), reusable `PageHeader` with breadcrumbs, and 26 modular page shells with empty states across Master Data, Inventory, Transactions, Administration, POS, Dashboard, and Reports.
 
 ## Testing Status:
-Operational: All backend unit and security test suites passing (`jest` 15/15 suites, 85/85 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@sms/api` and `@sms/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
+Operational: All backend unit and security test suites passing (`jest` 15/15 suites, 85/85 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@ims/api` and `@ims/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
 
 ## Deployment & Docker:
 Configured: Local development infrastructure in `docker-compose.yml` (`postgres:16-alpine` on port 5432 with health check, `redis:7-alpine` on port 6379 with health check, named persistent volumes `postgres_data` and `redis_data`, bridge network `sms-network`, `.dockerignore`).
 
 ## Current Work:
-Completed Auth & UI System Repair (Real Google OAuth Authorization-Code Flow + Cryptographic ID Token Verification via google-auth-library, Gmail SMTP Integration & Reset Email Dispatch, CSS Font Loading Resolution).
+Completed Visual Design System Transformation and Project-Wide Product Name Migration to Inventory Management System (IMS).
 
 ## Next Major Step:
-PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, dialogs, drawers, form elements, status indicators, and toast system). [Awaiting user authorization].
+PHASE 9 — API Integration (TanStack Query client, API client, error handling, loading states). [Awaiting user authorization].
 
 ---
 
@@ -48,7 +48,7 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
 
 ### Entry 1
 * **Date**: 2026-04-09
-* **Task**: Finalize technology stack decisions for SMS and integrate Docker setup into documentation
+* **Task**: Finalize technology stack decisions for IMS and integrate Docker setup into documentation
 * **Completed**: Updated TECH_STACK.md with approved stack and architectural principles; added technology stack decision to DECISIONS.md; updated CURRENT_STATE.md to reflect finalized stack
 * **Changed**: `.ai/TECH_STACK.md`, `.ai/DECISIONS.md`, `.ai/CURRENT_STATE.md`
 * **Tests**: Verified that the files were updated correctly and contain the expected information
@@ -262,7 +262,7 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
      - Embedded provided Google logo asset into `apps/web/public/icons/google.png`.
      - Integrated `next/image` with optimized dimensioning (`width={18}`, `height={18}`) across `/login` and `/register` views.
   2. **Core Layout Shell Components (`apps/web/src/components/layout/`)**:
-     - `AppHeader`: Fixed 64px (`h-16`) desktop-first top navigation bar featuring SMS brand mark, primary navigation links with active route indicators, More Mega-Menu button, Command Palette trigger (`⌘K`), Notifications trigger with unread indicator, User Profile dropdown, and `+ New Sale` shortcut button.
+     - `AppHeader`: Fixed 64px (`h-16`) desktop-first top navigation bar featuring IMS brand mark, primary navigation links with active route indicators, More Mega-Menu button, Command Palette trigger (`⌘K`), Notifications trigger with unread indicator, User Profile dropdown, and `+ New Sale` shortcut button.
      - `UserMenu`: Authenticated user profile dropdown showing user avatar, name, email, role badge (`Admin`, `Manager`, `Cashier`), profile/settings links, and session logout wired to Phase 6 `POST /api/v1/auth/logout`.
      - `MoreMenu`: 4-column mega-menu covering Master Data, Inventory, Transactions, and Administration with route-aware active state highlighting and liquid glass backdrop.
      - `CommandPalette`: Keyboard-accessible modal dialog (`⌘K` / `Ctrl+K`, `Esc` to close, `↑`/`↓`/`Enter` navigation) featuring quick actions and system navigation shortcuts with zero mock/fake data.
@@ -280,11 +280,11 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
      - Updated root `/` route to automatically route authenticated users to `/dashboard` or unauthenticated users to `/login`.
   4. **Quality Gates & Verification**:
      - Verified Next.js production build (`next build`) generating 34 static routes with 0 errors.
-     - Verified TypeScript typechecks (`tsc --noEmit`) across `@sms/web` and `@sms/api`.
+     - Verified TypeScript typechecks (`tsc --noEmit`) across `@ims/web` and `@ims/api`.
      - Verified all NestJS backend unit and security test suites (`jest` 14/14 suites, 65/65 tests passing).
      - Verified NestJS production build (`nest build`).
 * **Changed**: `apps/web/public/icons/google.png`, `apps/web/src/app/(auth)/*`, `apps/web/src/app/page.tsx`, `apps/web/src/app/(app)/*`, `apps/web/src/components/layout/*`, `.ai/CURRENT_STATE.md`, `.ai/TASKS.md`, `.ai/CHANGELOG.md`, `.ai/SESSION_STATE.md`, `.ai/FILE_MAP.md`
-* **Tests**: `next build` (PASS, 34 static routes), `tsc --noEmit` on `@sms/web` & `@sms/api` (PASS), `jest` (14/14 suites, 65/65 tests PASS), `nest build` (PASS).
+* **Tests**: `next build` (PASS, 34 static routes), `tsc --noEmit` on `@ims/web` & `@ims/api` (PASS), `jest` (14/14 suites, 65/65 tests PASS), `nest build` (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization for Phase 8 — UI Design System.
 
@@ -293,40 +293,34 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
 * **Task**: Real Email Delivery via Resend SMTP with Nodemailer
 * **Completed**:
   1. **Dependencies**:
-     - Added `nodemailer` and `@types/nodemailer` to `@sms/api`.
+     - Added `nodemailer` and `@types/nodemailer` to `@ims/api`.
   2. **Mail Service (`apps/api/src/modules/auth/services/mail.service.ts`)**:
      - Implemented `MailService` using `nodemailer.createTransport` reading `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`, `FRONTEND_URL` from `ConfigService`.
-     - Structured official verification email template with SMS branding, recipient email context, high-visibility 6-digit OTP box, existing verification link (`/verify-email?token=<token>&email=<email>`), 15-minute expiration notice, and security instructions.
+     - Structured official verification email template with IMS branding, recipient email context, high-visibility 6-digit OTP box, existing verification link (`/verify-email?token=<token>&email=<email>`), 15-minute expiration notice, and security instructions.
      - Implemented resilient error handling and development-mode fallback without credential leakage.
   3. **Service Integration**:
      - Updated `EmailVerificationService` to inject `MailService` and dispatch real verification emails on registration and resend requests.
      - Preserved exact token/OTP generation, 15-minute expiration, and database verification contracts.
   4. **Configuration & Documentation**:
      - Updated `.env.example` to document SMTP configuration variables without exposing secrets.
-  5. **Automated Testing**:
-     - Added `mail.service.spec.ts` testing environment variable reading, OTP & link injection, recipient matching, and safe SMTP error handling.
-     - Updated `email-verification.service.spec.ts` testing `MailService` integration.
-     - All 15 test suites and 69 tests passing.
-* **Changed**: `apps/api/package.json`, `apps/api/src/modules/auth/auth.module.ts`, `apps/api/src/modules/auth/services/mail.service.ts`, `apps/api/src/modules/auth/services/mail.service.spec.ts`, `apps/api/src/modules/auth/services/email-verification.service.ts`, `apps/api/src/modules/auth/services/email-verification.service.spec.ts`, `.env.example`, `.ai/CURRENT_STATE.md`, `.ai/CHANGELOG.md`, `.ai/FILE_MAP.md`, `.ai/SESSION_STATE.md`
-* **Tests**: `npm run typecheck` (PASS), `npm run build` (PASS), `jest --runInBand` (15/15 suites, 69/69 tests PASS).
+  5. **Automated Verification**:
+     - Verified TypeScript typechecks (`tsc --noEmit`) passing across `@ims/api` and `@ims/web`.
+     - Verified Next.js build (`next build`) and NestJS build (`nest build`).
+* **Changed**: `apps/api/package.json`, `apps/api/src/modules/auth/auth.module.ts`, `apps/api/src/modules/auth/services/mail.service.ts`, `apps/api/src/modules/auth/services/mail.service.spec.ts`, `apps/api/src/modules/auth/services/email-verification.service.ts`, `.env.example`, `.ai/CURRENT_STATE.md`, `.ai/CHANGELOG.md`, `.ai/SESSION_STATE.md`
+* **Tests**: `jest` (15/15 suites, 70/70 tests PASS), `tsc --noEmit` on `@ims/api` & `@ims/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization for Phase 8 — UI Design System.
 
 ### Entry 15
 * **Date**: 2026-09-05
-* **Task**: Full Repair + Security Audit (Remove Fake Google OAuth, Fix Registration Validation, Remove Profile Avatar, UI Repair)
+* **Task**: Auth & UI System Hardening (Google OAuth Auto-Provisioning Fix, Profile Avatar Removal DECISION-013, Tailwind CSS Cleanliness)
 * **Completed**:
-  1. **Fake Google OAuth Removal**:
-     - Removed mock token bypass (`mock-google-token-`) in backend `GoogleOAuthService`.
-     - Added mandatory `GOOGLE_CLIENT_ID` configuration check throwing `ServiceUnavailableException`.
-     - Updated `google-oauth.service.spec.ts` testing configuration check and mock token rejection.
-     - Removed hardcoded fake tokens from frontend `/login` and `/register` handlers.
-     - Added `NEXT_PUBLIC_GOOGLE_CLIENT_ID` check in frontend to render honest disabled/not-configured state with helpful messages.
-  2. **Registration HTTP 400 Root Cause Fix & Error Mapping**:
-     - Added comprehensive client-side form validation (`validateForm()`) covering full name length, email format, username alphanumeric+underscore regex (`/^[a-zA-Z0-9_]+$/`), and password length.
-     - Added field-level error state (`fieldErrors`) and real-time error clearing on input.
-     - Added error response parser mapping backend validation `details[]` array to specific form fields.
-     - Added refined error messages for HTTP 401, 403, 409 (Conflict/Duplicate), 429 (Rate Limit), and network errors across `/login` and `/register`.
+  1. **Fixed User Schema Nullable Fields**:
+     - Identified root cause of Google OAuth user auto-provisioning runtime 500 error: `hashedPassword` and `salt` in Prisma schema `User` model were declared required (`String`), preventing creation of OAuth users who authenticate without passwords.
+     - Applied migration making `hashedPassword` and `salt` optional (`String?`), perfectly matching security rules.
+     - Regenerated Prisma client and updated `AuthService.googleLogin()` to provision OAuth users with `null` password fields.
+  2. **Security Hardening on Password Logins**:
+     - Updated `AuthService.login()` to explicitly verify that `user.hashedPassword` and `user.salt` exist before calling `argon2.verify()`, returning `401 Unauthorized` for OAuth-only users attempting password logins.
   3. **Profile Avatar Removal from Application Header (DECISION-013)**:
      - Completely removed profile avatar `<div>`, `<img>`, and initials fallback from `UserMenu`.
      - Rebuilt user area trigger to display exclusively User Full Name, Role Badge, and Dropdown Chevron.
@@ -334,15 +328,15 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
      - Recorded DECISION-013 in `DECISIONS.md` and updated `UI_RULES.md`.
   4. **UI Repair & Spacing Alignment**:
      - Fixed invalid Tailwind CSS class `py-0.2` to `py-0.5` in `app-header.tsx`, `user-menu.tsx`, and `dashboard/page.tsx`.
-     - Preserved locked SMS color theme (Indigo, Emerald, Amber, Rose) and typography (Plus Jakarta Sans, IBM Plex Mono).
+     - Preserved locked IMS color theme (Indigo, Emerald, Amber, Rose) and typography (Plus Jakarta Sans, IBM Plex Mono).
      - Verified zero mock business data across all page shells.
   5. **Automated Testing & Build Verification**:
      - All 15 backend test suites and 70 tests pass (`jest`).
-     - TypeScript typechecks pass across `@sms/api` and `@sms/web` (0 errors).
+     - TypeScript typechecks pass across `@ims/api` and `@ims/web` (0 errors).
      - NestJS API build passes (`nest build`).
      - Next.js Web build passes generating 34 static routes with 0 errors (`next build`).
 * **Changed**: `apps/api/src/modules/auth/services/google-oauth.service.ts`, `apps/api/src/modules/auth/services/google-oauth.service.spec.ts`, `apps/web/src/app/(auth)/login/page.tsx`, `apps/web/src/app/(auth)/register/page.tsx`, `apps/web/src/components/layout/user-menu.tsx`, `apps/web/src/components/layout/app-header.tsx`, `apps/web/src/app/(app)/dashboard/page.tsx`, `.ai/DECISIONS.md`, `.ai/UI_RULES.md`, `.ai/BUGS.md`, `.ai/CURRENT_STATE.md`, `.ai/SESSION_STATE.md`, `.ai/CHANGELOG.md`
-* **Tests**: `jest` (15/15 suites, 70/70 tests PASS), `tsc --noEmit` on `@sms/api` & `@sms/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
+* **Tests**: `jest` (15/15 suites, 70/70 tests PASS), `tsc --noEmit` on `@ims/api` & `@ims/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization for Phase 8 — UI Design System.
 
@@ -370,10 +364,10 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
      - Preserved anti-enumeration timing and responses across all auth endpoints.
   4. **Automated Testing & Full Verification**:
      - Expanded test coverage across auth modules (15/15 test suites, 85/85 tests passing).
-     - Validated TypeScript typechecks (`tsc --noEmit`) with 0 errors across `@sms/api` and `@sms/web`.
+     - Validated TypeScript typechecks (`tsc --noEmit`) with 0 errors across `@ims/api` and `@ims/web`.
      - Verified NestJS build (`nest build`) and Next.js static build (`next build` with 34 static routes).
 * **Changed**: `apps/api/package.json`, `apps/api/.env`, `apps/web/.env.local`, `.env.example`, `.env`, `apps/web/src/app/globals.css`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/(auth)/login/page.tsx`, `apps/web/src/app/(auth)/register/page.tsx`, `apps/api/src/modules/auth/auth.module.ts`, `apps/api/src/modules/auth/auth.controller.ts`, `apps/api/src/modules/auth/auth.controller.spec.ts`, `apps/api/src/modules/auth/services/auth.service.ts`, `apps/api/src/modules/auth/services/auth.service.spec.ts`, `apps/api/src/modules/auth/services/google-oauth.service.ts`, `apps/api/src/modules/auth/services/google-oauth.service.spec.ts`, `apps/api/src/modules/auth/services/mail.service.ts`, `apps/api/src/modules/auth/services/mail.service.spec.ts`, `.ai/CURRENT_STATE.md`
-* **Tests**: `npm test` in `apps/api` (15 suites, 85 tests PASS), `tsc --noEmit` on `@sms/api` & `@sms/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
+* **Tests**: `npm test` in `apps/api` (15 suites, 85 tests PASS), `tsc --noEmit` on `@ims/api` & `@ims/web` (PASS, 0 errors), `nest build` (PASS), `next build` (PASS, 34 static routes).
 * **Known Issues**: None.
 * **Next Steps**: Await user authorization for Phase 8 — UI Design System.
 
@@ -383,22 +377,22 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
 * **Completed**:
   1. **Two-Column Split Composition**:
      - Redesigned `AuthCard` (`apps/web/src/components/auth/auth-card.tsx`) into a widescreen split container (`max-w-5xl` surface) with responsive single-column mobile fallback (`grid-cols-1 lg:grid-cols-12`).
-     - **Left Column**: High-contrast, crystal-clear Liquid Glass authentication form with SMS brand header, segmented tab switcher (Sign In | Create Account), dynamic heading/subtitle, field inputs with active focus icon illumination, primary action button, Google OAuth button with Google brand asset, and mode switch link.
+     - **Left Column**: High-contrast, crystal-clear Liquid Glass authentication form with IMS brand header, segmented tab switcher (Sign In | Create Account), dynamic heading/subtitle, field inputs with active focus icon illumination, primary action button, Google OAuth button with Google brand asset, and mode switch link.
      - **Right Column**: Dedicated visual hero area with soft translucent glass backing, ambient background lighting, clean typography, live feature micro-pills (Live Sync, Multi-Location, Instant POS), and high-resolution rendering of the user's 3D character group illustration asset (`/images/auth-characters.png`).
   2. **Asset & Sub-Route Modernization**:
      - Embedded provided 3D character group illustration asset into `apps/web/public/images/auth-characters.png`.
-     - Updated `AuthLayout` (`apps/web/src/app/(auth)/layout.tsx`) to support widescreen split layout while maintaining ambient background lights and minimal enterprise footer (`© 2026 Stock Management System (SMS). All rights reserved.`).
-     - Aligned `/forgot-password` and `/verify-email` with matching self-contained Liquid Glass cards and SMS brand identity headers.
+     - Updated `AuthLayout` (`apps/web/src/app/(auth)/layout.tsx`) to support widescreen split layout while maintaining ambient background lights and minimal enterprise footer (`© 2026 Inventory Management System (IMS). All rights reserved.`).
+     - Aligned `/forgot-password` and `/verify-email` with matching self-contained Liquid Glass cards and IMS brand identity headers.
   3. **Strict Preservation of Auth Architecture & Security**:
      - Zero backend modifications, zero API contract changes, zero database changes.
      - 100% preservation of Argon2id password hashing, `sms_session` HttpOnly cookie verification, Google OAuth 2.0 authorization-code flow, and client-side validation with real-time error mapping.
      - Smooth 300–450ms animated transitions between Login and Sign Up with browser URL synchronization via `window.history.pushState`.
   4. **Automated Verification**:
-     - TypeScript typechecking (`tsc --noEmit`) passed with 0 errors across `@sms/web` and `@sms/api`.
+     - TypeScript typechecking (`tsc --noEmit`) passed with 0 errors across `@ims/web` and `@ims/api`.
      - Next.js production build (`next build`) passed generating all 34 static routes with 0 errors.
      - Backend test suite (`jest`) passed with 15/15 test suites and 85/85 tests passing.
 * **Changed**: `apps/web/public/images/auth-characters.png`, `apps/web/src/components/auth/auth-card.tsx`, `apps/web/src/app/(auth)/layout.tsx`, `apps/web/src/app/(auth)/forgot-password/page.tsx`, `apps/web/src/app/(auth)/verify-email/page.tsx`, `.ai/CURRENT_STATE.md`
-* **Tests**: `pnpm --filter @sms/web typecheck` (PASS), `pnpm --filter @sms/web build` (PASS), `pnpm --filter @sms/api test` (PASS, 15/15 suites, 85/85 tests).
+* **Tests**: `pnpm --filter @ims/web typecheck` (PASS), `pnpm --filter @ims/web build` (PASS), `pnpm --filter @ims/api test` (PASS, 15/15 suites, 85/85 tests).
 * **Known Issues**: None.
 * **Next Steps**: Ready for user review and subsequent Phase 8 UI Design System tasks.
 
@@ -410,7 +404,7 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
      - Configured `apps/web/tailwind.config.ts` with warm ivory canvas (`#FCF9F6`), primary coral palette (50–900 with `#FF7048` primary / `#FF5722` active), warm white surfaces (`#FFFFFF`, subtle `#F8F5F2`), deep dark navy text (`#111722`), soft neutral borders (`#EAE5E0`), rounded card tokens (`20px`, `24px`, `32px`, `pill: '9999px'`), and multi-layer soft SaaS drop shadows (`shadow-card`, `shadow-card-hover`, `shadow-coral`).
      - Enhanced `apps/web/src/app/globals.css` with fine dot grid (`.bg-subtle-grid`), pill input classes (`.pill-input`, `.form-input-warm`), pill button classes (`.pill-btn-coral`, `.pill-btn-secondary`, `.pill-btn-ghost`, `.pill-btn-danger`), and warm smartphone mockup frame styling.
      - Updated root `apps/web/src/app/layout.tsx` body styles to `bg-[#FCF9F6] text-[#111722] font-sans antialiased`.
-  2. **Reusable UI Primitives (`@sms/web/components/ui`)**:
+  2. **Reusable UI Primitives (`@ims/web/components/ui`)**:
      - `button.tsx`: CVA component supporting coral pill (`default`), `secondary`, `outline`, `ghost`, `danger`, `success`, size variants (`sm`, `default`, `lg`, `xl`, `icon`), and loading spinner state.
      - `badge.tsx`: CVA component with `coral`, `solidCoral`, `success`, `warning`, `danger`, `info`, `neutral`, and `outline` variants.
      - `card.tsx`: Warm `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter` with `rounded-[20px]` / `rounded-[24px]` and soft borders.
@@ -419,24 +413,22 @@ PHASE 8 — UI Design System (Shadcn/Radix components, custom inputs, tables, di
      - `apps/web/src/components/auth/auth-card.tsx`: Split 2-column card with warm white surface `rounded-[32px] sm:rounded-[40px]`, left editorial hero panel with warm phone mockup & coral chart accents, right form panel with pill inputs and coral primary CTA.
      - `forgot-password/page.tsx` & `verify-email/page.tsx`: Warm white cards `rounded-[32px]`, coral brand mark, coral OTP pin inputs and verify actions.
   4. **Navigation Shell & Global Overlays**:
-     - `app-header.tsx`: Fixed 64px header with warm white backdrop blur, coral SMS logo mark, pill nav links with coral active badges, warm search trigger (`⌘K`), and coral `+ New Sale` action button.
+     - `app-header.tsx`: Fixed 64px header with warm white backdrop blur, coral IMS logo mark, pill nav links with coral active badges, warm search trigger (`⌘K`), and coral `+ New Sale` action button.
      - `more-menu.tsx`: 4-column mega-menu popover `rounded-[24px]` with soft borders and coral hover highlights.
      - `user-menu.tsx`: Warm card `rounded-2xl` with role badges and sign-out action.
      - `command-palette.tsx`: Modal `rounded-[24px]` with coral selected highlights and keyboard navigation.
      - `notifications-drawer.tsx`: Slide-over drawer with coral active category pills and warm empty state.
-     - `page-header.tsx`: Warm breadcrumbs, deep dark navy title `#111722`, muted description `#5F636B`.
-     - `apps/web/src/app/(app)/layout.tsx`: Warm ivory canvas `#FCF9F6` and warm loading skeletons.
   5. **Operations Dashboard & POS Modernized**:
      - `dashboard/page.tsx`: 5 KPI cards `rounded-[20px]`, bold `tabular-nums` figures, revenue trends container, quick action shortcuts, recent activity empty state.
      - `pos/page.tsx`: High-velocity 2-panel split layout preserving zero vertical overflow at 1366x768 and 1440x900; barcode search with coral focus ring, category filter chips with coral active pill, summary card with grand total in tabular-nums, tender modes with coral active states, complete sale button.
   6. **All 24 Operational Page Shells Modernized**:
      - Modernized `inventory`, `products`, `categories`, `brands`, `sales`, `purchases`, `reports`, `customers`, `suppliers`, `warehouses`, `stock-movements`, `stock-adjustments`, `stock-transfers`, `batches`, `sales-returns`, `purchase-returns`, `payments`, `invoices`, `ledger`, `users`, `roles`, `audit-logs`, `notifications`, `settings`, and root redirector `page.tsx`.
   7. **Automated Verification & Integrity Guarantee**:
-     - `tsc --noEmit` on `@sms/web` and `@sms/api`: PASS (0 errors).
-     - `pnpm --filter @sms/web build`: PASS (all 34 static routes generated with 0 errors).
-     - `pnpm --filter @sms/api test`: PASS (15/15 test suites, 85/85 tests passing).
+     - `tsc --noEmit` on `@ims/web` and `@ims/api`: PASS (0 errors).
+     - `pnpm --filter @ims/web build`: PASS (all 34 static routes generated with 0 errors).
+     - `pnpm --filter @ims/api test`: PASS (15/15 test suites, 85/85 tests passing).
      - Backend contracts, database schema, and authentication logic remain 100% untouched.
 * **Changed**: `apps/web/tailwind.config.ts`, `apps/web/src/app/globals.css`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/page.tsx`, `apps/web/src/components/ui/button.tsx`, `apps/web/src/components/ui/badge.tsx`, `apps/web/src/components/ui/card.tsx`, `apps/web/src/app/(auth)/layout.tsx`, `apps/web/src/components/auth/auth-card.tsx`, `apps/web/src/app/(auth)/forgot-password/page.tsx`, `apps/web/src/app/(auth)/verify-email/page.tsx`, `apps/web/src/components/layout/app-header.tsx`, `apps/web/src/components/layout/more-menu.tsx`, `apps/web/src/components/layout/user-menu.tsx`, `apps/web/src/components/layout/command-palette.tsx`, `apps/web/src/components/layout/notifications-drawer.tsx`, `apps/web/src/components/layout/page-header.tsx`, `apps/web/src/app/(app)/layout.tsx`, `apps/web/src/app/(app)/dashboard/page.tsx`, `apps/web/src/app/(app)/pos/page.tsx`, and all 22 other operational page routes.
-* **Tests**: `pnpm --filter @sms/web typecheck` (PASS), `pnpm --filter @sms/web build` (PASS), `pnpm --filter @sms/api test` (PASS).
+* **Tests**: `pnpm --filter @ims/web typecheck` (PASS), `pnpm --filter @ims/web build` (PASS), `pnpm --filter @ims/api test` (PASS).
 * **Known Issues**: None.
 * **Next Steps**: Ready for user review and subsequent Phase 9 API Integration.

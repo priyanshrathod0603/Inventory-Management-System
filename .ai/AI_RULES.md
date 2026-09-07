@@ -1,6 +1,6 @@
 # AI Rules & Development Constitution
 
-This document is the permanent constitution governing all current and future AI coding agents working on the Stock Management System (SMS) project.
+This document is the permanent constitution governing all current and future AI coding agents working on the Inventory Management System (IMS) project.
 
 ## 1. Cardinal Rule: The .ai/ Project Brain is Supreme
 

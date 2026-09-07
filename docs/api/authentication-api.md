@@ -1,6 +1,6 @@
 # Authentication API
 
-> **Architectural Standard**: SMS uses **ONE Single Common Authentication System**. All users (Admin, Manager, Cashier, Staff, etc.) authenticate via the common endpoints below. There are NO separate login/signup endpoints for different roles. Downstream authorization is handled via RBAC after authentication.
+> **Architectural Standard**: IMS uses **ONE Single Common Authentication System**. All users (Admin, Manager, Cashier, Staff, etc.) authenticate via the common endpoints below. There are NO separate login/signup endpoints for different roles. Downstream authorization is handled via RBAC after authentication.
 
 ## 1. Authentication Endpoints
 

@@ -65,7 +65,7 @@ export class MailService {
     const { to, token, otpCode } = options;
     const fromAddress =
       this.configService.get<string>('EMAIL_FROM') ||
-      'Inventory Management System <noreply@sms-system.internal>';
+      'Inventory Management System <noreply@ims-system.internal>';
 
     const frontendBaseUrl =
       this.configService.get<string>('FRONTEND_URL') ||
@@ -201,7 +201,7 @@ If you did not request this registration, please safely disregard this email.
     const { to, token, fullName } = options;
     const fromAddress =
       this.configService.get<string>('EMAIL_FROM') ||
-      'Inventory Management System <noreply@sms-system.internal>';
+      'Inventory Management System <noreply@ims-system.internal>';
 
     const frontendBaseUrl =
       this.configService.get<string>('FRONTEND_URL') ||

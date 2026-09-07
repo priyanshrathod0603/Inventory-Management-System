@@ -23,7 +23,7 @@ interface AuthCardProps {
   initialMode?: 'login' | 'register';
 }
 
-// Stock Management System Brand Emblem (Coral / Navy Theme)
+// Inventory Management System Brand Emblem (Coral / Navy Theme)
 function InventoryLogo() {
   return (
     <div className="flex items-center gap-3 select-none">
@@ -36,10 +36,10 @@ function InventoryLogo() {
       </div>
       <div>
         <span className="text-lg sm:text-xl font-extrabold tracking-tight text-navy-950 font-sans block leading-tight">
-          SMS
+          IMS
         </span>
         <span className="text-[10px] text-content-muted font-semibold tracking-wider uppercase block">
-          Stock Management System
+          Inventory Management System
         </span>
       </div>
     </div>

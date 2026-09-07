@@ -18,10 +18,10 @@ function InventoryLogo() {
       </div>
       <div>
         <span className="text-xl font-extrabold tracking-tight text-navy-950 font-sans block leading-tight">
-          SMS
+          IMS
         </span>
         <span className="text-[10px] text-content-muted font-semibold tracking-wider uppercase block">
-          Stock Management System
+          Inventory Management System
         </span>
       </div>
     </div>

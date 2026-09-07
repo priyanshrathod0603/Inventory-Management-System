@@ -52,10 +52,10 @@ export function AppHeader({ onOpenSearch, onOpenNotifications }: AppHeaderProps)
             </div>
             <div>
               <div className="text-sm font-extrabold text-navy-950 leading-tight tracking-tight font-sans">
-                SMS
+                IMS
               </div>
               <div className="text-[10px] text-content-muted font-semibold leading-none uppercase tracking-wider">
-                Stock Management System
+                Inventory Management System
               </div>
             </div>
           </Link>

@@ -11,7 +11,7 @@
 ```bash
 # 1. Clone the project repository
 git clone <repository_url>
-cd SMS
+cd IMS
 
 # 2. Copy environment file
 cp .env.example .env
@@ -23,7 +23,7 @@ docker compose up -d
 pnpm install
 
 # 5. Generate Prisma client
-pnpm --filter @sms/api prisma:generate
+pnpm --filter @ims/api prisma:generate
 
 # 6. Run the applications in development mode
 # Terminal 1: Backend API (runs on port 3001)

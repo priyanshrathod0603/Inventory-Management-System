@@ -2,7 +2,7 @@
 
 ## 1. Executive Visual Identity & Design Philosophy
 
-The Stock Management System (SMS) is a production-grade inventory, counter billing (POS), and operations management system designed for Indian retail stores, pharmacies, FMCG distributors, supermarkets, and warehouse operations.
+The Inventory Management System (IMS) is a production-grade inventory, counter billing (POS), and operations management system designed for Indian retail stores, pharmacies, FMCG distributors, supermarkets, and warehouse operations.
 
 ### Core Visual Direction
 The approved design language merges five pillars into a unified, high-performance interface:
@@ -24,7 +24,7 @@ CAREOPS-INSPIRED OPERATIONS DASHBOARD STRUCTURE
 * **Fast & Tactile**: Instant feedback, rapid keyboard-driven billing, clear focus states, and zero unnecessary decorative clutter.
 * **Refined & Modern**: Subtle border definitions, soft multi-layer drop shadows, clean cool neutrals, and refined indigo primary accents.
 
-### Strict Anti-Patterns (What SMS Is NOT)
+### Strict Anti-Patterns (What IMS Is NOT)
 * **NOT** a generic flat Bootstrap/AdminLTE template.
 * **NOT** an overwhelming, bloated legacy ERP screen.
 * **NOT** a healthcare, medical-charting, or clinical dashboard.
@@ -32,7 +32,7 @@ CAREOPS-INSPIRED OPERATIONS DASHBOARD STRUCTURE
 * **NOT** a futuristic neon, dark-mode cyberpunk, or gaming UI.
 * **NOT** a playful, childish, or consumer social app.
 * **NOT** an excessively blurred glassmorphism showcase.
-* **NOT** a dark enterprise dashboard. The SMS visual canvas is light, crisp, and high-clarity.
+* **NOT** a dark enterprise dashboard. The IMS visual canvas is light, crisp, and high-clarity.
 
 ---
 
@@ -61,7 +61,7 @@ The authenticated application shell consists of a top header, optional sub-navig
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ [Logo] SMS  Stock Management System   Dashboard  POS  Inventory  Sales  Purchases  Reports  More ▾│ [🔍 ⌘K] [🔔 3] [Avatar (Admin) ▾] [+ New Sale]│
+│ [Logo] IMS  Inventory Management System   Dashboard  POS  Inventory  Sales  Purchases  Reports  More ▾│ [🔍 ⌘K] [🔔 3] [Avatar (Admin) ▾] [+ New Sale]│
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Page Header: Title, Breadcrumbs, Contextual Actions & Date Filter                                │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
@@ -73,7 +73,7 @@ The authenticated application shell consists of a top header, optional sub-navig
 
 ### Top Application Header (Fixed Height: `64px` / `h-16`)
 * **Left Section**:
-  * **Brand Identity**: SMS Emblem / Logo (`32×32px`) + App Title "**SMS**" (`font-bold text-slate-900`) + Subtitle "**Stock Management System**" (`text-xs text-slate-500 font-medium`).
+  * **Brand Identity**: IMS Emblem / Logo (`32×32px`) + App Title "**IMS**" (`font-bold text-slate-900`) + Subtitle "**Inventory Management System**" (`text-xs text-slate-500 font-medium`).
 * **Center Navigation Bar**:
   * **Dashboard**: `/dashboard`
   * **POS**: `/pos` (Prominent visual highlight badge)
@@ -355,7 +355,7 @@ Standard Form Field Layout:
 
 ## 11. Enterprise Table System
 
-Every list and ledger across SMS (Products, Sales, Purchases, Stock Movements, Customers, Suppliers, Invoices, Audit Logs) utilizes a standardized, high-density data table.
+Every list and ledger across IMS (Products, Sales, Purchases, Stock Movements, Customers, Suppliers, Invoices, Audit Logs) utilizes a standardized, high-density data table.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -523,7 +523,7 @@ POS is the **highest-velocity workflow** in the system. The interface is enginee
 
 ## 16. Inventory & Traceability UI Rules
 
-**Fundamental Principle**: Stock in SMS is an immutable business asset. Stock quantities are **NEVER** silently overwritten or deleted. Every stock change is a traceable, historical **Stock Movement**.
+**Fundamental Principle**: Stock in IMS is an immutable business asset. Stock quantities are **NEVER** silently overwritten or deleted. Every stock change is a traceable, historical **Stock Movement**.
 
 ```
 Inventory Event Model:
@@ -657,7 +657,7 @@ The invoice rendering engine supports three standardized layout formats:
 ┌─────────────────────────┐  ┌────────────────────────────────────────────────────────┐
 │   58mm / 80mm THERMAL   │  │             A4 FULL TAX INVOICE (GST COMPLIANT)        │
 │                         │  │                                                        │
-│      SMS RETAIL         │  │ SMS MEGA STORE                        TAX INVOICE      │
+│      IMS RETAIL         │  │ IMS MEGA STORE                        TAX INVOICE      │
 │  GSTIN: 27AAAAA0000A1Z5 │  │ GSTIN: 27AAAAA0000A1Z5                Invoice: INV-1092│
 │  Date: 04/09/2026 14:30 │  │ Mumbai, Maharashtra                   Date: 04/09/2026 │
 │  Invoice: INV-1092      │  ├────────────────────────────────────────────────────────┤
@@ -739,7 +739,7 @@ Select Supplier → Enter Purchase Invoice / PO # → Add Received Products (Qua
 
 ## 26. Batch & Expiry Management UI
 
-For FMCG, pharmaceuticals, and perishable goods, SMS provides batch-level traceability.
+For FMCG, pharmaceuticals, and perishable goods, IMS provides batch-level traceability.
 
 * **Batch Grid Columns**: Batch Number (`IBM Plex Mono`), Product Name, Manufacturing Date, Expiry Date, Remaining Stock, Warehouse Location, Days to Expiry, Status Badge.
 * **Visual Expiry Alerts**:
@@ -781,7 +781,7 @@ The reporting center provides business intelligence with date filtering, summari
 
 ## 28. User Management, Roles & Granular Permissions UI
 
-SMS implements strict Role-Based Access Control (RBAC) with granular permissions.
+IMS implements strict Role-Based Access Control (RBAC) with granular permissions.
 
 ### User Roles Overview:
 * **Admin**: Complete system control, business settings, role assignments, audit logs, price adjustments.
@@ -910,7 +910,7 @@ When a search, table, or list returns zero records, render a structured empty st
 
 ## 34. Keyboard Navigation & POS Usability Standards
 
-SMS is optimized for high-speed counter operation with minimal mouse reliance.
+IMS is optimized for high-speed counter operation with minimal mouse reliance.
 
 ### Global Keyboard Shortcuts:
 
@@ -958,11 +958,11 @@ Payment Modes:         Cash, UPI, Card, Bank Transfer, Credit / Khata
 
 ## 36. Single Common Authentication & Account UI Specification
 
-> **Architectural Standard**: SMS uses **ONE Common Login System** and **ONE Common Registration Flow**. All users (Admin, Manager, Cashier, Staff, etc.) access the application through the exact same authentication screens. There are **NO separate role-based login screens**. Downstream role/permission authorization takes effect inside the application shell after login.
+> **Architectural Standard**: IMS uses **ONE Common Login System** and **ONE Common Registration Flow**. All users (Admin, Manager, Cashier, Staff, etc.) access the application through the exact same authentication screens. There are **NO separate role-based login screens**. Downstream role/permission authorization takes effect inside the application shell after login.
 
 ### 36.1 Common Login Screen (`/login`)
 * **Card Container**: Centered branded glass card (`w-full max-w-md bg-white border border-slate-200 shadow-xl rounded-2xl p-8`).
-* **Header**: Brand Logo, Application Name ("Stock Management System"), Subtitle ("Sign in to your counter or management terminal").
+* **Header**: Brand Logo, Application Name ("Inventory Management System"), Subtitle ("Sign in to your counter or management terminal").
 * **Elements**:
   * `Identifier Field`: Input for username or email address with left icon (`User` / `Mail`).
   * `Password Field`: Input with eye toggle (`Eye` / `EyeOff`) to show/hide plaintext.

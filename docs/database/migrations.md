@@ -1,21 +1,21 @@
 # Database Migrations Guide
 
 ## 1. Migration Strategy
-SMS uses **Prisma Migrate** to manage declarative, version-controlled PostgreSQL schema migrations.
+IMS uses **Prisma Migrate** to manage declarative, version-controlled PostgreSQL schema migrations.
 
 ## 2. Standard Migration Workflow
 
 ### Generating Migrations in Development:
 ```bash
 # From workspace root
-pnpm --filter @sms/api prisma:migrate
+pnpm --filter @ims/api prisma:migrate
 ```
 * Generates a new migration SQL file in `apps/api/prisma/migrations/<timestamp>_<migration_name>/migration.sql`.
 * Automatically regenerates the Prisma Client.
 
 ### Applying Migrations in Staging / Production:
 ```bash
-pnpm --filter @sms/api exec prisma migrate deploy
+pnpm --filter @ims/api exec prisma migrate deploy
 ```
 
 ---

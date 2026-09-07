@@ -1,7 +1,7 @@
 # Rollback Strategy
 
 ## 1. Application Rollback
-* In containerized environments, redeploy the previous tagged Docker image tag (e.g. `sms-api:v1.0.2` → `sms-api:v1.0.1`).
+* In containerized environments, redeploy the previous tagged Docker image tag (e.g. `ims-api:v1.0.2` → `ims-api:v1.0.1`).
 * Instant container swap maintains continuous uptime.
 
 ## 2. Database Migration Rollback

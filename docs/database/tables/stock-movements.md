@@ -1,7 +1,7 @@
 # Table: `stock_movements`
 
 ## 1. Description
-The `stock_movements` table is the immutable chronological ledger of every inventory mutation across SMS.
+The `stock_movements` table is the immutable chronological ledger of every inventory mutation across IMS.
 
 ## 2. Schema Definition
 

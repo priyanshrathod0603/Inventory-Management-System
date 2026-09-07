@@ -1,6 +1,6 @@
 # User Stories
 
-This document captures core user personas and their corresponding user stories for SMS.
+This document captures core user personas and their corresponding user stories for IMS.
 
 ## User Personas
 1. **Cashier / Counter Staff**: High-velocity checkout operator focused on fast scanning, minimal clicks, quick customer lookup, and receipt generation.

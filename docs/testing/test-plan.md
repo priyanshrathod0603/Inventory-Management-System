@@ -18,13 +18,13 @@
 
 ```bash
 # Run all backend unit & service tests
-pnpm --filter @sms/api test
+pnpm --filter @ims/api test
 
 # Run backend integration / E2E tests
-pnpm --filter @sms/api test:e2e
+pnpm --filter @ims/api test:e2e
 
 # Run frontend unit & component tests
-pnpm --filter @sms/web test
+pnpm --filter @ims/web test
 
 # Run typechecks across workspace
 pnpm run typecheck
