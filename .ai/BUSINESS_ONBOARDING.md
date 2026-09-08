@@ -14,7 +14,18 @@ The **Universal Business Onboarding** subsystem transforms the Inventory Managem
 - Every authenticated user possesses full system administrative privileges.
 - Multi-warehouse operations are controlled via the `isMultiWarehouse: boolean` capability toggle, not user roles.
 
-### C. Resumable Onboarding Drafts
+### C. Multi-Business Selection & Universal Foundation
+- **Multi-Business Support**: Merchants may operate multiple business types (e.g. Footwear & Shoes + Clothing & Apparel).
+- **Multi-Selection in Onboarding**: Step 1 enables selecting multiple business types simultaneously with clean toggle mechanics.
+- **Multi-Business ≠ Multi-Warehouse Distinction**:
+  - `Multi-Business` = Multiple retail verticals or business contexts operated by a merchant.
+  - `Multi-Warehouse` = Multiple physical storage/inventory facilities for a business (controlled by `isMultiWarehouse`).
+  - `isMultiWarehouse` is strictly an inventory facility feature, never Multi-Business support.
+- **Business Type ≠ Product Category**:
+  - Business Type defines the industry nature of the store.
+  - Product Category defines actual persisted catalog items. Selecting a business type does NOT assume or auto-generate product categories.
+
+### D. Resumable Onboarding Drafts
 - Users can step through the 4-step setup wizard with server-persisted draft progress via `POST /api/v1/business-profile/draft`.
 - If an onboarding session is interrupted, the user can resume exactly from their saved step on their next login.
 
@@ -34,12 +45,18 @@ The **Universal Business Onboarding** subsystem transforms the Inventory Managem
 
 ## 4. 4-Step Onboarding Flow
 
-1. **Step 1: Category Selection**
+1. **Step 1: Business Type Selection (Multi-Select Enabled)**
    - Visual card selector showcasing all 10 business types with icons and descriptions.
-   - Dynamic custom input when `OTHER` is selected.
+   - **Multi-Selection Behavior**:
+     - Clicking an unselected card → selects it.
+     - Clicking an already-selected card → deselects it.
+     - Multiple cards can remain selected simultaneously (e.g., Footwear + Clothing + Furniture).
+     - At least one business type selection is required to advance to Step 2.
+     - Visual state clearly distinguishes selected (coral accent border, badge) from unselected cards.
+   - Dynamic custom text input when `OTHER` is selected.
 2. **Step 2: Business Profile & Contact**
    - Store / Business Name (Required).
-   - Owner / Manager Name.
+   - Owner / Manager Name (Optional).
    - Contact Phone, WhatsApp (for invoices/alerts), Email, Website.
    - Physical Street Address, City, State, Country, Postal Code.
 3. **Step 3: Tax Compliance & Currency**
@@ -66,3 +83,16 @@ When `completeOnboarding` executes in a database transaction, it verifies whethe
 - IsActive: `true`
 
 This guarantees that inventory movements, stock adjustments, and POS sales function seamlessly right after onboarding.
+
+## 7. Current Implementation vs. Future Scope Boundary
+- **Current Phase 10 Implementation**:
+  - Single `BusinessProfile` database record per user.
+  - Multi-business selection in onboarding UI.
+  - Dynamic store branding personalization in header and settings.
+  - POS category filter driven dynamically by real merchant product categories.
+- **Future Architecture Scope (Not in Phase 10)**:
+  - Normalized multi-business tenant database entity modeling.
+  - Active business context switcher in navigation header.
+  - Multi-business catalog data segregation across transactions and ledgers.
+  - Full invoice template engine and printing branding (Phase 11/12).
+

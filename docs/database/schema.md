@@ -2,7 +2,7 @@
 
 This document details the PostgreSQL schema implemented in Prisma ORM.
 
-## 1. Authentication & RBAC
+## 1. Authentication & Universal Access (DECISION-016)
 
 ### `users`
 | Column | Type | Constraints | Description |
@@ -12,14 +12,16 @@ This document details the PostgreSQL schema implemented in Prisma ORM.
 | `email` | `VARCHAR(255)`| Unique, NOT NULL | User email address |
 | `passwordHash`| `VARCHAR(255)`| NOT NULL | Salted Argon2id hash |
 | `fullName` | `VARCHAR(100)`| NOT NULL | Full display name |
-| `roleId` | `UUID` | Foreign Key -> `roles.id` | User role |
+| `phone` | `VARCHAR(20)` | Nullable | Contact number |
 | `isActive` | `BOOLEAN` | DEFAULT TRUE | Active status |
 | `isDeleted`| `BOOLEAN` | DEFAULT FALSE | Soft delete flag |
 
-### `roles` & `permissions`
-* `roles`: `id` (UUID PK), `name` (VARCHAR Unique), `description` (TEXT), `isSystem` (BOOLEAN).
-* `permissions`: `id` (UUID PK), `code` (VARCHAR Unique e.g. `create_sale`), `module` (VARCHAR), `description` (TEXT).
-* `role_permissions`: `roleId` (UUID FK), `permissionId` (UUID FK) - Composite PK.
+### `permissions`
+* `permissions`: `id` (UUID PK), `code` (VARCHAR Unique e.g. `create_sale`), `module` (VARCHAR), `description` (TEXT). Holds all 38 system permissions granted universally to authenticated users.
+* *Note: `roles` and `role_permissions` tables were permanently removed in migration `20260907000000_remove_role_system` per DECISION-016.*
+
+### `business_profiles`
+* `id` (UUID PK), `userId` (UUID Unique FK -> `users.id`), `businessName` (VARCHAR), `businessType` (VARCHAR e.g. `FOOTWEAR,CLOTHING`), `customBusinessType` (VARCHAR Nullable), `ownerName` (VARCHAR), `phone` (VARCHAR), `whatsapp` (VARCHAR), `email` (VARCHAR), `website` (VARCHAR), `address` (TEXT), `city` (VARCHAR), `state` (VARCHAR), `country` (VARCHAR DEFAULT 'India'), `postalCode` (VARCHAR), `logoUrl` (TEXT), `isGstRegistered` (BOOLEAN), `gstin` (VARCHAR), `taxNumber` (VARCHAR), `currency` (VARCHAR DEFAULT 'INR'), `currencySymbol` (VARCHAR DEFAULT '₹'), `isMultiWarehouse` (BOOLEAN DEFAULT FALSE), `isOnboardingCompleted` (BOOLEAN DEFAULT FALSE), `onboardingStep` (INTEGER DEFAULT 1).
 
 ---
 

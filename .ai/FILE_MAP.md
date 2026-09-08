@@ -94,14 +94,24 @@ apps/
 │   │       │   └── services/     # PasswordService, SessionService, EmailVerificationService, GoogleOAuthService, AuthService, MailService
 │   │       │       ├── mail.service.ts
 │   │       │       └── mail.service.spec.ts
-│   │       ├── permissions/      # System permissions catalog & seeder module
+│   │       ├── business-profile/ # Business profile, onboarding & store identity module
+│   │       │   ├── business-profile.controller.ts
+│   │       │   ├── business-profile.service.ts
+│   │       │   └── business-profile.module.ts
+│   │       ├── permissions/      # System permissions catalog & seeder module (38 permissions)
 │   │       │   ├── permissions.service.ts
 │   │       │   └── permissions.module.ts
-│   │       └── users/            # User profile & IDOR protected management module
-│   │           ├── users.controller.ts
-│   │           ├── users.service.ts
-│   │           ├── users.service.spec.ts
-│   │           └── users.module.ts
+│   │       ├── users/            # User profile & management module
+│   │       │   ├── users.controller.ts
+│   │       │   ├── users.service.ts
+│   │       │   ├── users.service.spec.ts
+│   │       │   └── users.module.ts
+│   │       ├── products/         # Products master catalog CRUD module
+│   │       ├── categories/       # Category hierarchy module
+│   │       ├── brands/           # Brand master module
+│   │       ├── inventory/        # Stock movements, adjustments & transfers module
+│   │       ├── warehouses/       # Warehouses management module
+│   │       └── batches/          # Batches & expiry tracking module
 │   └── test/
 │       ├── app.e2e-spec.ts
 │       └── jest-e2e.json
@@ -110,7 +120,7 @@ apps/
     ├── next.config.mjs
     ├── package.json
     ├── postcss.config.mjs
-    ├── tailwind.config.ts        # Locked UI design system tokens
+    ├── tailwind.config.ts        # Locked UI design system tokens (Warm Luxury SaaS)
     ├── tsconfig.json
     ├── public/
     │   └── icons/
@@ -119,22 +129,31 @@ apps/
         ├── lib/
         │   ├── utils.ts          # cn() class merge utility
         │   ├── api-client.ts     # Typed API client with credentials inclusion
+        │   ├── query-keys.ts     # Central TanStack Query key factory
         │   └── auth/
-        │       └── auth-context.tsx # React AuthContext provider & hooks
+        │       ├── auth-context.tsx # React AuthContext provider & hooks
+        │       └── permissions.ts   # Universal admin permission helpers
         ├── components/
-        │   └── layout/
-        │       ├── app-header.tsx         # Fixed 64px desktop-first top navigation bar
-        │       ├── user-menu.tsx          # Authenticated user dropdown & logout
-        │       ├── more-menu.tsx          # 4-column mega-menu for secondary modules
-        │       ├── command-palette.tsx    # Accessible Command Palette (⌘K)
-        │       ├── notifications-drawer.tsx # Slide-over notification drawer
-        │       └── page-header.tsx        # Standardized page header with breadcrumbs
+        │   ├── layout/
+        │   │   ├── app-header.tsx         # Fixed 64px desktop top navigation bar (store branding)
+        │   │   ├── user-menu.tsx          # Authenticated user dropdown & logout
+        │   │   ├── more-menu.tsx          # 4-column mega-menu for secondary modules
+        │   │   ├── command-palette.tsx    # Accessible Command Palette (⌘K)
+        │   │   ├── notifications-drawer.tsx # Slide-over notification drawer
+        │   │   └── page-header.tsx        # Standardized page header with breadcrumbs
+        │   └── modals/           # Canonical Section 40 Form Modals
+        │       ├── product-form-modal.tsx
+        │       ├── category-form-modal.tsx
+        │       ├── brand-form-modal.tsx
+        │       ├── stock-adjustment-modal.tsx
+        │       ├── stock-transfer-modal.tsx
+        │       └── batch-form-modal.tsx
         └── app/
             ├── globals.css       # Base CSS, tabular-nums, liquid glass
             ├── layout.tsx        # Root HTML layout with providers
-            ├── page.tsx          # Root client redirector (dashboard or login)
+            ├── page.tsx          # Root client redirector (dashboard, onboarding, or login)
             ├── providers.tsx     # TanStack Query & AuthContext Provider
-            ├── (auth)/           # Single Common Authentication route group (public)
+            ├── (auth)/           # Single Common Authentication route group (PROTECTED & FROZEN)
             │   ├── layout.tsx    # Auth centered card layout
             │   ├── login/
             │   │   └── page.tsx  # Single common login screen with Google OAuth
@@ -146,9 +165,10 @@ apps/
             │       └── page.tsx  # Password reset request screen
             └── (app)/            # Authenticated Application route group
                 ├── layout.tsx    # Authenticated shell layout (64px AppHeader + shortcuts)
+                ├── onboarding/page.tsx      # Universal Business Onboarding wizard (Multi-selection)
                 ├── dashboard/page.tsx       # Operations dashboard & KPI metrics
-                ├── pos/page.tsx             # High-velocity 2-panel counter billing
-                ├── inventory/page.tsx       # Stock valuation & stock list shell
+                ├── pos/page.tsx             # Dynamic category filter counter billing
+                ├── inventory/page.tsx       # Stock valuation & multi-warehouse inventory
                 ├── sales/page.tsx           # Sales orders & invoices register
                 ├── purchases/page.tsx       # Purchase orders & vendor inward register
                 ├── reports/page.tsx         # Reports & business intelligence

@@ -15,14 +15,14 @@ The Inventory Management System (IMS) adheres to a multi-tier, modular client-se
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │                              API & GATEWAY LAYER                                 │
 │        NestJS REST Controllers • OpenAPI / Swagger • Cookie Session Guard        │
-│          RBAC Permission Guards • Rate Limiters • Global Exception Filter        │
+│    Universal Admin Permission Guards • Rate Limiters • Global Exception Filter   │
 └────────────────────────────────────────┬─────────────────────────────────────────┘
                                          │ Dependency Injection
                                          ▼
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │                         BUSINESS LOGIC & DOMAIN SERVICES                         │
-│  Auth • Users • Products • Inventory • POS/Sales • Purchases • Returns • Ledger  │
-│      Payments • Invoicing (58mm/80mm/A4) • Audit Logger • Reporting Engine       │
+│  Auth • Users • Business Profile • Products • Inventory • POS/Sales • Purchases  │
+│    Returns • Ledger • Payments • Invoicing • Audit Logger • Reporting Engine     │
 └────────────────────────────────────────┬─────────────────────────────────────────┘
                                          │ Interactive Prisma Transactions
                                          ▼
@@ -44,10 +44,10 @@ The Inventory Management System (IMS) adheres to a multi-tier, modular client-se
 ## 2. Frontend Architecture (Next.js + React + TypeScript)
 
 * **Framework**: Next.js with React and TypeScript.
-* **Component Design System**: Tailwind CSS paired with `shadcn/ui` and `Lucide Icons`.
+* **Component Design System**: Tailwind CSS paired with `shadcn/ui` and `Lucide Icons` following Warm Luxury SaaS design language.
 * **State & Data Management**:
   * **Server Cache & Sync**: `TanStack Query` (React Query) handles API queries, mutation invalidation, optimistic updates (where safe), and background polling.
-  * **Form Management**: `React Hook Form` integrated with `Zod` schemas for client-side validation prior to API submission.
+  * **Form Management**: `React Hook Form` integrated with `Zod` schemas for client-side validation prior to API submission. Canonical form UX/UI standard (Section 40 of UI_RULES.md).
   * **UI State**: React context / lightweight state for active POS billing cart, keyboard shortcut listeners, and notification drawers.
 * **Hardware Integration**:
   * **POS Barcode Scanner Handler**: Custom React hook listening for rapid keycode streams from USB/Bluetooth HID scanners and routing directly into the cart without losing form focus.
@@ -64,16 +64,18 @@ The backend is built as a structured, modular NestJS application. Major business
 src/
 ├── app.module.ts
 ├── common/
-│   ├── decorators/         # @RequirePermissions, @CurrentUser
+│   ├── decorators/         # @RequirePermissions, @CurrentUser, @Public
 │   ├── filters/            # GlobalExceptionFilter
 │   ├── guards/             # SessionAuthGuard, PermissionsGuard
 │   ├── interceptors/       # AuditLogInterceptor, TransformResponseInterceptor
 │   └── pipes/              # ZodValidationPipe
 ├── modules/
 │   ├── auth/               # Single Common Auth: Login, Signup, Google OAuth, Email Verification, Session lifecycle, Password reset
-│   ├── users/              # User management, role assignment
-│   ├── roles/              # Role & granular permissions definition (RBAC authorization)
-│   ├── products/           # Catalog, categories, brands, barcode lookup
+│   ├── users/              # User management & profile (Single Universal Admin access model)
+│   ├── business-profile/   # BusinessProfile setup, onboarding wizard, store identity, multi-warehouse setting
+│   ├── permissions/        # System permissions catalog & seeder (38 granular permissions)
+│   ├── roles/              # [SUPERSEDED / REMOVED per DECISION-016 — All users receive full permissions]
+│   ├── products/           # Catalog, categories, brands, barcode lookup, SKU generation
 │   ├── inventory/          # Stock movements, adjustments, stock transfers
 │   ├── warehouses/         # Multi-warehouse location management
 │   ├── batches/            # Batch tracking & expiry date management
@@ -123,11 +125,15 @@ await this.prisma.$transaction(async (tx) => {
 
 * **Authentication & Session Security**:
   * Secure server-side session management stored in PostgreSQL/Redis.
-  * Session token issued via an `HttpOnly`, `Secure` (in production), `SameSite=Strict` cookie named `sms_session`.
+  * Session token issued via an `HttpOnly`, `Secure` (in production), `SameSite=Lax` cookie named `sms_session`.
   * Passwords hashed using `Argon2id` with cryptographically secure random salts.
-* **Role-Based & Granular Permission Enforcement**:
-  * Every API controller endpoint is protected by `@RequirePermissions('permission_code')`.
-  * The `PermissionsGuard` verifies the authenticated user's active role permissions against the required capability before executing business logic.
+* **Single Universal Admin Access Model (DECISION-016)**:
+  * All authenticated users operate with full operational permissions across the platform.
+  * The backend provisions all 38 system permissions from the `permissions` table to any authenticated session.
+  * Controller endpoints utilize `@RequirePermissions(...)` guards which pass for all valid sessions.
+  * Complex multi-role hierarchy (Admin, Manager, Cashier, Staff) and the `roles` / `role_permissions` tables have been permanently superseded and removed.
+* **Protected Auth UI**:
+  * `/login` and `/register` authentication screens are strictly frozen and protected from accidental redesign.
 * **Input Validation & Sanitization**:
   * Strict schema validation using Zod/class-validator DTOs on all request payloads.
   * Parameterized queries via Prisma ORM preventing SQL injection.
@@ -185,3 +191,24 @@ await this.prisma.$transaction(async (tx) => {
 * **Environment Configuration**:
   * Environment variables strictly separated between `.env.development`, `.env.staging`, and `.env.production`.
   * **Strict Policy**: No `.env` or `.env.example` files containing real secrets may ever be committed to version control.
+
+---
+
+## 11. Universal Business Platform Architecture (DECISION-018)
+
+* **Universal Business Platform Topology**:
+  * The system is a universal commerce engine serving any retail/wholesale vertical (Grocery, Footwear, Clothing, Electronics, Pharmacy, Hardware, Furniture, General Store, etc.).
+  * **Zero Hardcoded Industry Data**: No application screen, backend handler, or database seed hardcodes vertical-specific categories or catalog structures.
+  * **Data Flow**:
+    ```
+    Active Business (BusinessProfile) → Business Data → Products → Categories → Inventory → POS
+    ```
+* **POS Category Source-of-Truth**:
+  * POS screen category filters are dynamically populated **solely** from real persisted categories associated with existing products in the active business inventory.
+  * If no categories exist in the active business, POS displays only `"All"` and an appropriate empty state.
+* **Multi-Business Selection vs. Multi-Warehouse Distinction**:
+  * **Multi-Business Selection** (Onboarding Step 1): Allows merchants operating hybrid businesses to select multiple business types simultaneously (e.g., Footwear + Clothing + Grocery).
+  * **Multi-Warehouse (`isMultiWarehouse`)**: An inventory capability flag controlling whether stock is tracked across multiple physical locations (godowns/storefronts) for a single business entity. It is NEVER a multi-business or multi-tenant switch.
+* **Current Phase 10 Foundation vs. Future Scope Boundary**:
+  * **Current Implemented Foundation (Phase 10)**: Single `BusinessProfile` entity per user account holding business identity, multi-type selection (`businessType` / `customBusinessType`), GST details, and `isMultiWarehouse` capability flag.
+  * **Future Multi-Business Scope**: Normalized multi-business tenant entity model with contextual business switching per account is scheduled for subsequent phases.

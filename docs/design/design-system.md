@@ -54,5 +54,21 @@ $info-600:       #2563EB; // Blue (Info alerts, UPI badges)
 
 ---
 
+## 5. Canonical Form UX/UI Design Standard (Section 40)
+* **Modal Architecture**: Centered modal cards with rounded corners (`rounded-[24px]`), clean white surface (`#FFFFFF`), and soft backdrop (`bg-black/40 backdrop-blur-sm`).
+* **Input Styling**: Standard `h-11` heights, rounded corners (`rounded-xl` / `rounded-full`), `#FAF7F4` clean warm surfaces, subtle `#EAE5E0` borders, and `#FF7048` coral focus rings (`ring-2 ring-[#FF7048]/20`).
+* **Form Structure**: Grouped into distinct section cards with uppercase section headers and Lucide icons.
+* **Explicit Labels**: Required fields marked with coral asterisk `<span className="text-[#FF7048]">*</span>`, optional fields explicitly marked with `<span className="text-neutral-400 text-xs font-normal">(Optional)</span>`.
+* **Keyboard Accessibility**: All modals close on `Escape` key and auto-focus the primary input.
+
+---
+
+## 6. Protected Auth UI Policy (DECISION-010)
+* The `/login` and `/register` authentication screens are strictly protected and frozen.
+* Any application-wide form or styling changes must strictly exclude the `(auth)` route group.
+
+---
+
 ## Source Reference
 * Authoritative Specification: [.ai/UI_RULES.md](../../.ai/UI_RULES.md)
+* Architectural Decisions: [.ai/DECISIONS.md](../../.ai/DECISIONS.md)

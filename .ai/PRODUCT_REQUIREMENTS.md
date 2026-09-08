@@ -2,31 +2,33 @@
 
 ## 1. Executive Summary & Core Business Principles
 
-The Inventory Management System (IMS) is an enterprise-ready retail POS and inventory management platform tailored for Indian retail, wholesale, pharmacy, supermarket, and FMCG businesses.
+The Inventory Management System (IMS) is an enterprise-ready **Universal Business & Inventory Management Platform** designed for diverse retail, wholesale, pharmacy, supermarket, footwear, apparel, electronics, furniture, hardware, FMCG, and specialty trade operations.
 
 ### Non-Negotiable Core Business Principles:
-1. **Transactional Integrity**: Critical operations (Sales, Purchases, Returns, Stock Adjustments, Payments) execute as atomic, single-unit database transactions. No partial state is permitted.
-2. **Immutable Inventory Traceability**: Current stock quantity and historical stock movements are distinct concepts. Stock quantities are NEVER simply overwritten without an auditable stock movement record (`StockMovement`).
-3. **Legal Invoice Protection**: Invoices are permanent accounting documents. There is **NO** generic `Delete Invoice` action. Rectifications occur via **Void/Cancel** workflows with mandatory audit reasons or **Sales Returns (Credit Notes)**.
-4. **Server-Authoritative Security**: The NestJS backend is the sole security and authorization boundary. Frontend role/permission checks are strictly for UI presentation and UX guidance.
-5. **Zero Mock Business Data**: The system operates with real data. When data is loading, empty, or failing, standard system state patterns (Skeletons, Empty States, Error Boundaries) are displayed without generating fake business entities.
+1. **Universal Business Platform**: IMS is an industry-agnostic system. It is never locked or hardcoded to a single retail vertical (not Grocery-only, not Footwear-only, not Clothing-only).
+2. **Transactional Integrity**: Critical operations (Sales, Purchases, Returns, Stock Adjustments, Payments) execute as atomic, single-unit database transactions. No partial state is permitted.
+3. **Immutable Inventory Traceability**: Current stock quantity and historical stock movements are distinct concepts. Stock quantities are NEVER simply overwritten without an auditable stock movement record (`StockMovement`).
+4. **Legal Invoice Protection**: Invoices are permanent accounting documents. There is **NO** generic `Delete Invoice` action. Rectifications occur via **Void/Cancel** workflows with mandatory audit reasons or **Sales Returns (Credit Notes)**.
+5. **Server-Authoritative Security**: The NestJS backend is the sole security and authorization boundary.
+6. **Zero Industry Hardcoding & Zero Mock Data**: The system operates on real persisted merchant catalog data. Never hardcode industry-specific default catalogs or POS category filters.
+7. **Single Universal Admin Access Model**: All authenticated users possess full administrative and operational privileges across all modules (DECISION-016).
 
 ---
 
 ## 2. Authentication & Session Management
 
 ### 2.1 Core Architectural Principles
-* **Single Common Authentication System**: IMS uses exactly ONE unified authentication system. All users—regardless of role (Admin, Super Admin, Manager, Cashier, Staff, Accountant)—authenticate through the exact same login entry point. There are NO separate Admin, Manager, Staff, or role-specific login pages or portals.
-* **Single Common Registration System**: A single unified signup flow (`/register`) for new account registration. There are NO role-specific signup portals.
+* **Single Common Authentication System**: IMS uses exactly ONE unified authentication system. All users authenticate through the exact same login entry point (`/login`). There are NO separate Admin, Manager, Staff, or role-specific login portals.
+* **Single Common Registration System**: A single unified signup flow (`/register`) for new account registration.
 * **Planned Authentication Methods**:
   1. **Email + Password**: Standard credential authentication with strong hashing (Argon2id) and validation.
   2. **Google Authentication**: Social login via Google OAuth 2.0 / Google Sign-In.
   3. **Email Verification**: Required verification step ensuring account validity before full access.
-* **Authentication vs. Authorization Decoupling**: Authentication strictly verifies identity (*"Who is this user?"*). Authorization (*"What is this user permitted to do?"*) is handled separately via downstream RBAC and granular permissions on the backend after successful authentication.
+* **Single Universal Admin Access Model**: All authenticated users receive full operational permissions (DECISION-016).
 
 ### 2.2 Screens & Components
-* **Common Login Screen** (`/login`): Clean branded card with username/email input, password input with visibility toggle, "Continue with Google" OAuth button, "Remember Me" checkbox, "Sign In" button, and links to registration and password reset.
-* **Common Registration Screen** (`/register`): Branded registration form with full name, email, password, password confirmation, "Sign up with Google" option, and link to login.
+* **Common Login Screen** (`/login`): Clean branded card with username/email input, password input with visibility toggle, "Continue with Google" OAuth button, "Remember Me" checkbox, "Sign In" button, and links to registration and password reset. (STRICTLY PROTECTED UI).
+* **Common Registration Screen** (`/register`): Branded registration form with full name, email, password, password confirmation, "Sign up with Google" option, and link to login. (STRICTLY PROTECTED UI).
 * **Email Verification Screen** (`/verify-email`): Token-based verification confirmation screen and resend verification email trigger.
 * **Forgot / Reset Password Screen** (`/forgot-password`, `/reset-password`): Self-service and administrative password reset workflow.
 * **Change Password Dialog**: In-app modal accessible from the user profile dropdown.
@@ -44,7 +46,7 @@ The Inventory Management System (IMS) is an enterprise-ready retail POS and inve
    - For password auth: Server validates credentials against salted Argon2id hash.
    - For Google auth: Server validates Google OAuth ID token and links/locates existing user record.
    - Server validates email verification status (if required).
-   - On success: Server creates a session record, issues an HttpOnly, Secure session cookie (`sms_session`), logs an `AUTH_LOGIN` audit event, and returns user profile + granular permissions payload.
+   - On success: Server creates a session record, issues an HttpOnly, Secure session cookie (`sms_session`), logs an `AUTH_LOGIN` audit event, and returns user profile payload.
    - On failure: Increments failed attempt counter; triggers exponential rate-limiting after 5 failed attempts within 15 minutes.
 2. **Common Registration Flow**:
    - User submits registration details or authenticates with Google.
@@ -54,18 +56,22 @@ The Inventory Management System (IMS) is an enterprise-ready retail POS and inve
 * Session cookies must use `HttpOnly`, `Secure` (in production), and `SameSite=Strict` (or `Lax` where justified).
 * Passwords and OAuth secrets must NEVER be logged or returned in any API response.
 * Concurrent session handling: Allows simultaneous logins across different counter terminals while tracking unique terminal/session IDs (`terminalId`, `ipAddress`, `userAgent`).
-* Phase 6 Note: Full implementation of authentication, sessions, OAuth, verification, and RBAC guards is scheduled for Phase 6.
 
 ---
 
-## 3. Role-Based Access Control (RBAC) & Granular Permissions
+## 3. Authorization Architecture (SUPERSEDED / HISTORICAL — Single Universal Admin Access Model Active)
 
-### 3.1 Initial System Roles
-1. **Admin**: Unrestricted operational and system administrative access.
-2. **Manager**: Full operational access across POS, Inventory, Purchases, Sales, Customer/Supplier Ledgers, Returns, and Business Reports. Restricted from managing global system settings and modifying user roles.
-3. **Cashier / Staff**: High-velocity POS counter billing, customer phone lookup, sales history viewing, receipt printing, and WhatsApp bill dispatch.
+> [!NOTE]
+> **SUPERSEDED / HISTORICAL SPECIFICATION (DECISION-016)**:
+> The multi-role RBAC hierarchy (Admin, Manager, Cashier, Staff roles) defined during early design phases was permanently superseded by **DECISION-016 (Single Universal Admin Access Model)**.
+> 
+> In the active architecture:
+> 1. Every authenticated user is granted the full catalog of permissions upon login.
+> 2. There is NO operational role-branching, no `roleId` assignment, and no multi-role hierarchy.
+> 3. `accessLevel: 'Admin'` is a fixed presentational badge.
+> 4. Multi-Warehouse is an operational capability toggle (`isMultiWarehouse`), not an RBAC permission.
 
-### 3.2 Granular Permission Catalog
+### 3.1 Historical Permission Catalog (Preserved for Capability Taxonomy)
 ```
 Module           Permissions
 --------------------------------------------------------------------------------------
@@ -80,13 +86,6 @@ Payments         record_payment, view_payments, reconcile_cash_drawer
 Reports          view_reports, view_profit_reports, export_reports
 Administration   manage_users, view_audit_logs, manage_settings
 ```
-
-### 3.3 Explicit Prohibitions for Cashier / Staff Role:
-* Cannot view product purchase prices (cost of goods).
-* Cannot perform manual or unrestricted stock adjustments.
-* Cannot permanently delete or void invoices without manager authorization.
-* Cannot view net store profit or business margin reports.
-* Cannot manage user accounts, permissions, or system settings.
 
 ---
 

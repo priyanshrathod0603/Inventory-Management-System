@@ -48,7 +48,7 @@
 
 ## 2. Authentication & Session Endpoints (`/auth`)
 
-> **Architectural Standard**: IMS utilizes **ONE Single Common Authentication System**. All users (Admin, Manager, Cashier, Staff, etc.) authenticate through these exact common endpoints. There are no role-specific login/registration endpoints. Downstream authorization is governed by RBAC after authentication. Implementation is scheduled for Phase 6.
+> **Architectural Standard**: IMS utilizes **ONE Single Common Authentication System** with a **Single Universal Admin Access Model (DECISION-016)**. All authenticated users operate with full operational permissions across the platform. There are no separate role-specific login/registration endpoints.
 
 ### `POST /api/v1/auth/login`
 * **Purpose**: Universal common login endpoint for all users. Authenticates credentials and issues secure HttpOnly session cookie.
@@ -56,7 +56,7 @@
 * **Request Body**:
   ```json
   {
-    "identifier": "rahul_cashier",
+    "identifier": "admin_user",
     "password": "Password123!",
     "rememberMe": true
   }
@@ -68,11 +68,11 @@
     "data": {
       "user": {
         "id": "uuid",
-        "username": "rahul_cashier",
-        "email": "rahul@example.com",
-        "fullName": "Rahul Sharma",
-        "role": "Cashier",
-        "permissions": ["create_sale", "view_products", "view_sales"]
+        "username": "admin_user",
+        "email": "admin@example.com",
+        "fullName": "Store Administrator",
+        "accessLevel": "Admin",
+        "permissions": ["create_sale", "view_products", "manage_inventory", "view_sales", "...all 38 permissions"]
       }
     }
   }
@@ -130,8 +130,8 @@
         "id": "uuid",
         "email": "user@gmail.com",
         "fullName": "Google User",
-        "role": "Cashier",
-        "permissions": ["create_sale", "view_products"]
+        "accessLevel": "Admin",
+        "permissions": ["create_sale", "view_products", "manage_inventory", "...all 38 permissions"]
       }
     }
   }
@@ -239,7 +239,7 @@
 * **Permission**: Authenticated
 
 ### `GET /api/v1/auth/me`
-* **Purpose**: Fetch current authenticated user profile, active role, and granular permission array.
+* **Purpose**: Fetch current authenticated user profile and all system permissions.
 * **Permission**: Authenticated
 * **Response (`200 OK`)**:
   ```json
@@ -247,11 +247,11 @@
     "success": true,
     "data": {
       "id": "uuid",
-      "username": "rahul_cashier",
-      "email": "rahul@example.com",
-      "fullName": "Rahul Sharma",
-      "role": "Cashier",
-      "permissions": ["create_sale", "view_products", "view_sales"]
+      "username": "admin_user",
+      "email": "admin@example.com",
+      "fullName": "Store Administrator",
+      "accessLevel": "Admin",
+      "permissions": ["create_sale", "view_products", "manage_inventory", "view_sales", "...all 38 permissions"]
     }
   }
   ```
@@ -530,3 +530,73 @@
 ### `GET /api/v1/settings` & `PUT /api/v1/settings/:group`
 * **Purpose**: Read and update store configurations.
 * **Permission**: `manage_settings`
+
+---
+
+## 11. Business Profile & Onboarding Endpoints (`/business-profile`)
+
+### `GET /api/v1/business-profile`
+* **Purpose**: Fetch the active authenticated user's `BusinessProfile` entity.
+* **Permission**: Authenticated
+* **Response (`200 OK`)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "uuid",
+      "userId": "uuid",
+      "businessName": "Apex Retail Store",
+      "businessType": "FOOTWEAR,CLOTHING",
+      "customBusinessType": null,
+      "ownerName": "Priyansh",
+      "phone": "+91 9876543210",
+      "whatsapp": "+91 9876543210",
+      "email": "contact@apexretail.com",
+      "website": "https://apexretail.com",
+      "address": "123 Commercial Street",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "country": "India",
+      "postalCode": "400001",
+      "logoUrl": null,
+      "isGstRegistered": true,
+      "gstin": "27AAPFU0939F1ZV",
+      "taxNumber": null,
+      "currency": "INR",
+      "currencySymbol": "₹",
+      "isMultiWarehouse": false,
+      "isOnboardingCompleted": true,
+      "onboardingStep": 4
+    }
+  }
+  ```
+
+### `PUT /api/v1/business-profile`
+* **Purpose**: Upsert / update the authenticated user's business profile data.
+* **Permission**: Authenticated
+* **Request Body**: Partial or complete `BusinessProfileDto` payload.
+
+### `POST /api/v1/business-profile/complete-step`
+* **Purpose**: Save step progress during multi-step onboarding wizard (`/onboarding`).
+* **Permission**: Authenticated
+* **Request Body**:
+  ```json
+  {
+    "step": 1,
+    "data": {
+      "businessType": "FOOTWEAR,CLOTHING"
+    }
+  }
+  ```
+
+### `POST /api/v1/business-profile/complete-onboarding`
+* **Purpose**: Finalize onboarding wizard, mark `isOnboardingCompleted = true`, and provision default warehouse if not present.
+* **Permission**: Authenticated
+* **Request Body**:
+  ```json
+  {
+    "businessName": "Apex Retail Store",
+    "businessType": "FOOTWEAR,CLOTHING",
+    "isMultiWarehouse": false
+  }
+  ```

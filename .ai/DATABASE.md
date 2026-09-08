@@ -48,9 +48,9 @@
 
 ## 3. Detailed Table Schema Definitions
 
-### 3.1 Authentication, Users & RBAC
+### 3.1 Authentication, Users & Universal Permissions
 
-> **Single Common Identity Standard**: The `users` table is the single, common account table for all users in the system (Admin, Manager, Cashier, Staff, etc.). There are NO separate login tables or role-specific account tables. All users authenticate through the same login system. The `roles`, `permissions`, and `role_permissions` tables serve downstream authorization (RBAC) only.
+> **Single Universal Admin Identity Standard (DECISION-016)**: The `users` table is the single, common account table for all authenticated users in the system. All authenticated users operate with full operational permissions across the platform. Multi-role RBAC (`roles` and `role_permissions` tables) has been permanently superseded and removed from the database schema via migration `20260907000000_remove_role_system`. The `permissions` table holds the system's 38 granular permission codes.
 
 #### `users`
 * `id`: `UUID` (PK, default `gen_random_uuid()`)
@@ -59,28 +59,18 @@
 * `passwordHash`: `VARCHAR(255)` (NOT NULL, Argon2id hash)
 * `fullName`: `VARCHAR(100)` (NOT NULL)
 * `phone`: `VARCHAR(20)` (Nullable)
-* `roleId`: `UUID` (FK -> `roles.id`, NOT NULL)
 * `isActive`: `BOOLEAN` (DEFAULT TRUE)
 * `isDeleted`: `BOOLEAN` (DEFAULT FALSE)
 * `lastLoginAt`: `TIMESTAMP WITH TIME ZONE` (Nullable)
 * `createdAt`, `updatedAt`: `TIMESTAMP WITH TIME ZONE`
 
-#### `roles`
-* `id`: `UUID` (PK)
-* `name`: `VARCHAR(50)` (Unique, NOT NULL e.g., 'Admin', 'Manager', 'Cashier')
-* `description`: `TEXT` (Nullable)
-* `isSystem`: `BOOLEAN` (DEFAULT FALSE - protects built-in roles from deletion)
-* `createdAt`, `updatedAt`: `TIMESTAMP WITH TIME ZONE`
-
 #### `permissions`
-* `id`: `UUID` (PK)
+* `id`: `UUID` (PK, default `gen_random_uuid()`)
 * `code`: `VARCHAR(100)` (Unique, NOT NULL e.g., 'create_sale', 'adjust_stock')
 * `module`: `VARCHAR(50)` (NOT NULL e.g., 'Sales', 'Inventory')
 * `description`: `TEXT` (Nullable)
 
-#### `role_permissions`
-* `roleId`: `UUID` (PK, FK -> `roles.id` ON DELETE CASCADE)
-* `permissionId`: `UUID` (PK, FK -> `permissions.id` ON DELETE CASCADE)
+> *Note: `roles` and `role_permissions` tables were permanently removed in migration `20260907000000_remove_role_system` per DECISION-016.*
 
 #### `sessions`
 * `id`: `VARCHAR(128)` (PK)

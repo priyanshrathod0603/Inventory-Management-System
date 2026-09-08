@@ -28,9 +28,11 @@ IMS is a business-critical system. Financial amounts, inventory quantities, and 
 
 ## 3. Mandatory Coverage Rules
 * 100% of Prisma interactive transaction boundaries must have rollback test coverage.
-* 100% of RBAC permission guards must have negative authorization tests (verifying `403 Forbidden`).
+* 100% of protected endpoints must have authentication tests (verifying `401 Unauthorized` for unauthenticated requests) and universal admin authorization tests (verifying `200`/`201` for authenticated sessions per DECISION-016).
+* Master form modals must adhere to Section 40 UX/UI standards.
 
 ---
 
 ## Source Reference
 * Authoritative Specification: [.ai/CODING_RULES.md](../../.ai/CODING_RULES.md)
+* Architectural Decisions: [.ai/DECISIONS.md](../../.ai/DECISIONS.md)

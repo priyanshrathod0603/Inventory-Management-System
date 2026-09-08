@@ -1,6 +1,6 @@
 # Authentication API
 
-> **Architectural Standard**: IMS uses **ONE Single Common Authentication System**. All users (Admin, Manager, Cashier, Staff, etc.) authenticate via the common endpoints below. There are NO separate login/signup endpoints for different roles. Downstream authorization is handled via RBAC after authentication.
+> **Architectural Standard**: IMS uses **ONE Single Common Authentication System** with a **Single Universal Admin Access Model (DECISION-016)**. All authenticated users receive full operational permissions across the platform. The `/login` and `/register` UI screens are strictly protected and frozen (DECISION-010).
 
 ## 1. Authentication Endpoints
 
@@ -12,7 +12,7 @@ Authenticates a user (via email/username and password) and sets the secure sessi
 * **Request Body**:
 ```json
 {
-  "identifier": "rahul_cashier",
+  "identifier": "admin_user",
   "password": "Password123!",
   "rememberMe": true
 }
@@ -24,17 +24,17 @@ Authenticates a user (via email/username and password) and sets the secure sessi
   "data": {
     "user": {
       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "username": "rahul_cashier",
-      "email": "rahul@example.com",
-      "fullName": "Rahul Sharma",
-      "role": "Cashier",
-      "permissions": ["create_sale", "view_products", "view_sales"]
+      "username": "admin_user",
+      "email": "admin@example.com",
+      "fullName": "Store Administrator",
+      "accessLevel": "Admin",
+      "permissions": ["create_sale", "view_products", "manage_inventory", "view_sales", "...all 38 permissions"]
     }
   },
   "message": "Login successful"
 }
 ```
-* **Cookie Set**: `Set-Cookie: sms_session=...; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=2592000`
+* **Cookie Set**: `Set-Cookie: sms_session=...; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`
 
 ---
 
@@ -45,9 +45,9 @@ Creates a new user account via the single common registration flow.
 * **Request Body**:
 ```json
 {
-  "fullName": "Rahul Sharma",
-  "email": "rahul@example.com",
-  "username": "rahul_cashier",
+  "fullName": "Store Administrator",
+  "email": "admin@example.com",
+  "username": "admin_user",
   "password": "Password123!"
 }
 ```
@@ -65,7 +65,7 @@ Creates a new user account via the single common registration flow.
 ---
 
 ### `POST /api/v1/auth/google`
-Planned Google OAuth authentication endpoint (Google Sign-In).
+Google OAuth authentication endpoint (Google Sign-In).
 
 * **Permissions**: Public
 * **Request Body**:
@@ -83,8 +83,8 @@ Planned Google OAuth authentication endpoint (Google Sign-In).
       "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       "email": "user@gmail.com",
       "fullName": "Google User",
-      "role": "Cashier",
-      "permissions": ["create_sale", "view_products"]
+      "accessLevel": "Admin",
+      "permissions": ["create_sale", "view_products", "manage_inventory", "...all 38 permissions"]
     }
   }
 }

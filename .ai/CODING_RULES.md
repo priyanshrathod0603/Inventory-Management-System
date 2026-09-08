@@ -131,11 +131,13 @@ Git operations must remain under explicit human control. The AI must NEVER autom
 ## 7. Absolute Prohibitions (NEVER DO)
 
 1. **NEVER** delete historical financial transactions (Sales, Invoices, Payments, Stock Movements).
-2. **NEVER** redesign approved UI, change locked fonts (`Plus Jakarta Sans`, `IBM Plex Mono`), or alter locked colors (Indigo, Emerald, Amber, Rose).
-3. **NEVER** replace top navigation with a sidebar or introduce mobile layouts in Phase 1.
-4. **NEVER** modify frontend files during a backend-only task or vice versa.
-5. **NEVER** commit `.env`, `.env.example`, private keys, or credentials to version control.
-6. **NEVER** erase historical entries in `.ai/` files (`DECISIONS.md`, `CHANGELOG.md`, `CURRENT_STATE.md`).
-7. **NEVER** silently change architecture, database schemas, or API contracts without explicit documentation and user approval.
-8. **NEVER** automatically stage (`git add .`), commit (`git commit`), or push (`git push`) changes without explicit human instruction.
-9. **NEVER** execute destructive Git operations (`git reset --hard`, `git clean`, force-push, history rewrite) without explicit human confirmation.
+2. **NEVER** redesign approved UI, change locked fonts (`Plus Jakarta Sans`, `IBM Plex Mono`), or alter locked Warm Luxury SaaS design tokens (`#FF7048` Coral, `#FCF9F6` Warm Ivory, `#111722` Deep Navy).
+3. **NEVER** modify, restyle, or alter the protected `(auth)` screens (`/login`, `/register`).
+4. **NEVER** replace top navigation with a sidebar or introduce mobile layouts in Phase 1.
+5. **NEVER** modify frontend files during a backend-only task or vice versa.
+6. **NEVER** hardcode industry-specific vertical categories (e.g. Grocery categories) into POS, products, or core workflows. Data must flow from active business data.
+7. **NEVER** commit `.env`, `.env.example`, private keys, or credentials to version control.
+8. **NEVER** erase historical entries in `.ai/` files (`DECISIONS.md`, `CHANGELOG.md`, `CURRENT_STATE.md`).
+9. **NEVER** silently change architecture, database schemas, or API contracts without explicit documentation and user approval.
+10. **NEVER** automatically stage (`git add .`), commit (`git commit`), or push (`git push`) changes without explicit human instruction.
+11. **NEVER** execute destructive Git operations (`git reset --hard`, `git clean`, force-push, history rewrite) without explicit human confirmation.

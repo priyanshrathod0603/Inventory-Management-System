@@ -13,7 +13,7 @@ apps/api/
 │   ├── main.ts                 # Bootstrap: Global prefix (/api/v1), Swagger, Validation
 │   ├── app.module.ts           # Root NestJS module importing domain modules
 │   ├── common/                 # Shared decorators, filters, guards, and interceptors
-│   │   ├── decorators/         # @RequirePermissions(), @CurrentUser()
+│   │   ├── decorators/         # @RequirePermissions(), @CurrentUser(), @Public()
 │   │   ├── filters/            # GlobalExceptionFilter
 │   │   ├── guards/             # SessionAuthGuard, PermissionsGuard
 │   │   ├── interceptors/       # AuditLogInterceptor, TransformInterceptor
@@ -21,10 +21,14 @@ apps/api/
 │   ├── prisma/                 # PrismaService & PrismaModule
 │   ├── health/                 # Health check controller (/api/v1/health)
 │   └── modules/                # Business domain modules
-│       ├── auth/               # Authentication & Session management
-│       ├── users/              # User management & role assignment
-│       ├── products/           # Product catalog, categories, brands
+│       ├── auth/               # Authentication & Session management (Email, Google OAuth)
+│       ├── business-profile/   # BusinessProfile setup, onboarding wizard, store identity
+│       ├── permissions/        # System permissions catalog & seeder (38 permissions)
+│       ├── users/              # User management & profile (Single Universal Admin access)
+│       ├── products/           # Product catalog, categories, brands, SKU/barcode lookup
 │       ├── inventory/          # Stock movements, adjustments, transfers
+│       ├── warehouses/         # Multi-warehouse location management
+│       ├── batches/            # Batch tracking & expiry date management
 │       ├── sales/              # POS checkout, held bills, order discounts
 │       ├── purchases/          # Procurement & inward stock receiving
 │       ├── returns/            # Sales returns & Purchase returns
@@ -48,7 +52,7 @@ Cookie Parser & CORS Middleware
        ↓
 SessionAuthGuard (Validates session cookie 'sms_session')
        ↓
-PermissionsGuard (Verifies granular @RequirePermissions against user role)
+PermissionsGuard (Verifies universal permissions - all authenticated sessions grant full permissions per DECISION-016)
        ↓
 ValidationPipe (Transforms & validates payload via class-validator / DTO)
        ↓

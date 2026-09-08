@@ -24,17 +24,18 @@
 
 ---
 
-## 2. Server-Authoritative Authorization & RBAC
+## 2. Server-Authoritative Authorization & Universal Admin Access
 
 1. **Server as Sole Security Boundary**:
    * Frontend permission checks, hidden buttons, and disabled UI elements are strictly for **user experience guidance**.
-   * The NestJS backend MUST independently authorize every incoming request using NestJS `Guards` and verify role permissions against the database/session cache.
-2. **Granular Permission Checks**:
-   * Endpoints must be protected by explicit permission guards (e.g. `@RequirePermissions('create_sale')`, `@RequirePermissions('adjust_stock')`).
-   * Never rely on coarse role name string checks alone.
-3. **Least Privilege Enforcement**:
-   * **Cashier / Staff Restrictions**: Cashiers must never be authorized to view product cost/purchase prices, perform unrestricted stock adjustments, delete products, access system settings, or delete/void invoices without manager PIN approval.
-   * Database credentials and service accounts must operate with minimal necessary table permissions.
+   * The NestJS backend MUST independently authorize every incoming request using NestJS `Guards` (`SessionAuthGuard`, `PermissionsGuard`).
+2. **Single Universal Admin Access Model (DECISION-016)**:
+   * All authenticated users operate with full operational permissions across the platform.
+   * The backend provisions all 38 system permissions from the `permissions` table to every authenticated session.
+   * Multi-role hierarchy (Admin, Manager, Cashier, Staff) and the `roles` / `role_permissions` tables have been permanently superseded and removed.
+3. **Historical RBAC Restrictions Superseded**:
+   * Prior granular role restrictions (e.g. Cashier vs Manager PIN approvals) are marked as SUPERSEDED (DECISION-016). All authenticated store operators have full operational capabilities.
+   * Database credentials and service accounts continue to operate with minimal necessary table permissions.
 
 ---
 
@@ -99,3 +100,12 @@
    * Database backups (`pg_dump`) must be encrypted using AES-256 before storage on local or backup media.
 2. **Restore Authorization**:
    * Database restore operations require high-privilege administrative credentials, explicit confirmation, and generate mandatory audit records.
+
+---
+
+## 8. Protected Auth UI Policy (DECISION-010 / Constitutional Rule)
+
+1. **Strictly Frozen & Protected**:
+   * The `/login` and `/register` (sign up) user interface screens are completely approved, frozen, and protected.
+   * Modifying, redesigning, restructuring, altering layouts, colors, card geometries, input shapes, brand badges, social login buttons, or typography cascades of the authentication pages is strictly forbidden.
+   * All development, redesign passes, or form refactorings across the app must explicitly exclude the `(auth)` route group.

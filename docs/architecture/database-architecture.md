@@ -23,13 +23,13 @@ The database layer uses PostgreSQL 16+ managed via Prisma ORM. It enforces relat
 
 ```
 ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│   AUTH & RBAC    │  │   MASTER DATA    │  │  CRM & VENDORS   │  │   TRANSACTIONS   │
+│ AUTH & PROFILE   │  │   MASTER DATA    │  │  CRM & VENDORS   │  │   TRANSACTIONS   │
 │ • users          │  │ • categories     │  │ • customers      │  │ • sales          │
-│ • roles          │  │ • brands         │  │ • suppliers      │  │ • sale_items     │
-│ • permissions    │  │ • products       │  │ • customer_ledger│  │ • purchases      │
-│ • role_perms     │  │ • warehouses     │  │ • supplier_ledger│  │ • purchase_items │
-│ • sessions       │  │ • warehouse_inv  │  │                  │  │ • sales_returns  │
-│                  │  │ • product_batches│  │                  │  │ • purchase_returns│
+│ • permissions    │  │ • brands         │  │ • suppliers      │  │ • sale_items     │
+│ • sessions       │  │ • products       │  │ • customer_ledger│  │ • purchases      │
+│ • business_profs │  │ • warehouses     │  │ • supplier_ledger│  │ • purchase_items │
+│ (roles dropped   │  │ • warehouse_inv  │  │                  │  │ • sales_returns  │
+│  per DEC-016)    │  │ • product_batches│  │                  │  │ • purchase_returns│
 └──────────────────┘  └──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
@@ -38,3 +38,4 @@ The database layer uses PostgreSQL 16+ managed via Prisma ORM. It enforces relat
 ## Source Reference
 * Authoritative Specification: [.ai/DATABASE.md](../../.ai/DATABASE.md)
 * Prisma Schema: [apps/api/prisma/schema.prisma](../../apps/api/prisma/schema.prisma)
+* Architectural Decisions: [.ai/DECISIONS.md](../../.ai/DECISIONS.md)

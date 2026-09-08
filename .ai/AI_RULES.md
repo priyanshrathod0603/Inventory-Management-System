@@ -218,3 +218,27 @@ The AI owns implementation and validation only unless explicitly authorized othe
 6. `hasRole()` does NOT exist in the frontend codebase. Do NOT create it.
 7. The `PermissionsGuard` remains active for server-side enforcement — but since all authenticated users carry the full catalog, all pass naturally.
 8. See **DECISION-016** in `DECISIONS.md` for full context and rationale.
+
+---
+
+## CONSTITUTIONAL RULE — Universal Business Platform & Zero Industry Hardcoding (Added: 2026-09-08)
+
+1. **Universal Business Platform**: IMS is an industry-agnostic business management system. It is NEVER hardcoded to a single vertical (not Grocery-only, not Footwear-only, not Clothing-only).
+2. **Zero Industry Hardcoding**: Never assume, mock, or hardcode industry-specific default catalogs, preset categories, or product items into UI components or backend logic. User/business data is the SOLE source of truth.
+3. **Multi-Business Selection**: The onboarding business-type selector MUST support selecting MULTIPLE business types simultaneously (select/deselect toggle on each card, multiple selections active at once, at least one selection required).
+4. **Multi-Business ≠ Multi-Warehouse**:
+   - **Multi-Business** = Multiple business contexts / retail verticals operated by a merchant.
+   - **Multi-Warehouse** = Multiple storage facilities / locations for a single business entity.
+   - `isMultiWarehouse` is an inventory capability flag, NEVER proof of Multi-Business support.
+5. **Business Type ≠ Product Category**:
+   - Business Type = industry classification of the enterprise.
+   - Product Category = actual persisted catalog taxonomy created by the merchant.
+   - Selecting a business type does NOT mean product categories exist.
+6. **POS Category Source-of-Truth**:
+   - POS category filter chips MUST be populated dynamically from real persisted product categories belonging to the active business context (`Active Business → Products → Categories → POS Filter Chips`).
+   - POS categories MUST NEVER be hardcoded to Grocery (e.g. Rice & Grains, Edible Oils, Dairy, Spices, Snacks, Beverages) or any other industry.
+   - If a business has no product categories, POS displays `"All"` filter pill and an empty state.
+7. **Protected Auth UI**: Login and Sign Up UI screens are strictly FROZEN. Do NOT redesign or alter auth layout, 3D character hero assets, animations, or styling.
+8. **Current vs. Future Architecture Boundary**: Do NOT falsely claim full multi-business tenant switching exists until explicitly implemented. Current Phase 10 scope is multi-type selection in onboarding + single BusinessProfile personalization.
+9. See **DECISION-017** and **DECISION-018** in `DECISIONS.md` for full context.
+

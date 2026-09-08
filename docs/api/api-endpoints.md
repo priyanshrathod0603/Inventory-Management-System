@@ -56,7 +56,14 @@ This document lists core REST API endpoints defined in the authoritative API spe
 * `GET /api/v1/settings`: Read store configurations (`manage_settings`).
 * `PUT /api/v1/settings/:group`: Update store settings (`manage_settings`).
 
+## 10. Business Profile & Onboarding (`/api/v1/business-profile`)
+* `GET /api/v1/business-profile`: Fetch active store business profile.
+* `PUT /api/v1/business-profile`: Upsert/update business profile details.
+* `POST /api/v1/business-profile/complete-step`: Save intermediate onboarding step data.
+* `POST /api/v1/business-profile/complete-onboarding`: Finalize onboarding & provision default warehouse.
+
 ---
 
 ## Source Reference
 * Authoritative Specification: [.ai/API_CONTRACTS.md](../../.ai/API_CONTRACTS.md)
+* Architectural Decisions: [.ai/DECISIONS.md](../../.ai/DECISIONS.md)

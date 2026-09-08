@@ -1,17 +1,18 @@
-# User Guide (Cashier & Staff)
+# User Guide (Store Operator & Billing Counter)
 
 ## 1. Status Notice
-* **Implementation Status**: Planned / Specification Frozen.
-* The application technical foundation is operational. Business feature screens will be implemented according to the workflows below.
+* **Implementation Status**: POS Counter Billing is scheduled for Phase 11.
+* The application technical foundation and dynamic category filtering architecture are specified and ready.
 
 ---
 
 ## 2. Operating the Billing Counter (POS)
-1. **Scanning Items**: Point USB/Bluetooth barcode scanner at product EAN barcode or press `F2` to search by product title/SKU.
-2. **Quantity Stepper**: Use `+` and `-` buttons or keyboard arrows to adjust item quantities.
-3. **Applying Discounts**: Enter percentage or fixed Rupee discount per line item or overall order discount.
-4. **Selecting Payment Mode**: Select `Cash`, `UPI` (generates dynamic QR code on screen), `Card`, or `Customer Khata Credit`.
-5. **Completing Transaction**: Press `F8` or `Enter` to confirm checkout. The receipt automatically dispatches to the thermal printer.
+1. **Dynamic Category Filtering**: Click dynamic category chips (sourced strictly from your store's real product categories) or view `"All"`.
+2. **Scanning & Adding Items**: Point USB/Bluetooth barcode scanner at product barcode, click a product card, or press `F2` to search by title/SKU.
+3. **Quantity Stepper**: Use `+` and `-` buttons or keyboard arrows to adjust item quantities.
+4. **Applying Discounts**: Enter percentage or fixed Rupee discount per line item or overall order discount.
+5. **Selecting Payment Mode**: Select `Cash`, `UPI` (generates dynamic QR code on screen), `Card`, or `Customer Khata Credit`.
+6. **Completing Transaction**: Press `F8` or `Enter` to confirm checkout. The receipt automatically dispatches to the thermal printer.
 
 ---
 
@@ -22,4 +23,4 @@
 ---
 
 ## Source Reference
-* Authoritative Specification: [.ai/PRODUCT_REQUIREMENTS.md](../../.ai/PRODUCT_REQUIREMENTS.md) and [.ai/UI_RULES.md](../../.ai/UI_RULES.md)
+* Authoritative Specification: [.ai/PRODUCT_REQUIREMENTS.md](../../.ai/PRODUCT_REQUIREMENTS.md), [.ai/UI_RULES.md](../../.ai/UI_RULES.md), and [.ai/DECISIONS.md](../../.ai/DECISIONS.md)

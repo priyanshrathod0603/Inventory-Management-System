@@ -22,7 +22,12 @@
 ## 4. Brute-Force & Rate Limiting
 * `/api/v1/auth/login` and `/api/v1/auth/register` are rate-limited to 5 failed attempts per 15 minutes per IP/identifier before triggering exponential cooldowns.
 
+## 5. Protected Auth UI Policy (DECISION-010 / Constitutional Rule)
+* The `/login` and `/register` authentication UI screens are strictly frozen and protected.
+* Any redesigns, restyling passes, or global form standardizations must strictly exclude the `(auth)` route group to preserve the approved authentication experience.
+
 ---
 
 ## Source Reference
 * Authoritative Specification: [.ai/SECURITY_RULES.md](../../.ai/SECURITY_RULES.md)
+* Decisions Log: [.ai/DECISIONS.md](../../.ai/DECISIONS.md)

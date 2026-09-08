@@ -214,3 +214,34 @@
 * **Reason**: Enables seamless multi-industry onboarding with strong transactional guarantees and server-authoritative security boundaries.
 * **Impact**: All authenticated users without a completed `BusinessProfile` are routed through `/onboarding`. Header and invoices personalize dynamically based on the active `BusinessProfile`.
 
+---
+
+## DECISION-018
+* **Title**: Universal Business Platform, Multi-Business Selection, POS Category Source-of-Truth & Architectural Boundaries
+* **Status**: Accepted
+* **Context**: Universal Business Architecture, Multi-Context Modeling & POS Catalog Sourcing
+* **Decision**:
+  1. **Universal Business Platform**: IMS is an industry-agnostic business and inventory management platform designed for diverse business types and scales (General Store/Kirana, Grocery, Footwear, Clothing, Electronics, Furniture, Hardware, Pharmacy, Retail, Other/Custom, Multi-Warehouse operations).
+  2. **Multiple Business-Type Selection in Onboarding**: The onboarding wizard (`/onboarding` Step 1) allows selecting MULTIPLE business types simultaneously (e.g. Footwear + Clothing + Furniture).
+     - Selection Mechanics: Clicking an unselected card selects it; clicking an already-selected card deselects it; multiple cards can remain selected simultaneously; at least one business type selection is required to proceed.
+  3. **Multi-Business ≠ Multi-Warehouse Distinction**:
+     - **Multi-Business**: Multiple business contexts or retail verticals operated by a merchant (e.g., Footwear outlet + Clothing boutique).
+     - **Multi-Warehouse**: Multiple storage and inventory facilities belonging to a single business entity (e.g., Main Storefront, Central Godown, Warehouse B).
+     - `isMultiWarehouse` is strictly an inventory capability toggle on `BusinessProfile` and must NEVER be treated as Multi-Business support.
+  4. **Business Type ≠ Product Category**:
+     - Business Type defines the industry nature of the enterprise.
+     - Product Category defines the merchant's actual persisted catalog taxonomy.
+     - Selecting a business type does NOT imply or automatically create specific product categories.
+  5. **POS Category Source-of-Truth Rule**:
+     - POS category filter chips MUST be dynamically populated from the merchant's real persisted product categories (`Active Business → Business Data → Products → Categories → POS Category Filters`).
+     - POS categories MUST NEVER be hardcoded to any specific industry (e.g. Grocery categories such as "Rice & Grains", "Edible Oils", "Dairy", "Spices", "Snacks", "Beverages" must NEVER be hardcoded into POS components).
+     - If the merchant has no product categories, the POS displays the `"All"` filter pill and an appropriate empty state.
+  6. **Zero Industry Hardcoding**:
+     - The platform must never assume any specific industry as a universal default catalog. All catalog data is user/business-defined.
+  7. **Current Phase 10 Foundation vs. Future Multi-Business Architecture Boundary**:
+     - **Current Supported Foundation (Phase 10)**: Multi-type selection in onboarding wizard, single `BusinessProfile` record per user, dynamic business personalization (AppHeader & Settings), universal unit pickers, and real category-driven POS filtering.
+     - **Future Multi-Business Scope**: Full normalized multi-business tenant entity schema, active business context switcher, and multi-business data segregation across ledgers. Future developers and AI agents must NOT falsely document or assume full multi-business tenant switching exists until explicitly implemented.
+* **Reason**: Formalizes universal business principles, protects catalog integrity, prevents industry bias, and establishes strict architectural boundaries between current Phase 10 capabilities and future multi-business features.
+* **Impact**: Enforces real category data flow in POS, clarifies business vs. warehouse distinctions, and ensures all documentation remains 100% truthful to the codebase.
+
+

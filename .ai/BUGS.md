@@ -46,4 +46,4 @@
 
 ## Active Bugs
 * **Current Status**: Zero known active application bugs.
-* **Quality Gate**: All 15 backend test suites (85 tests) pass, Next.js build passes (34 static routes), TypeScript typecheck passes across API and Web with 0 errors.
+* **Quality Gate**: All 22 backend test suites (121 tests) pass, Next.js build passes (35 static routes), TypeScript typecheck passes across API and Web with 0 errors.

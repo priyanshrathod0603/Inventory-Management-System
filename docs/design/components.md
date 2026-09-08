@@ -25,7 +25,16 @@ This document details the core component library rules for IMS.
 * `Low Stock` / `Pending` / `Near Expiry`: `bg-amber-50 text-amber-700 border-amber-200`
 * `Out of Stock` / `Cancelled` / `Expired`: `bg-rose-50 text-rose-700 border-rose-200`
 
+## 5. Canonical Section 40 Form Modals
+* **Modal Overlay**: `fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4`
+* **Modal Dialog Card**: `bg-white rounded-[24px] border border-[#EAE5E0] shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]`
+* **Section Card**: `bg-[#FAF7F4] border border-[#EAE5E0] rounded-[16px] p-5 space-y-4`
+* **Canonical Input Field**: `w-full h-11 px-4 bg-[#FAF7F4] border border-[#EAE5E0] rounded-xl text-sm text-[#111722] focus:bg-white focus:border-[#FF7048] focus:ring-2 focus:ring-[#FF7048]/20 transition-all`
+* **Required Indicator**: `<span className="text-[#FF7048]">*</span>`
+* **Optional Indicator**: `<span className="text-neutral-400 text-xs font-normal">(Optional)</span>`
+
 ---
 
 ## Source Reference
 * Authoritative Specification: [.ai/UI_RULES.md](../../.ai/UI_RULES.md)
+* Architectural Decisions: [.ai/DECISIONS.md](../../.ai/DECISIONS.md)

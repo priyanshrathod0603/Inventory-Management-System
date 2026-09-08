@@ -86,15 +86,12 @@ Authentication and authorization must follow the existing security rules.
 * Resend / Third-party vendor email APIs are explicitly disabled/removed from auth flows.
 
 ## Authorization
-Use:
-* RBAC
-* Granular permissions
-Roles include the project’s existing roles such as:
-* Admin
-* Manager
-* Staff
-Authorization must be enforced on the backend/server side.
-Frontend permission checks are only for UI/UX and must NEVER be treated as the security boundary.
+* Single Universal Admin Access Model (DECISION-016)
+* 38 Granular system permissions
+* All authenticated users operate with full operational capabilities across the platform.
+* Multi-role hierarchy (Admin, Manager, Cashier, Staff) and `roles` / `role_permissions` tables have been permanently superseded and removed.
+* Authorization is verified on the backend/server side via session guards.
+* Frontend permission checks provide seamless UX guidance.
 ## API
 * REST API
 * OpenAPI / Swagger documentation

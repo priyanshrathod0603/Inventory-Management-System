@@ -61,19 +61,19 @@ The authenticated application shell consists of a top header, optional sub-navig
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ [Logo] IMS  Inventory Management System   Dashboard  POS  Inventory  Sales  Purchases  Reports  More ▾│ [🔍 ⌘K] [🔔 3] [Avatar (Admin) ▾] [+ New Sale]│
+│ [Logo] IMS  Inventory Management System   Dashboard  POS  Inventory  Sales  Purchases  Reports  More ▾│ [🔍 ⌘K] [🔔 3] [Admin (Owner) ▾] [+ New Sale]│
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Page Header: Title, Breadcrumbs, Contextual Actions & Date Filter                                │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                                  │
-│ Main Content Canvas (Max-width: 1600px / Full-width for POS, Background: #F8FAFC)                │
+│ Main Content Canvas (Max-width: 1600px / Full-width for POS, Background: #FCF9F6)                │
 │                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Top Application Header (Fixed Height: `64px` / `h-16`)
 * **Left Section**:
-  * **Brand Identity**: IMS Emblem / Logo (`32×32px`) + App Title "**IMS**" (`font-bold text-slate-900`) + Subtitle "**Inventory Management System**" (`text-xs text-slate-500 font-medium`).
+  * **Brand Identity**: Store Emblem / Logo (`32×32px`) + Store Name (`font-bold text-slate-900`) + Subtitle / Vertical (`text-xs text-slate-500 font-medium`).
 * **Center Navigation Bar**:
   * **Dashboard**: `/dashboard`
   * **POS**: `/pos` (Prominent visual highlight badge)
@@ -86,7 +86,7 @@ The authenticated application shell consists of a top header, optional sub-navig
   * **Global Search Trigger**: Search bar input simulation (`⌘K` shortcut badge, `w-56`).
   * **Keyboard Help**: `?` shortcut helper overlay trigger.
   * **Notification Bell**: Lucide `Bell` icon with unread count indicator pill.
-  * **User Profile Menu**: User avatar (`36×36px`) with initials/photo, Full Name (`text-sm font-semibold`), User Role badge (`Admin`, `Manager`, `Cashier`), and dropdown arrow.
+  * **User Profile Menu (DECISION-013)**: Clean text-only user button (Full Name + `Admin` access badge + dropdown arrow, strictly **NO** avatar photo/circle).
   * **Primary Header CTA**: `+ New Sale` (`.pill-btn-coral h-9 px-4 text-white font-semibold text-xs rounded-full shadow-coral`).
 
 ### Active Navigation Rules:
@@ -464,20 +464,20 @@ POS is the **highest-velocity workflow** in the system. The interface is enginee
 ┌────────────────────────────────────────────────────────┬─────────────────────────────────────────┐
 │ 🔍 [F2] Scan Barcode or Search Product (Name, SKU)...  │ Customer: [Walk-in Customer      ▾] [+New]│
 ├────────────────────────────────────────────────────────┼─────────────────────────────────────────┤
-│ CART ITEMS (4 Items)                       [Clear All] │ BILLING SUMMARY                         │
+│ CART ITEMS (Live interactive table)        [Clear All] │ BILLING SUMMARY                         │
 │ ┌────────────────────────────────────────────────────┐ │ Subtotal:                     ₹1,240.00 │
-│ │ 1. Aashirvaad Atta 10kg               ₹420.00     │ │ Item Discounts:               - ₹40.00  │
+│ │ 1. Product Item Alpha                  ₹420.00     │ │ Item Discounts:               - ₹40.00  │
 │ │    SKU-89010   [-] [ 2 ] [+]   Qty   ₹840.00 [🗑] │ │ Order Discount (5%):          - ₹60.00  │
 │ ├────────────────────────────────────────────────────┤ │ GST (18% Included):           ₹173.80   │
-│ │ 2. Amul Butter 500g                   ₹275.00     │ ├─────────────────────────────────────────┤
+│ │ 2. Product Item Beta                   ₹275.00     │ ├─────────────────────────────────────────┤
 │ │    SKU-10244   [-] [ 1 ] [+]   Qty   ₹275.00 [🗑] │ │ GRAND TOTAL:                ₹1,140.00   │
 │ ├────────────────────────────────────────────────────┤ ├─────────────────────────────────────────┤
-│ │ 3. Tata Tea Gold 500g                 ₹265.00     │ │ TENDER PAYMENT                         │
+│ │ 3. Product Item Gamma                  ₹265.00     │ │ TENDER PAYMENT                         │
 │ │    SKU-30911   [-] [ 1 ] [+]   Qty   ₹265.00 [🗑] │ │ [💵 Cash] [📱 UPI] [💳 Card] [📋 Credit]│
 │ └────────────────────────────────────────────────────┘ │ Paid: [ ₹1,200.00 ]  Change: ₹60.00     │
 ├────────────────────────────────────────────────────────┼─────────────────────────────────────────┤
-│ QUICK PRODUCT SHORTCUT TILES (Optional / Category View)│ [F6] Hold Bill     [F8] COMPLETE SALE   │
-│ [Rice & Grains] [Oils] [Dairy] [Snacks] [Beverages]    │ [Esc] Cancel       [ 🖨 Complete & Print ]│
+│ QUICK PRODUCT SHORTCUT TILES (Dynamic Category Tabs)   │ [F6] Hold Bill     [F8] COMPLETE SALE   │
+│ [All] [Dynamic Cat 1] [Dynamic Cat 2] [Dynamic Cat 3]  │ [Esc] Cancel       [ 🖨 Complete & Print ]│
 └────────────────────────────────────────────────────────┴─────────────────────────────────────────┘
 ```
 

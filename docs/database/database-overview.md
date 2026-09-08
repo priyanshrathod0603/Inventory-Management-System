@@ -21,9 +21,9 @@
 
 ---
 
-## 3. Table Catalog Summary (24 Entities)
+## 3. Table Catalog Summary
 
-* **Auth & RBAC**: `users`, `roles`, `permissions`, `role_permissions`, `sessions`
+* **Auth & Profile**: `users`, `permissions`, `sessions`, `business_profiles` *(Note: `roles` and `role_permissions` tables dropped in migration `20260907000000_remove_role_system` per DECISION-016)*
 * **Master Data**: `categories`, `brands`, `products`, `warehouses`, `warehouse_inventory`, `product_batches`
 * **CRM & Vendors**: `customers`, `suppliers`, `customer_ledger`, `supplier_ledger`
 * **POS & Transactions**: `sales`, `sale_items`, `invoices`, `held_bills`

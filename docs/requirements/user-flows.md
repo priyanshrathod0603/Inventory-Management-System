@@ -1,16 +1,34 @@
 # User Flows
 
-This document visualizes key operational workflows across IMS.
+This document visualizes key operational workflows across SMS / Universal Inventory Platform.
+
+## 0. Universal Business Onboarding Flow
+
+```mermaid
+flowchart TD
+    A[Start: User Registers / First Login] --> B[Redirect to /onboarding]
+    B --> C[Step 1: Multi-Business Type Selection]
+    C --> D[Select One or Multiple Verticals: Footwear, Clothing, etc.]
+    D --> E[Step 2: Business Profile Details: Name, Phone, Address]
+    E --> F[Step 3: Tax & Currency Settings: GSTIN, State]
+    F --> G[Step 4: Warehouse Setup: Single or Multi-Warehouse]
+    G --> H[Server: Save BusinessProfile & Provision Default Warehouse]
+    H --> I[Mark isOnboardingCompleted = true]
+    I --> J[Redirect to /dashboard]
+```
+
+---
 
 ## 1. High-Velocity POS Counter Checkout Flow
 
 ```mermaid
 flowchart TD
     A[Start: Open POS Screen] --> B[Default: Walk-in Customer]
-    B --> C{Search Customer?}
-    C -- Yes --> D[Type Mobile Phone / Select Customer]
-    C -- No --> E[Scan Barcode / SKU]
-    D --> E
+    B --> C{Filter Category?}
+    C -- Yes --> D1[Click Dynamic Category Tab - Sourced from real inventory]
+    C -- No / All --> D2[View All Products]
+    D1 --> E[Scan Barcode / SKU / Click Product]
+    D2 --> E
     E --> F[Item Added to Cart]
     F --> G{Adjust Qty / Discount?}
     G -- Yes --> H[Update Line Item]
@@ -74,11 +92,11 @@ flowchart TD
     D --> E[Enter Quantity to Adjust]
     E --> F[Review Visual Math: Old Stock ± Qty = Calculated New Stock]
     F --> G[Select Mandatory Reason & Enter Detailed Audit Note]
-    G --> H[Manager PIN Authorization]
+    G --> H[Submit Adjustment with Universal Admin Authorization]
     H --> I[Execute Adjustment: Update Stock & Log Immutable Audit Entry]
 ```
 
 ---
 
 ## Source Reference
-* Derived from: [.ai/PRODUCT_REQUIREMENTS.md](../../.ai/PRODUCT_REQUIREMENTS.md) and [.ai/ARCHITECTURE.md](../../.ai/ARCHITECTURE.md)
+* Derived from: [.ai/PRODUCT_REQUIREMENTS.md](../../.ai/PRODUCT_REQUIREMENTS.md), [.ai/ARCHITECTURE.md](../../.ai/ARCHITECTURE.md), and [.ai/DECISIONS.md](../../.ai/DECISIONS.md)
