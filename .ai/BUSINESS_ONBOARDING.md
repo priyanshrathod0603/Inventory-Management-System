@@ -1,0 +1,68 @@
+# Business Onboarding Architecture & Specification
+
+## 1. Overview
+The **Universal Business Onboarding** subsystem transforms the Inventory Management System (IMS) into an industry-agnostic business management platform. It allows merchants across retail, FMCG, groceries, apparel, electronics, furniture, hardware, pharmacies, and specialty stores to configure their business identity, tax settings, and operational scale immediately following account registration.
+
+## 2. Core Architecture & Principles
+
+### A. Server-Authoritative State
+- `isOnboardingCompleted`: Stored directly on the `BusinessProfile` database entity and evaluated on the server.
+- Session tokens, `@Get('/auth/me')`, `@Post('/auth/login')`, and `@Post('/auth/google')` compute and deliver `isOnboardingCompleted: Boolean(user.businessProfile?.isOnboardingCompleted)`.
+- Client cannot bypass onboarding via manual URL manipulation; Next.js route guards inspect `user.isOnboardingCompleted` on all authenticated views under `/(app)/*` and redirect incomplete users to `/onboarding`.
+
+### B. Universal Admin Access Model
+- Every authenticated user possesses full system administrative privileges.
+- Multi-warehouse operations are controlled via the `isMultiWarehouse: boolean` capability toggle, not user roles.
+
+### C. Resumable Onboarding Drafts
+- Users can step through the 4-step setup wizard with server-persisted draft progress via `POST /api/v1/business-profile/draft`.
+- If an onboarding session is interrupted, the user can resume exactly from their saved step on their next login.
+
+## 3. Supported Business Categories
+| Type Key | Display Name | Industry Preset / Focus |
+|---|---|---|
+| `GENERAL_STORE` | General Store | Multi-category FMCG, Kirana, Packaged Goods |
+| `GROCERY` | Grocery & Supermarket | Perishables, Expiry Tracking, Weight/Volume Units |
+| `FOOTWEAR` | Footwear & Shoes | Pairs, Sizes, Color Variants, Box Units |
+| `CLOTHING` | Clothing & Apparel | Garments, Fabrics, Seasonal Collections |
+| `ELECTRONICS` | Electronics & Gadgets | Serial Tracking, Warranty Periods, Model IDs |
+| `FURNITURE` | Furniture & Decor | Dimensions, Assembly Sets, Heavy Cargo Units |
+| `HARDWARE` | Hardware & Tools | Metrics, Spares, Tools, Fasteners |
+| `PHARMACY` | Pharmacy & Health | Strict Batch Numbers, Expiry Alerting, Schedules |
+| `RETAIL` | Specialty Retail | Gifts, Luxury, Boutique Goods |
+| `OTHER` | Other / Custom | Dynamic user-specified industry name |
+
+## 4. 4-Step Onboarding Flow
+
+1. **Step 1: Category Selection**
+   - Visual card selector showcasing all 10 business types with icons and descriptions.
+   - Dynamic custom input when `OTHER` is selected.
+2. **Step 2: Business Profile & Contact**
+   - Store / Business Name (Required).
+   - Owner / Manager Name.
+   - Contact Phone, WhatsApp (for invoices/alerts), Email, Website.
+   - Physical Street Address, City, State, Country, Postal Code.
+3. **Step 3: Tax Compliance & Currency**
+   - GST / Tax Registered toggle.
+   - Formatted GSTIN / Tax ID field (auto-uppercase).
+   - Base Operating Currency selection (`INR (₹)`, `USD ($)`, `EUR (€)`, `AED (د.إ)`).
+4. **Step 4: Capabilities & Review**
+   - Multi-Warehouse Mode toggle (`isMultiWarehouse`).
+   - Profile summary card.
+   - "Launch Store & Go to Dashboard" activation button.
+
+## 5. API Endpoints
+
+- `GET /api/v1/business-profile` — Retrieves the current user's profile and onboarding state.
+- `POST /api/v1/business-profile/onboarding` — Submits full onboarding data, provisions a default warehouse if none exists, and sets `isOnboardingCompleted = true`.
+- `POST /api/v1/business-profile/draft` — Saves progressive step draft data without marking onboarding complete.
+- `PATCH /api/v1/business-profile` — Updates store master data from the Settings page.
+
+## 6. Default Warehouse Provisioning
+When `completeOnboarding` executes in a database transaction, it verifies whether active warehouses exist. If no warehouse exists, it automatically provisions:
+- Name: `{Business Name} - Main Store`
+- Code: `WH-01`
+- IsDefault: `true`
+- IsActive: `true`
+
+This guarantees that inventory movements, stock adjustments, and POS sales function seamlessly right after onboarding.

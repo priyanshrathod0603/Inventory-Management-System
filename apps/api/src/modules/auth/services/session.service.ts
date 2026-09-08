@@ -32,6 +32,8 @@ export interface UserSessionPayload {
     isActive: boolean;
     isDeleted: boolean;
     avatarUrl: string | null;
+    businessProfile?: any | null;
+    isOnboardingCompleted: boolean;
   };
 }
 
@@ -98,7 +100,11 @@ export class SessionService {
     const session = await this.prisma.session.findUnique({
       where: { id: sessionId },
       include: {
-        user: true,
+        user: {
+          include: {
+            businessProfile: true,
+          },
+        },
       },
     });
 
@@ -143,6 +149,8 @@ export class SessionService {
         isActive: user.isActive,
         isDeleted: user.isDeleted,
         avatarUrl: user.avatarUrl,
+        businessProfile: user.businessProfile || null,
+        isOnboardingCompleted: Boolean(user.businessProfile?.isOnboardingCompleted),
       },
     };
   }

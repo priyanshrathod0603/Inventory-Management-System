@@ -48,6 +48,7 @@ model User {
   cashDrawerSessions      CashDrawerSession[]
   auditLogs               AuditLog[]
   settingsUpdated         SystemSetting[]
+  businessProfile         BusinessProfile?
 
   @@map("users")
 }
@@ -713,3 +714,41 @@ model SystemSetting {
 
   @@map("system_settings")
 }
+
+// -------------------------------------------------------------
+// Universal Business Profile, Configuration & Onboarding
+// -------------------------------------------------------------
+
+model BusinessProfile {
+  id                    String   @id @default(uuid()) @db.Uuid
+  userId                String   @unique @db.Uuid
+  businessName          String   @db.VarChar(200)
+  businessType          String   @db.VarChar(50)
+  customBusinessType    String?  @db.VarChar(100)
+  ownerName             String?  @db.VarChar(100)
+  phone                 String?  @db.VarChar(20)
+  whatsapp              String?  @db.VarChar(20)
+  email                 String?  @db.VarChar(255)
+  website               String?  @db.VarChar(255)
+  address               String?  @db.Text
+  city                  String?  @db.VarChar(100)
+  state                 String?  @db.VarChar(100)
+  country               String   @default("India") @db.VarChar(100)
+  postalCode            String?  @db.VarChar(20)
+  logoUrl               String?  @db.VarChar(500)
+  isGstRegistered       Boolean  @default(false)
+  gstin                 String?  @db.VarChar(20)
+  taxNumber             String?  @db.VarChar(50)
+  currency              String   @default("INR") @db.VarChar(10)
+  currencySymbol        String   @default("₹") @db.VarChar(5)
+  isMultiWarehouse      Boolean  @default(false)
+  isOnboardingCompleted Boolean  @default(false)
+  onboardingStep        Int      @default(1)
+  createdAt             DateTime @default(now()) @db.Timestamptz
+  updatedAt             DateTime @default(now()) @updatedAt @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("business_profiles")
+}
+

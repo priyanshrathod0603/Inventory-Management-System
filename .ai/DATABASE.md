@@ -466,6 +466,33 @@
 * `reason`: `TEXT` (Nullable)
 * `ipAddress`: `VARCHAR(45)` (Nullable)
 
+#### `business_profiles`
+* `id`: `UUID` (PK, default `gen_random_uuid()`)
+* `userId`: `UUID` (Unique, FK -> `users.id` ON DELETE CASCADE)
+* `businessName`: `VARCHAR(150)` (NOT NULL)
+* `businessType`: `VARCHAR(50)` (NOT NULL e.g., 'GENERAL_STORE', 'GROCERY', 'FOOTWEAR', 'CLOTHING', 'ELECTRONICS', 'FURNITURE', 'HARDWARE', 'PHARMACY', 'RETAIL', 'OTHER')
+* `customBusinessType`: `VARCHAR(100)` (Nullable)
+* `ownerName`: `VARCHAR(100)` (Nullable)
+* `phone`: `VARCHAR(20)` (Nullable)
+* `whatsapp`: `VARCHAR(20)` (Nullable)
+* `email`: `VARCHAR(255)` (Nullable)
+* `website`: `VARCHAR(255)` (Nullable)
+* `address`: `TEXT` (Nullable)
+* `city`: `VARCHAR(100)` (Nullable)
+* `state`: `VARCHAR(100)` (Nullable)
+* `country`: `VARCHAR(100)` (DEFAULT 'India')
+* `postalCode`: `VARCHAR(20)` (Nullable)
+* `logoUrl`: `TEXT` (Nullable)
+* `isGstRegistered`: `BOOLEAN` (DEFAULT FALSE)
+* `gstin`: `VARCHAR(20)` (Nullable)
+* `taxNumber`: `VARCHAR(50)` (Nullable)
+* `currency`: `VARCHAR(10)` (DEFAULT 'INR')
+* `currencySymbol`: `VARCHAR(10)` (DEFAULT '₹')
+* `isMultiWarehouse`: `BOOLEAN` (DEFAULT FALSE)
+* `isOnboardingCompleted`: `BOOLEAN` (DEFAULT FALSE)
+* `onboardingStep`: `INTEGER` (DEFAULT 1)
+* `createdAt`, `updatedAt`: `TIMESTAMP WITH TIME ZONE`
+
 #### `system_settings`
 * `id`: `UUID` (PK)
 * `key`: `VARCHAR(100)` (Unique, NOT NULL)

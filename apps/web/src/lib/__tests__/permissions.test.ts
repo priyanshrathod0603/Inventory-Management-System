@@ -29,6 +29,7 @@ const universalUser: AuthUser = {
   ],
   isEmailVerified: true,
   avatarUrl: null,
+  isOnboardingCompleted: true,
 };
 
 function runPermissionsTests() {

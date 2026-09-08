@@ -23,6 +23,8 @@ const UNITS = [
   { value: 'DOZ', label: 'Dozen (DOZ)' },
   { value: 'MTR', label: 'Meter (MTR)' },
   { value: 'GRAM', label: 'Gram (GRAM)' },
+  { value: 'PAIR', label: 'Pair (PAIR)' },
+  { value: 'SET', label: 'Set (SET)' },
 ];
 
 const TAX_RATES = [
@@ -69,6 +71,26 @@ export function ProductFormModal({ isOpen, onClose, productToEdit }: ProductForm
 
   const isEditing = Boolean(productToEdit);
   const isPending = createMutation.isPending || updateMutation.isPending;
+
+  const handleGenerateSku = () => {
+    const rawName = name.trim();
+    if (!rawName) {
+      setSku(`SKU-${Math.floor(100000 + Math.random() * 900000)}`);
+      return;
+    }
+    const words = rawName.split(/[^a-zA-Z0-9]+/).filter(Boolean);
+    const prefix = words
+      .map((w) => w.slice(0, 3).toUpperCase())
+      .slice(0, 2)
+      .join('-');
+    const randomSuffix = Math.floor(100 + Math.random() * 900);
+    setSku(`${prefix || 'ITEM'}-${randomSuffix}`);
+  };
+
+  const pPrice = Number(purchasePrice) || 0;
+  const sPrice = Number(sellingPrice) || 0;
+  const marginAmt = sPrice > 0 ? sPrice - pPrice : 0;
+  const marginPct = sPrice > 0 ? ((marginAmt / sPrice) * 100).toFixed(1) : '0.0';
 
   useEffect(() => {
     if (productToEdit) {
@@ -278,9 +300,18 @@ export function ProductFormModal({ isOpen, onClose, productToEdit }: ProductForm
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-navy-950 mb-1">
-                    SKU Code <span className="text-danger-600">*</span>
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold text-navy-950">
+                      SKU Code <span className="text-danger-600">*</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleGenerateSku}
+                      className="text-[10px] text-coral-600 hover:text-coral-700 font-bold hover:underline cursor-pointer"
+                    >
+                      + Generate SKU
+                    </button>
+                  </div>
                   <input
                     type="text"
                     required
@@ -410,6 +441,26 @@ export function ProductFormModal({ isOpen, onClose, productToEdit }: ProductForm
                     placeholder="0.00"
                     className="form-input-warm w-full text-xs text-navy-950 focus:outline-none tabular-nums"
                   />
+                </div>
+              </div>
+
+              {/* Real-time Profit & Margin Calculator */}
+              <div className="p-3.5 bg-surface-subtle/80 border border-border rounded-2xl flex items-center justify-between text-xs">
+                <div>
+                  <span className="text-content-secondary block text-[11px]">Estimated Gross Profit</span>
+                  <strong className={`font-mono font-bold text-sm ${marginAmt >= 0 ? 'text-emerald-700' : 'text-rose-600'}`}>
+                    ₹{marginAmt.toFixed(2)} / unit
+                  </strong>
+                </div>
+                <div className="text-right">
+                  <span className="text-content-secondary block text-[11px]">Gross Margin</span>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-bold ${
+                    Number(marginPct) > 0
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      : 'bg-surface-muted text-content-secondary'
+                  }`}>
+                    {marginPct}%
+                  </span>
                 </div>
               </div>
 

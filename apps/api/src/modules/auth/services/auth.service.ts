@@ -102,10 +102,13 @@ export class AuthService {
   async login(dto: LoginDto, req: Request, res: Response) {
     const identifier = dto.identifier.toLowerCase().trim();
 
-    // Find user by email OR username
+    // Find user by email OR username with business profile
     const user = await this.prisma.user.findFirst({
       where: {
         OR: [{ email: identifier }, { username: identifier }],
+      },
+      include: {
+        businessProfile: true,
       },
     });
 
@@ -159,6 +162,8 @@ export class AuthService {
         permissions,
         isEmailVerified: user.isEmailVerified,
         avatarUrl: user.avatarUrl,
+        businessProfile: user.businessProfile || null,
+        isOnboardingCompleted: Boolean(user.businessProfile?.isOnboardingCompleted),
       },
       message: 'Login successful',
     };
@@ -174,6 +179,9 @@ export class AuthService {
     let user = await this.prisma.user.findFirst({
       where: {
         OR: [{ googleId: googleProfile.googleId }, { email: googleProfile.email }],
+      },
+      include: {
+        businessProfile: true,
       },
     });
 
@@ -195,6 +203,9 @@ export class AuthService {
             emailVerifiedAt: user.emailVerifiedAt || new Date(),
             avatarUrl: user.avatarUrl || googleProfile.avatarUrl || null,
           },
+          include: {
+            businessProfile: true,
+          },
         });
       }
     } else {
@@ -214,6 +225,9 @@ export class AuthService {
           emailVerifiedAt: new Date(),
           isActive: true,
           isDeleted: false,
+        },
+        include: {
+          businessProfile: true,
         },
       });
     }
@@ -243,6 +257,8 @@ export class AuthService {
         permissions,
         isEmailVerified: user.isEmailVerified,
         avatarUrl: user.avatarUrl,
+        businessProfile: user.businessProfile || null,
+        isOnboardingCompleted: Boolean(user.businessProfile?.isOnboardingCompleted),
       },
       message: 'Google authentication successful',
     };
@@ -473,6 +489,9 @@ export class AuthService {
   async getMe(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
+      include: {
+        businessProfile: true,
+      },
     });
 
     if (!user || user.isDeleted || !user.isActive) {
@@ -493,6 +512,8 @@ export class AuthService {
       permissions,
       isEmailVerified: user.isEmailVerified,
       avatarUrl: user.avatarUrl,
+      businessProfile: user.businessProfile || null,
+      isOnboardingCompleted: Boolean(user.businessProfile?.isOnboardingCompleted),
       createdAt: user.createdAt,
     };
   }

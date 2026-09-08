@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '../../lib/auth/auth-context';
+import { useBusinessProfile } from '../../hooks/use-business-profile';
 import { MoreMenu } from './more-menu';
 import { UserMenu } from './user-menu';
 import {
@@ -25,11 +26,33 @@ interface AppHeaderProps {
   onOpenNotifications: () => void;
 }
 
+const BUSINESS_TYPE_LABELS: Record<string, string> = {
+  GENERAL_STORE: 'General Store',
+  GROCERY: 'Grocery & Supermarket',
+  FOOTWEAR: 'Footwear & Shoes',
+  CLOTHING: 'Clothing & Apparel',
+  ELECTRONICS: 'Electronics & Gadgets',
+  FURNITURE: 'Furniture & Decor',
+  HARDWARE: 'Hardware & Tools',
+  PHARMACY: 'Pharmacy & Health',
+  RETAIL: 'Specialty Retail',
+  OTHER: 'Store',
+};
+
 export function AppHeader({ onOpenSearch, onOpenNotifications }: AppHeaderProps) {
   const pathname = usePathname();
   const { user } = useAuth();
+  const { data: profileData } = useBusinessProfile();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const businessProfile = profileData?.profile || user?.businessProfile;
+  const businessName = businessProfile?.businessName || 'StockFlow';
+  const businessTypeLabel = businessProfile?.businessType
+    ? businessProfile.businessType === 'OTHER' && businessProfile.customBusinessType
+      ? businessProfile.customBusinessType
+      : BUSINESS_TYPE_LABELS[businessProfile.businessType] || 'Store'
+    : 'Universal IMS';
 
   const navLinks = [
     { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -61,12 +84,17 @@ export function AppHeader({ onOpenSearch, onOpenNotifications }: AppHeaderProps)
                 <path d="M12 22V12" />
               </svg>
             </div>
-            <div>
-              <div className="text-sm sm:text-base font-extrabold text-[#111722] tracking-tight font-sans leading-none">
-                IMS
+            <div className="max-w-[180px] sm:max-w-[240px] truncate">
+              <div className="text-sm sm:text-base font-extrabold text-[#111722] tracking-tight font-sans leading-none truncate">
+                {businessName}
               </div>
-              <div className="text-[9px] text-[#8C9097] font-semibold tracking-wider uppercase leading-none mt-1 hidden sm:block">
-                Inventory Management System
+              <div className="text-[9px] text-[#8C9097] font-semibold tracking-wider uppercase leading-none mt-1 hidden sm:flex items-center gap-1.5 truncate">
+                <span>{businessTypeLabel}</span>
+                {businessProfile?.isMultiWarehouse && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-extrabold bg-navy-100 text-navy-800">
+                    MULTI-WH
+                  </span>
+                )}
               </div>
             </div>
           </Link>

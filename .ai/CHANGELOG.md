@@ -523,3 +523,26 @@ Removed the multi-role RBAC system (Admin / Manager / Cashier / Staff) and repla
   - TypeScript Typechecks: 0 errors across API and Web
   - Next.js Build: All 33 static routes compiled cleanly
 
+## Phase 10 — Universal Business Onboarding, Store Personalization & Form UX Redesign
+- **Date**: 2026-09-08
+- **Scope**: Expanded IMS into an industry-agnostic business management platform supporting 10 industry categories, 4-step server-authoritative onboarding wizard, draft persistence, dynamic header/settings personalization, and progressive-disclosure form modals.
+- **Backend Implementation**:
+  - `BusinessProfile` entity in schema with migration `20260908000000_business_profile_onboarding`.
+  - `BusinessProfileModule` (`BusinessProfileService`, `BusinessProfileController`, validation DTOs, unit tests).
+  - Endpoints: `GET /business-profile`, `POST /business-profile/onboarding`, `POST /business-profile/draft`, `PATCH /business-profile`.
+  - Updated `SessionService` and `AuthService` to evaluate and deliver server-authoritative `isOnboardingCompleted` and `businessProfile`.
+  - Transactional default warehouse auto-provisioning upon onboarding completion.
+- **Frontend Implementation**:
+  - `useBusinessProfile` hook and `businessProfileKeys` query key factory.
+  - `/onboarding` page with 4-step interactive wizard (Category selection with 10 presets, Store info, GST/Currency, Review & Launch).
+  - Strict post-auth routing: incomplete onboarding users are routed to `/onboarding`, completed users to `/dashboard`.
+  - Dynamic `AppHeader` personalization (displays live business name and category badge).
+  - Live Store Master Data tab editor in Settings (`/settings`).
+  - `ProductFormModal` upgraded with universal units (`PAIR`, `SET`), quick SKU generator, and live gross margin calculation preview.
+  - Strict preservation of existing Login and Sign Up UI visual design.
+- **Test Results**:
+  - Backend Jest: 22 test suites, 120 tests passing (100% pass).
+  - TypeScript Typechecks: 0 errors across `@ims/api` and `@ims/web`.
+  - Next.js Build: All 34 static routes generated and compiled with 0 errors.
+
+

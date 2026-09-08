@@ -19,10 +19,14 @@ export default function AuthenticatedAppLayout({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  // Client-side authentication guard
+  // Client-side authentication guard & onboarding enforcement
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login');
+    if (!isLoading) {
+      if (!user) {
+        router.push('/login');
+      } else if (!user.isOnboardingCompleted) {
+        router.push('/onboarding');
+      }
     }
   }, [user, isLoading, router]);
 

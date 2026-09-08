@@ -1,46 +1,46 @@
 # Current State
 
 ## Project
-Inventory Management System (IMS)
+Inventory Management System (IMS) — Universal Business Management Platform
 
 ## Stage:
-Phase 9 API Integration Completed (Ready for Phase 10 Products + Inventory)
+Phase 10 — Products + Inventory & Universal Business Onboarding Completed
 
 ## Application Status:
-Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), full production-grade Authentication & RBAC foundation, centralized API client layer with standard envelopes & HTTP method helpers, TanStack Query provider integration with intelligent error retry and query key factory, granular RBAC permission evaluation utilities, real user profile & system health telemetry integration, and complete desktop-first Next.js App Router layout shell.
+Monorepo workspace root structure established with application boundaries (`apps/web`, `apps/api`), shared package boundaries (`packages/config`, `packages/types`, `packages/validation`), automation scripts boundary (`scripts/`), complete engineering documentation layer (`docs/`), production-grade Authentication & Single Universal Admin Access foundation, centralized API client layer with standard envelopes & HTTP method helpers, TanStack Query provider integration with intelligent error retry and query key factory, full Universal Business Onboarding system (4-step visual wizard, server-persisted draft progress, auto-provisioned default warehouse, dynamic header and store master data personalization, 10 business categories), and spacious progressive-disclosure form modals across all master entities.
 
 ## Documentation Status:
-Complete: Authoritative Project Brain in `.ai/` + Human-readable engineering/product documentation in `docs/` (Requirements, Architecture, API, Database, Security, Design, Testing, Deployment, Infrastructure, User Guides). Harmonized with approved Phase 8 UI design system.
+Complete: Authoritative Project Brain in `.ai/` (including canonical `BUSINESS_ONBOARDING.md`) + Human-readable engineering/product documentation in `docs/`.
 
 ## Requirements Status:
-Finalized, Synchronized & Frozen: Single Common Authentication System (One primary login `/login`, one common signup `/register`, Email+Password with Argon2id, Google OAuth with ID token verification, Email Verification with secure link and 6-digit OTP; downstream RBAC authorization decoupled) in `PRODUCT_REQUIREMENTS.md` and detailed in `docs/requirements/*`.
+Finalized, Synchronized & Frozen: Universal Business & Inventory Management Platform supporting 10 industry categories (General Store, Grocery, Footwear, Clothing, Electronics, Furniture, Hardware, Pharmacy, Retail, Other/Custom), strict server-authoritative onboarding lifecycle, Single Universal Admin Access Model, and protected authentication UI.
 
 ## Architecture Status:
 Finalized and Frozen in `ARCHITECTURE.md` and detailed in `docs/architecture/*`
 
 ## Technology Stack:
-Active & Verified: Next.js + React + TypeScript + TanStack Query (Frontend), NestJS + TypeScript (Backend), PostgreSQL 16+ (Database), Prisma ORM, Docker, and pnpm package manager (`TECH_STACK.md`)
+Active & Verified: Next.js 15 App Router + React + TypeScript + TanStack Query (Frontend), NestJS + TypeScript (Backend), PostgreSQL 16+ (Database), Prisma ORM, Docker, and pnpm package manager (`TECH_STACK.md`)
 
 ## Database Specification:
-Finalized, Migrated & Extended: Comprehensive PostgreSQL relational schema (26 entities including `EmailVerificationToken` and `PasswordResetToken`) and migrations (`20260904000000_init`, `20260905000000_auth_phase6`) in `apps/api/prisma/migrations/` with Prisma 6 Client generated and verified against `.ai/DATABASE.md`.
+Finalized, Migrated & Extended: Comprehensive PostgreSQL relational schema (27 entities including `BusinessProfile`, `EmailVerificationToken`, `PasswordResetToken`) and migrations (`20260904000000_init`, `20260905000000_auth_phase6`, `20260907000000_remove_role_system`, `20260908000000_business_profile_onboarding`) in `apps/api/prisma/migrations/` with Prisma 6 Client generated and verified against `.ai/DATABASE.md`.
 
-## Backend Foundation & Auth:
-Operational & Standardized: Common backend infrastructure (`apps/api/src/common/`), standard API response contracts, request ID middleware, logging with sensitive data redaction, global exception filter, SessionAuthGuard (`sms_session` cookie verification), PermissionsGuard (RBAC authorization), Argon2id password hashing, high-entropy 64-byte session token management, Google OAuth token verification, email verification service (tokens & 6-digit OTP), password reset workflow, roles seeding, and user profile management with strict IDOR protection.
+## Backend Foundation, Auth & Business Profile:
+Operational & Standardized: Common backend infrastructure (`apps/api/src/common/`), standard API response contracts, request ID middleware, logging with sensitive data redaction, global exception filter, SessionAuthGuard (`sms_session` cookie verification), PermissionsGuard, Argon2id password hashing, high-entropy 64-byte session token management, Google OAuth token verification, email verification service, password reset workflow, Single Universal Admin Access Model, and full BusinessProfile module (`GET /business-profile`, `POST /business-profile/onboarding`, `POST /business-profile/draft`, `PATCH /business-profile`).
 
 ## Frontend Foundation, Layout & Shells:
-Operational: Typed API client (`lib/api-client.ts`) with standard response/error envelope handling and HTTP helpers (`.get`, `.post`, `.patch`, `.put`, `.delete`), centralized query key factory (`lib/query-keys.ts`), custom hooks (`useCurrentUser`, `useUserProfile`, `useHealthLiveness`, `useHealthReadiness`), `AuthContext` React provider integrated with TanStack Query cache, RBAC permission utilities (`lib/auth/permissions.ts`), Next.js App Router structure with fixed Top Navigation bar (`AppHeader`), 4-column More Mega-Menu (`MoreMenu`), permission-filtered Command Palette (`⌘K`), Notifications Drawer, User Menu, and 34 static page shells with honest empty states.
+Operational: Typed API client (`lib/api-client.ts`), centralized query key factory (`lib/query-keys.ts`), custom hooks (`useBusinessProfile`, `useProducts`, `useCategories`, `useBrands`, `useWarehouses`, `useInventory`, `useBatches`, `useCurrentUser`, `useHealth`), `AuthContext` React provider integrated with TanStack Query cache, Next.js App Router structure with personalized floating Top Navigation bar (`AppHeader`), 4-column More Mega-Menu (`MoreMenu`), Command Palette (`⌘K`), Notifications Drawer, User Menu, 4-step interactive `/onboarding` page, and live Store Master Data editor in Settings.
 
 ## Testing Status:
-Operational: All backend unit and security test suites passing (`jest` 15/15 suites, 85/85 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@ims/api` and `@ims/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
+Operational: All backend unit and security test suites passing (`jest` 22/22 suites, 120/120 tests passing), TypeScript typechecks passing (`tsc --noEmit` across `@ims/api` and `@ims/web`), NestJS build passing (`nest build`), Next.js build passing (`next build` with 34 static routes).
 
 ## Deployment & Docker:
 Configured: Local development infrastructure in `docker-compose.yml` (`postgres:16-alpine` on port 5432 with health check, `redis:7-alpine` on port 6379 with health check, named persistent volumes `postgres_data` and `redis_data`, bridge network `sms-network`, `.dockerignore`).
 
 ## Current Work:
-Completed Phase 9 API Integration: Central API client, TanStack Query integration, AuthContext cache synchronization, RBAC permission evaluation utilities, Settings/Profile real data integration, System Health telemetry integration, and Documentation Consistency Gate.
+Completed Phase 10: Products + Inventory Foundation, Universal Business Onboarding, Personalization, and Form UX Redesign.
 
 ## Next Major Step:
-PHASE 10 — Products + Inventory (Catalog management, SKUs, barcodes, categories, brands, stock levels, adjustments, and warehouse transfers). [Awaiting user authorization].
+PHASE 11 — Point of Sale (POS) Billing & Barcode Engine.
 
 ---
 
@@ -526,3 +526,34 @@ PHASE 10 — Products + Inventory (Catalog management, SKUs, barcodes, categorie
 * **Documentation Updated**: `AI_RULES.md` (constitutional rule), `DECISIONS.md` (DECISION-016), `CHANGELOG.md`, `CURRENT_STATE.md`.
 * **Known Issues**: None.
 * **Next Steps**: Phase 10 — Products & Inventory module upon user authorization.
+
+### Entry 23 — Phase 10 Universal Business Onboarding, Personalization & Form UX Redesign (2026-09-08)
+
+* **Status**: COMPLETE
+* **Phase**: Phase 10 (Products & Inventory + Universal Business Onboarding)
+* **Summary**: Expanded IMS into an industry-agnostic universal business platform supporting 10 industry presets, 4-step server-authoritative onboarding wizard (`/onboarding`), resumable drafts, default warehouse provisioning, real-time dynamic AppHeader & Settings personalization, and spacious progressive-disclosure form modals.
+* **Database**:
+  - Added `BusinessProfile` entity (`userId` @unique 1-to-1 with `User`, `businessName`, `businessType`, `customBusinessType`, `ownerName`, `phone`, `whatsapp`, `email`, `website`, `address`, `city`, `state`, `country`, `postalCode`, `logoUrl`, `isGstRegistered`, `gstin`, `taxNumber`, `currency`, `currencySymbol`, `isMultiWarehouse`, `isOnboardingCompleted`, `onboardingStep`).
+  - Generated migration `20260908000000_business_profile_onboarding` and updated Prisma Client.
+* **Backend**:
+  - Implemented `BusinessProfileModule` (`business-profile.service.ts`, `business-profile.controller.ts`, DTOs with `class-validator`).
+  - Endpoints: `GET /business-profile`, `POST /business-profile/onboarding`, `POST /business-profile/draft`, `PATCH /business-profile`.
+  - Updated `SessionService`, `AuthService`, and session guards to deliver server-authoritative `isOnboardingCompleted: Boolean(user.businessProfile?.isOnboardingCompleted)` and `businessProfile`.
+  - Transactional default warehouse auto-provisioning upon completing onboarding.
+  - Comprehensive unit test suites created (`business-profile.service.spec.ts`).
+* **Frontend**:
+  - Created `useBusinessProfile` hook (`apps/web/src/hooks/use-business-profile.ts`) and query keys (`businessProfileKeys`).
+  - Built high-craft `/onboarding` page (`apps/web/src/app/onboarding/page.tsx`) with 4-step interactive wizard, visual card selector (10 business types), contact info, GSTIN auto-uppercase formatting, currency selection, and multi-warehouse toggle.
+  - Strict post-authentication routing: incomplete users are redirected to `/onboarding`, completed users to `/dashboard`.
+  - AppHeader dynamically displays business name and category badge with live updates from cache.
+  - Store Master Data tab in Settings allows full live editing of business profile attributes.
+  - ProductFormModal upgraded with universal units (`PCS`, `BOX`, `KG`, `LTR`, `PKT`, `DOZ`, `MTR`, `GRAM`, `PAIR`, `SET`), quick SKU generator, and live gross margin calculation preview.
+  - Strict protection of Login & Sign Up UI (100% untouched).
+* **Verification**:
+  - `npm test` in `apps/api`: **22/22 suites, 120/120 tests PASS** (100%).
+  - `npm run build` in `apps/api`: **PASS** (0 errors).
+  - `npm run build` in `apps/web`: **PASS** (all 34 static routes compiled with 0 errors).
+* **Documentation**:
+  - Created canonical `.ai/BUSINESS_ONBOARDING.md`.
+  - Synchronized `.ai/CURRENT_STATE.md`, `.ai/TASKS.md`, `.ai/CHANGELOG.md`, `.ai/DECISIONS.md`, `.ai/DATABASE.md`, `.ai/API_CONTRACTS.md`, `.ai/PRODUCT_REQUIREMENTS.md`.
+

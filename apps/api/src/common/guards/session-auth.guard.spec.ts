@@ -54,6 +54,7 @@ describe('SessionAuthGuard', () => {
       isActive: true,
       isDeleted: false,
       avatarUrl: null,
+      isOnboardingCompleted: true,
     };
 
     const mockSessionData = {

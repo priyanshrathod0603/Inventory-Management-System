@@ -195,3 +195,22 @@
   9. `AuditLog.userRole` column preserved as historical audit field; will receive the fixed string `'Admin'` for all future entries.
 * **Reason**: User explicitly changed the requirement: "there will be only one role: Admin — interpreted as no role system, just a fixed Admin presentational label." This corrects the over-engineered RBAC architecture for the current single-operator use case.
 * **Impact**: Simplified session validation (no role join), simpler user creation (no default role lookup), simpler frontend (no role-based UI branching). Permission codes remain as capability vocabulary for endpoint documentation. Future AI agents and developers must NOT reintroduce a multi-role RBAC system.
+
+---
+
+## DECISION-017
+* **Title**: Universal Business Onboarding, Industry Presets & Server-Authoritative Routing Lifecycle
+* **Status**: Accepted
+* **Context**: Universal Business Management Architecture & Personalization
+* **Decision**:
+  1. The IMS is expanded into an industry-agnostic universal business and inventory management platform supporting 10 industry categories (`GENERAL_STORE`, `GROCERY`, `FOOTWEAR`, `CLOTHING`, `ELECTRONICS`, `FURNITURE`, `HARDWARE`, `PHARMACY`, `RETAIL`, `OTHER`).
+  2. Multi-warehouse operations are controlled via a capability boolean flag `isMultiWarehouse` on `BusinessProfile`, never as a business category.
+  3. Onboarding completion status `isOnboardingCompleted` is strictly server-authoritative and persisted on `BusinessProfile`. Unauthenticated / Incomplete onboarding users are guarded at the route level:
+     - New User / Incomplete Onboarding → `/onboarding`
+     - Existing User / Completed Onboarding → `/dashboard`
+  4. Progressive 4-step draft state is saved to backend (`POST /business-profile/draft`), allowing users to resume interrupted onboarding seamlessly.
+  5. Default Warehouse (`WH-01` / Main Store) is automatically provisioned inside a transaction upon onboarding completion if no active warehouse exists.
+  6. Login and Sign Up UI screens are strictly protected and frozen; post-auth redirection logic is orchestrated exclusively at the context/routing layer without altering authentication visuals.
+* **Reason**: Enables seamless multi-industry onboarding with strong transactional guarantees and server-authoritative security boundaries.
+* **Impact**: All authenticated users without a completed `BusinessProfile` are routed through `/onboarding`. Header and invoices personalize dynamically based on the active `BusinessProfile`.
+

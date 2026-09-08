@@ -11,6 +11,7 @@ import { WarehousesModule } from './modules/warehouses/warehouses.module';
 import { ProductsModule } from './modules/products/products.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { BatchesModule } from './modules/batches/batches.module';
+import { BusinessProfileModule } from './modules/business-profile/business-profile.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 
 @Module({
@@ -24,6 +25,7 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     PermissionsModule,
     AuthModule,
     UsersModule,
+    BusinessProfileModule,
     CategoriesModule,
     BrandsModule,
     WarehousesModule,

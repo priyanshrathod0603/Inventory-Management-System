@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { apiClient, ApiError } from '../api-client';
 import { authKeys } from '../query-keys';
 import { useRouter } from 'next/navigation';
+import { BusinessProfile } from '../../hooks/use-business-profile';
 
 export interface AuthUser {
   id: string;
@@ -15,6 +16,8 @@ export interface AuthUser {
   permissions: string[];
   isEmailVerified: boolean;
   avatarUrl: string | null;
+  isOnboardingCompleted: boolean;
+  businessProfile?: BusinessProfile | null;
 }
 
 interface AuthContextType {
@@ -67,7 +70,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.user);
     queryClient.setQueryData(authKeys.me(), res.data.user);
     await queryClient.invalidateQueries({ queryKey: authKeys.all });
-    router.push('/');
+    if (!res.data.user.isOnboardingCompleted) {
+      router.push('/onboarding');
+    } else {
+      router.push('/dashboard');
+    }
   };
 
   const googleLogin = async (idToken: string) => {
@@ -78,7 +85,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.user);
     queryClient.setQueryData(authKeys.me(), res.data.user);
     await queryClient.invalidateQueries({ queryKey: authKeys.all });
-    router.push('/');
+    if (!res.data.user.isOnboardingCompleted) {
+      router.push('/onboarding');
+    } else {
+      router.push('/dashboard');
+    }
   };
 
   const register = async (data: {

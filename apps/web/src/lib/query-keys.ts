@@ -87,3 +87,8 @@ export const purchaseKeys = {
   details: () => [...purchaseKeys.all, 'detail'] as const,
   detail: (id: string) => [...purchaseKeys.details(), id] as const,
 };
+
+export const businessProfileKeys = {
+  all: ['business-profile'] as const,
+  profile: () => [...businessProfileKeys.all, 'detail'] as const,
+};
