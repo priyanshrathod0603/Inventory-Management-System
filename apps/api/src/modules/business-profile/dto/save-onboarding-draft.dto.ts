@@ -14,7 +14,7 @@ export class SaveOnboardingDraftDto {
   @ApiPropertyOptional({ example: 'GROCERY' })
   @IsString()
   @IsOptional()
-  @MaxLength(50)
+  @MaxLength(255)
   businessType?: string;
 
   @ApiPropertyOptional({ example: 'Custom Store' })

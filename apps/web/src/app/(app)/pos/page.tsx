@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   Barcode,
@@ -17,13 +17,38 @@ import {
   Banknote,
   Percent,
 } from 'lucide-react';
+import { useCategories } from '../../../hooks/use-categories';
+import { useBusinessProfile } from '../../../hooks/use-business-profile';
+import { CustomerFormModal } from '../../../components/customers/customer-form-modal';
+import { Customer } from '../../../hooks/use-customers';
 
 export default function PosPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [selectedTender, setSelectedTender] = useState<'CASH' | 'UPI' | 'CARD' | 'CREDIT'>('CASH');
+  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
+  const [activeCustomer, setActiveCustomer] = useState<{ name: string; phone?: string | null; isWalkIn: boolean }>({
+    name: 'Walk-in Customer',
+    isWalkIn: true,
+  });
 
-  const categories = ['ALL', 'Rice & Grains', 'Edible Oils', 'Dairy', 'Spices', 'Snacks', 'Beverages'];
+  const { data: profileData } = useBusinessProfile();
+  const currencySymbol = profileData?.profile?.currencySymbol || '₹';
+
+  const { data: categoriesResponse } = useCategories();
+  const categories = categoriesResponse?.data || [];
+
+  // Alt+C / F4 Keyboard shortcut handler for New Customer modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.altKey && (e.key === 'c' || e.key === 'C')) || e.key === 'F4') {
+        e.preventDefault();
+        setIsCustomerModalOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className="h-[calc(100vh-88px)] flex flex-col justify-between">
@@ -55,18 +80,29 @@ export default function PosPage() {
 
             {/* Quick Category Filter Chips */}
             <div className="flex items-center gap-1.5 mt-3 overflow-x-auto pb-1 text-xs">
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('ALL')}
+                className={`px-3.5 py-1 rounded-full font-semibold text-[11px] shrink-0 transition cursor-pointer ${
+                  selectedCategory === 'ALL'
+                    ? 'bg-coral-500 text-white shadow-xs'
+                    : 'bg-white border border-border text-content-secondary hover:text-navy-950 hover:bg-surface-subtle'
+                }`}
+              >
+                All
+              </button>
               {categories.map((cat) => (
                 <button
-                  key={cat}
+                  key={cat.id}
                   type="button"
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3.5 py-1 rounded-full font-semibold text-[11px] shrink-0 transition cursor-pointer ${
-                    selectedCategory === cat
+                    selectedCategory === cat.id
                       ? 'bg-coral-500 text-white shadow-xs'
                       : 'bg-white border border-border text-content-secondary hover:text-navy-950 hover:bg-surface-subtle'
                   }`}
                 >
-                  {cat}
+                  {cat.name}
                 </button>
               ))}
             </div>
@@ -97,6 +133,7 @@ export default function PosPage() {
               </span>
               <button
                 type="button"
+                onClick={() => setIsCustomerModalOpen(true)}
                 className="text-xs text-coral-600 hover:text-coral-700 font-bold flex items-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -108,12 +145,26 @@ export default function PosPage() {
                 <User className="w-4 h-4" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-bold text-navy-950 truncate font-sans">Walk-in Customer</div>
-                <div className="text-[10px] text-content-muted font-mono">No credit balance • Standard Retail</div>
+                <div className="text-xs font-bold text-navy-950 truncate font-sans">
+                  {activeCustomer.name}
+                </div>
+                <div className="text-[10px] text-content-muted font-mono truncate">
+                  {activeCustomer.phone ? `Phone: ${activeCustomer.phone}` : 'No credit balance • Standard Retail'}
+                </div>
               </div>
-              <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold rounded-full">
-                Walk-In
-              </span>
+              {activeCustomer.isWalkIn ? (
+                <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold rounded-full">
+                  Walk-In
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setActiveCustomer({ name: 'Walk-in Customer', isWalkIn: true })}
+                  className="px-2 py-0.5 bg-surface-subtle text-content-secondary hover:text-danger-600 border border-border text-[10px] font-bold rounded-full cursor-pointer transition"
+                >
+                  Reset
+                </button>
+              )}
             </div>
           </div>
 
@@ -122,18 +173,18 @@ export default function PosPage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs text-content-secondary font-medium">
                 <span>Subtotal (0 items)</span>
-                <span className="font-bold text-navy-950 tabular-nums">₹0.00</span>
+                <span className="font-bold text-navy-950 tabular-nums">{currencySymbol}0.00</span>
               </div>
               <div className="flex items-center justify-between text-xs text-content-secondary font-medium">
                 <span className="flex items-center gap-1.5">
                   <Percent className="w-3.5 h-3.5 text-content-muted" />
                   <span>Item &amp; Order Discounts</span>
                 </span>
-                <span className="text-content-muted tabular-nums">- ₹0.00</span>
+                <span className="text-content-muted tabular-nums">- {currencySymbol}0.00</span>
               </div>
               <div className="flex items-center justify-between text-xs text-content-secondary font-medium">
                 <span>GST Tax (Included)</span>
-                <span className="text-content-muted tabular-nums">₹0.00</span>
+                <span className="text-content-muted tabular-nums">{currencySymbol}0.00</span>
               </div>
 
               <div className="pt-3 border-t border-border flex items-baseline justify-between">
@@ -144,7 +195,7 @@ export default function PosPage() {
                   <div className="text-[10px] text-content-muted">Total payable amount</div>
                 </div>
                 <div className="text-3xl font-black text-coral-600 tabular-nums font-sans tracking-tight">
-                  ₹0.00
+                  {currencySymbol}0.00
                 </div>
               </div>
 
@@ -247,6 +298,19 @@ export default function PosPage() {
         </div>
         <span className="font-semibold text-content-muted hidden sm:inline">Terminal #1 • Active</span>
       </div>
+
+      {/* Customer Form Modal */}
+      <CustomerFormModal
+        isOpen={isCustomerModalOpen}
+        onClose={() => setIsCustomerModalOpen(false)}
+        onCustomerCreated={(newCust) => {
+          setActiveCustomer({
+            name: newCust.name,
+            phone: newCust.phone,
+            isWalkIn: false,
+          });
+        }}
+      />
     </div>
   );
 }

@@ -416,22 +416,29 @@ function StoreMasterDataTab() {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-[24px] border border-border shadow-card p-8 flex items-center justify-center">
-        <Loader2 className="w-7 h-7 text-coral-500 animate-spin" />
+      <div className="bg-white rounded-[28px] border border-[#EAE5E0] shadow-card p-12 flex flex-col items-center justify-center space-y-3">
+        <Loader2 className="w-8 h-8 text-[#FF6B4A] animate-spin" />
+        <p className="text-xs text-[#5F636B] font-medium">Loading store master data...</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSave} className="bg-white rounded-[24px] border border-border shadow-card p-6 sm:p-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-base font-extrabold text-[#111722] font-sans tracking-tight">
-            Store &amp; Organization Master Data
-          </h3>
-          <p className="text-xs text-[#5F636B] mt-1">
-            Manage your store identity, tax compliance, and multi-warehouse capabilities.
-          </p>
+    <form onSubmit={handleSave} className="bg-white rounded-[28px] border border-[#EAE5E0] shadow-card p-6 sm:p-8 space-y-6">
+      {/* Header Banner */}
+      <div className="flex items-center justify-between pb-5 border-b border-[#EAE5E0]">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0 shadow-xs">
+            <Building className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-base font-extrabold text-[#111722] font-sans tracking-tight">
+              Store &amp; Organization Master Data
+            </h3>
+            <p className="text-xs text-[#5F636B] mt-0.5">
+              Manage your legal business entity, tax compliance, location, and warehouse capabilities.
+            </p>
+          </div>
         </div>
         <button
           type="button"
@@ -451,41 +458,44 @@ function StoreMasterDataTab() {
       )}
 
       {errorMessage && (
-        <div className="p-4 bg-danger-50 border border-danger-200 rounded-2xl flex items-center gap-3 text-danger-800 text-xs font-semibold animate-fadeIn">
-          <AlertCircle className="w-4 h-4 text-danger-600 shrink-0" />
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-3 text-rose-800 text-xs font-semibold animate-fadeIn">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
 
-      {/* Business Identity */}
-      <div className="space-y-4">
-        <h4 className="text-xs font-extrabold text-[#111722] uppercase tracking-wider flex items-center gap-1.5">
-          <Building2 className="w-3.5 h-3.5 text-coral-500" />
-          <span>Business Identity &amp; Classification</span>
+      {/* Section 1: Business Identity */}
+      <div className="p-5 bg-[#FAF7F4] border border-[#EAE5E0] rounded-2xl space-y-4">
+        <h4 className="text-xs font-extrabold text-[#111722] uppercase tracking-wider flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0">
+            <Building2 className="w-3.5 h-3.5" />
+          </div>
+          <span>1. Business Identity &amp; Classification</span>
         </h4>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Business / Store Name *
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Business / Store Name <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
             </label>
             <input
               type="text"
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              placeholder="e.g. Metro Retail Store"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-semibold"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Industry Category
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Industry Category <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
             <select
               value={businessType}
               onChange={(e) => setBusinessType(e.target.value as BusinessType)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-medium cursor-pointer"
             >
               <option value="GENERAL_STORE">General Store / Kirana / FMCG</option>
               <option value="GROCERY">Grocery &amp; Supermarket</option>
@@ -496,203 +506,230 @@ function StoreMasterDataTab() {
               <option value="HARDWARE">Hardware &amp; Tools</option>
               <option value="PHARMACY">Pharmacy &amp; Health</option>
               <option value="RETAIL">Specialty Retail</option>
-              <option value="OTHER">Other / Custom</option>
+              <option value="OTHER">Other / Custom Industry</option>
             </select>
           </div>
 
           {businessType === 'OTHER' && (
             <div className="sm:col-span-2 animate-fadeIn">
-              <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-                Custom Industry Name
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Custom Industry Name <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="text"
                 value={customBusinessType}
                 onChange={(e) => setCustomBusinessType(e.target.value)}
-                placeholder="e.g. Optical Store"
-                className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+                placeholder="e.g. Optical Store, Luxury Boutique, Pet Shop"
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Owner / Manager Name
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Owner / Manager Name <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
             <input
               type="text"
               value={ownerName}
               onChange={(e) => setOwnerName(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              placeholder="e.g. Rajesh Kumar"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Contact Phone
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Contact Phone <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
-            <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
-            />
+            <div className="relative">
+              <Phone className="w-3.5 h-3.5 text-[#8C9097] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+91 98765 43210"
+                className="w-full h-11 pl-9 pr-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-mono"
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              WhatsApp Billing Number
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              WhatsApp Billing Number <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
-            <input
-              type="text"
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
-            />
+            <div className="relative">
+              <Phone className="w-3.5 h-3.5 text-emerald-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="tel"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
+                placeholder="+91 98765 43210 (For WhatsApp invoices)"
+                className="w-full h-11 pl-9 pr-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-mono"
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Store Email
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Store Email <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
-            />
+            <div className="relative">
+              <Mail className="w-3.5 h-3.5 text-[#8C9097] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="store@example.com"
+                className="w-full h-11 pl-9 pr-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-mono"
+              />
+            </div>
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Website
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Website / Online Catalog <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
-            <input
-              type="text"
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-              placeholder="https://..."
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
-            />
+            <div className="relative">
+              <Globe className="w-3.5 h-3.5 text-[#8C9097] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="url"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                placeholder="https://www.yourstore.com"
+                className="w-full h-11 pl-9 pr-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-mono"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Address & Location */}
-      <div className="space-y-4 pt-4 border-t border-[#EAE5E0]">
-        <h4 className="text-xs font-extrabold text-[#111722] uppercase tracking-wider flex items-center gap-1.5">
-          <MapPin className="w-3.5 h-3.5 text-coral-500" />
-          <span>Location &amp; Address</span>
+      {/* Section 2: Address & Location */}
+      <div className="p-5 bg-[#FAF7F4] border border-[#EAE5E0] rounded-2xl space-y-4">
+        <h4 className="text-xs font-extrabold text-[#111722] uppercase tracking-wider flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0">
+            <MapPin className="w-3.5 h-3.5" />
+          </div>
+          <span>2. Physical Location &amp; Address</span>
         </h4>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Street Address
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Street Address <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              placeholder="Shop No., Complex, Road / Area"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              City
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              City <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              placeholder="e.g. Mumbai, Surat"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              State / Region
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              State / Province <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
             <input
               type="text"
               value={state}
               onChange={(e) => setState(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              placeholder="e.g. Maharashtra, Gujarat"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Postal / PIN Code
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Postal / PIN Code <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
             <input
               type="text"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              placeholder="e.g. 400001"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-              Country
+            <label className="block text-xs font-bold text-[#111722] mb-1.5">
+              Country <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
             </label>
             <input
               type="text"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+              placeholder="India"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs"
             />
           </div>
         </div>
       </div>
 
-      {/* Tax & Operational Capabilities */}
-      <div className="space-y-4 pt-4 border-t border-[#EAE5E0]">
-        <h4 className="text-xs font-extrabold text-[#111722] uppercase tracking-wider flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-coral-500" />
-          <span>Tax &amp; Multi-Warehouse Configuration</span>
+      {/* Section 3: Tax & Multi-Warehouse Configuration */}
+      <div className="p-5 bg-[#FAF7F4] border border-[#EAE5E0] rounded-2xl space-y-4">
+        <h4 className="text-xs font-extrabold text-[#111722] uppercase tracking-wider flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-3.5 h-3.5" />
+          </div>
+          <span>3. Tax Compliance &amp; Warehouse Architecture</span>
         </h4>
 
-        {/* GST Toggle */}
+        {/* GST Toggle Card */}
         <div
           onClick={() => setIsGstRegistered(!isGstRegistered)}
           className={`p-4 rounded-xl border cursor-pointer transition flex items-center justify-between ${
-            isGstRegistered ? 'border-coral-500 bg-coral-50/40' : 'border-border bg-[#FAF7F4]'
+            isGstRegistered ? 'border-coral-500 bg-coral-50/50' : 'border-[#EAE5E0] bg-white'
           }`}
         >
           <div>
-            <h5 className="text-xs font-bold text-navy-950">GST / Tax Registered Entity</h5>
-            <p className="text-[11px] text-navy-500">Enable to print GSTIN and compute tax rates on bills</p>
+            <h5 className="text-xs font-bold text-[#111722]">GST / Tax Registered Entity</h5>
+            <p className="text-[11px] text-[#5F636B] mt-0.5">Enable to print GSTIN and compute multi-slab tax rates on customer invoices</p>
           </div>
-          <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${isGstRegistered ? 'bg-coral-500' : 'bg-surface-muted'}`}>
-            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${isGstRegistered ? 'translate-x-5' : 'translate-x-0'}`} />
+          <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${isGstRegistered ? 'bg-[#FF6B4A]' : 'bg-[#EAE5E0]'}`}>
+            <div className={`w-4 h-4 rounded-full bg-white shadow-2xs transition-transform ${isGstRegistered ? 'translate-x-5' : 'translate-x-0'}`} />
           </div>
         </div>
 
         {isGstRegistered && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fadeIn">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1 animate-fadeIn">
             <div>
-              <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-                GSTIN Number
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                GSTIN Number <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
               </label>
               <input
                 type="text"
                 value={gstin}
                 onChange={(e) => setGstin(e.target.value.toUpperCase())}
-                className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs font-mono uppercase text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+                placeholder="22AAAAA0000A1Z5"
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs font-mono uppercase text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-bold"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-                Tax Registration / PAN
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Tax Registration / PAN <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
               </label>
               <input
                 type="text"
                 value={taxNumber}
                 onChange={(e) => setTaxNumber(e.target.value.toUpperCase())}
-                className="w-full h-10 px-3.5 rounded-xl border border-border bg-white text-xs font-mono uppercase text-navy-950 focus:outline-none focus:ring-2 focus:ring-coral-500/20 focus:border-coral-500 transition"
+                placeholder="ABCDE1234F"
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-white text-xs font-mono uppercase text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs font-bold"
               />
             </div>
           </div>
@@ -700,46 +737,49 @@ function StoreMasterDataTab() {
 
         {/* Currency Selector */}
         <div>
-          <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
-            Default Operating Currency
+          <label className="block text-xs font-bold text-[#111722] mb-1.5">
+            Default Operating Currency &amp; Symbol
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             {[
-              { code: 'INR', symbol: '₹', label: 'INR (₹)' },
-              { code: 'USD', symbol: '$', label: 'USD ($)' },
-              { code: 'EUR', symbol: '€', label: 'EUR (€)' },
-              { code: 'AED', symbol: 'د.إ', label: 'AED (د.إ)' },
+              { code: 'INR', symbol: '₹', label: 'INR (₹ Indian Rupee)' },
+              { code: 'USD', symbol: '$', label: 'USD ($ US Dollar)' },
+              { code: 'EUR', symbol: '€', label: 'EUR (€ Euro)' },
+              { code: 'AED', symbol: 'د.إ', label: 'AED (د.إ Dirham)' },
             ].map((c) => (
               <button
                 key={c.code}
                 type="button"
                 onClick={() => handleCurrencyChange(c.code)}
-                className={`p-2.5 rounded-xl border text-xs font-bold transition flex items-center justify-between ${
+                className={`p-3 rounded-xl border text-xs font-bold transition flex flex-col items-start gap-1 cursor-pointer ${
                   currency === c.code
-                    ? 'border-coral-500 bg-coral-50 text-coral-700 ring-1 ring-coral-500'
-                    : 'border-border bg-white text-navy-700 hover:border-coral-200'
+                    ? 'border-[#FF6B4A] bg-coral-50 text-[#FF6B4A] ring-2 ring-[#FF6B4A]/20 shadow-xs'
+                    : 'border-[#EAE5E0] bg-white text-[#5F636B] hover:border-coral-200 hover:text-[#111722]'
                 }`}
               >
-                <span>{c.label}</span>
-                <span className="text-[10px] text-navy-400 font-mono">{c.code}</span>
+                <div className="flex items-center justify-between w-full">
+                  <span className="font-extrabold text-sm">{c.symbol}</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/5">{c.code}</span>
+                </div>
+                <span className="text-[11px] font-medium opacity-80 truncate">{c.label}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Multi-Warehouse Toggle */}
+        {/* Multi-Warehouse Toggle Card */}
         <div
           onClick={() => setIsMultiWarehouse(!isMultiWarehouse)}
           className={`p-4 rounded-xl border cursor-pointer transition flex items-center justify-between ${
-            isMultiWarehouse ? 'border-coral-500 bg-coral-50/40' : 'border-border bg-[#FAF7F4]'
+            isMultiWarehouse ? 'border-coral-500 bg-coral-50/50' : 'border-[#EAE5E0] bg-white'
           }`}
         >
           <div>
-            <h5 className="text-xs font-bold text-navy-950">Multi-Location &amp; Warehouse Mode</h5>
-            <p className="text-[11px] text-navy-500">Enable stock transfers and separate tracking across multiple warehouses</p>
+            <h5 className="text-xs font-bold text-[#111722]">Multi-Location &amp; Warehouse Mode</h5>
+            <p className="text-[11px] text-[#5F636B] mt-0.5">Enable inter-warehouse stock transfers, central godowns, and multiple retail branch tracking</p>
           </div>
-          <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${isMultiWarehouse ? 'bg-coral-500' : 'bg-surface-muted'}`}>
-            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${isMultiWarehouse ? 'translate-x-5' : 'translate-x-0'}`} />
+          <div className={`w-10 h-5 rounded-full p-0.5 transition-colors ${isMultiWarehouse ? 'bg-[#FF6B4A]' : 'bg-[#EAE5E0]'}`}>
+            <div className={`w-4 h-4 rounded-full bg-white shadow-2xs transition-transform ${isMultiWarehouse ? 'translate-x-5' : 'translate-x-0'}`} />
           </div>
         </div>
       </div>
@@ -749,12 +789,12 @@ function StoreMasterDataTab() {
         <button
           type="submit"
           disabled={updateMutation.isPending}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-coral-500 hover:bg-coral-600 active:scale-[0.98] text-white text-xs font-bold shadow-md shadow-coral-500/25 transition disabled:opacity-50 cursor-pointer"
+          className="pill-btn-coral px-6 h-11 rounded-full text-white font-bold text-xs shadow-coral flex items-center gap-2 transition cursor-pointer disabled:opacity-50"
         >
           {updateMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Saving Changes...</span>
+              <span>Saving Master Data...</span>
             </>
           ) : (
             <>

@@ -557,3 +557,33 @@ PHASE 11 — Point of Sale (POS) Billing & Barcode Engine.
   - Created canonical `.ai/BUSINESS_ONBOARDING.md`.
   - Synchronized `.ai/CURRENT_STATE.md`, `.ai/TASKS.md`, `.ai/CHANGELOG.md`, `.ai/DECISIONS.md`, `.ai/DATABASE.md`, `.ai/API_CONTRACTS.md`, `.ai/PRODUCT_REQUIREMENTS.md`.
 
+### Entry 24 — Master Application-Wide Form UX/UI Audit & Redesign (2026-09-08)
+
+* **Status**: COMPLETE
+* **Phase**: Master Application-Wide Form UX/UI Audit & Redesign
+* **Summary**: Conducted a full audit and comprehensive redesign across all 10 forms, modals, drawers, and data-entry experiences in IMS. Established the Canonical Form UX/UI Design Standard (`.ai/UI_RULES.md` §40) ensuring consistent modal architecture, standardized `h-11` input heights, warm ivory surface styling, clear label hierarchy, section card organization, progressive disclosure, and keyboard accessibility.
+* **Redesigned Components & Experiences**:
+  1. `CategoryFormModal` (`apps/web/src/components/categories/category-form-modal.tsx`): Upgraded with canonical header, auto-slug helper, standardized `h-11` inputs, Escape key listener, and modal container.
+  2. `BrandFormModal` (`apps/web/src/components/brands/brand-form-modal.tsx`): Upgraded with canonical header (`Award` icon), standardized `h-11` inputs, active status toggle, and Escape listener.
+  3. `BatchFormModal` (`apps/web/src/components/inventory/batch-form-modal.tsx`): Upgraded with 3 logical sections (Product & Warehouse, Batch Identification, Stock & Cost), dynamic currency symbol, and date pickers.
+  4. `WarehouseFormModal` (`apps/web/src/components/warehouses/warehouse-form-modal.tsx`): Upgraded with canonical header (`Warehouse` icon), uppercase font-mono code, and default warehouse toggle.
+  5. `StockAdjustmentModal` (`apps/web/src/components/inventory/stock-adjustment-modal.tsx`): Upgraded with Stock In (+) vs Stock Out (-) toggle buttons, live balance math card with negative protection warning, and mandatory audit justification.
+  6. `StockTransferModal` (`apps/web/src/components/inventory/stock-transfer-modal.tsx`): Upgraded with visual source-to-destination facility grid, multi-line item rows with live source warehouse stock pills, and add/remove buttons.
+  7. `CustomerFormModal` (`apps/web/src/components/customers/customer-form-modal.tsx`): High-speed POS customer creation modal with progressive disclosure for tax/credit details.
+  8. `SupplierFormModal` (`apps/web/src/components/suppliers/supplier-form-modal.tsx`): Vendor procurement registration modal with GSTIN uppercase auto-formatting.
+  9. `ProductDetailsDrawer` (`apps/web/src/components/products/product-details-drawer.tsx`): Upgraded with Escape key listener and smooth backdrop dismissal.
+  10. `StoreMasterDataTab` in `SettingsPage` (`apps/web/src/app/(app)/settings/page.tsx`): Upgraded into 3 structured section cards with canonical `h-11` inputs, coral toggles, and currency selector.
+* **POS & Directory Integration**:
+  - Integrated `CustomerFormModal` into POS counter billing (`/pos`) with `Alt+C` and `F4` hotkeys, real-time customer profile card, and reset button.
+  - Wired customer directory table and modals in `/customers`.
+  - Wired supplier directory table and modals in `/suppliers`.
+* **Universal Business Platform Compliance**:
+  - Zero industry hardcoding: all forms remain 100% universal across retail, FMCG, footwear, pharmacy, electronics, and apparel.
+* **Verification**:
+  - TypeScript typechecks passed on `@ims/web` and `@ims/api` with 0 errors (`tsc --noEmit`).
+  - Backend unit and security tests passed with 22/22 suites and 120/120 tests passing (`jest`).
+  - Zero modifications to protected auth screens (`/login`, `/register`, `/forgot-password`, `/verify-email`).
+* **Documentation Updated**:
+  - Added Section 40 (Canonical Form UX/UI Design Standard) to `.ai/UI_RULES.md`.
+  - Synchronized `.ai/CURRENT_STATE.md` and `.ai/CHANGELOG.md`.
+

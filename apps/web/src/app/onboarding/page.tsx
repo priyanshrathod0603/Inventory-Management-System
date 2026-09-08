@@ -129,7 +129,7 @@ export default function OnboardingPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Form State
-  const [businessType, setBusinessType] = useState<BusinessType>('GENERAL_STORE');
+  const [businessTypes, setBusinessTypes] = useState<BusinessType[]>(['GENERAL_STORE']);
   const [customBusinessType, setCustomBusinessType] = useState<string>('');
   const [businessName, setBusinessName] = useState<string>('');
   const [ownerName, setOwnerName] = useState<string>('');
@@ -157,7 +157,15 @@ export default function OnboardingPage() {
 
     if (profileData?.profile) {
       const p = profileData.profile;
-      if (p.businessType) setBusinessType(p.businessType);
+      if (p.businessType) {
+        const types = p.businessType
+          .split(',')
+          .map((t) => t.trim())
+          .filter(Boolean) as BusinessType[];
+        if (types.length > 0) {
+          setBusinessTypes(types);
+        }
+      }
       if (p.customBusinessType) setCustomBusinessType(p.customBusinessType);
       if (p.businessName && p.businessName !== 'My Business') setBusinessName(p.businessName);
       if (p.ownerName) setOwnerName(p.ownerName);
@@ -184,6 +192,17 @@ export default function OnboardingPage() {
     }
   }, [profileData, user, router]);
 
+  const toggleBusinessType = (type: BusinessType) => {
+    setErrorMessage(null);
+    setBusinessTypes((prev) => {
+      if (prev.includes(type)) {
+        return prev.filter((t) => t !== type);
+      } else {
+        return [...prev, type];
+      }
+    });
+  };
+
   // Currency auto-sync
   const handleCurrencyChange = (curr: string) => {
     setCurrency(curr);
@@ -200,11 +219,11 @@ export default function OnboardingPage() {
 
     // Validation per step
     if (currentStep === 1) {
-      if (!businessType) {
+      if (businessTypes.length === 0) {
         setErrorMessage('Please select a business category to continue.');
         return;
       }
-      if (businessType === 'OTHER' && !customBusinessType.trim()) {
+      if (businessTypes.includes('OTHER') && !customBusinessType.trim()) {
         setErrorMessage('Please specify your custom business type.');
         return;
       }
@@ -223,8 +242,8 @@ export default function OnboardingPage() {
     // Save draft progress to backend
     try {
       await draftMutation.mutateAsync({
-        businessType,
-        customBusinessType: businessType === 'OTHER' ? customBusinessType : undefined,
+        businessType: businessTypes.join(','),
+        customBusinessType: businessTypes.includes('OTHER') ? customBusinessType : undefined,
         businessName: businessName || 'My Business',
         ownerName,
         phone,
@@ -266,8 +285,8 @@ export default function OnboardingPage() {
     try {
       await completeMutation.mutateAsync({
         businessName: businessName.trim(),
-        businessType,
-        customBusinessType: businessType === 'OTHER' ? customBusinessType.trim() : undefined,
+        businessType: businessTypes.join(','),
+        customBusinessType: businessTypes.includes('OTHER') ? customBusinessType.trim() : undefined,
         ownerName: ownerName.trim() || undefined,
         phone: phone.trim() || undefined,
         whatsapp: whatsapp.trim() || undefined,
@@ -299,8 +318,6 @@ export default function OnboardingPage() {
       </div>
     );
   }
-
-  const selectedCategoryObj = BUSINESS_TYPE_OPTIONS.find((b) => b.type === businessType);
 
   return (
     <div className="min-h-screen bg-[#FCF9F6] bg-subtle-grid flex flex-col font-sans text-navy-950 antialiased selection:bg-coral-500 selection:text-white">
@@ -409,12 +426,12 @@ export default function OnboardingPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-h-[460px] overflow-y-auto pr-1">
                 {BUSINESS_TYPE_OPTIONS.map((opt) => {
                   const Icon = opt.icon;
-                  const isSelected = businessType === opt.type;
+                  const isSelected = businessTypes.includes(opt.type);
                   return (
                     <button
                       key={opt.type}
                       type="button"
-                      onClick={() => setBusinessType(opt.type)}
+                      onClick={() => toggleBusinessType(opt.type)}
                       className={`text-left p-4 rounded-2xl border transition-all duration-200 flex items-start gap-3.5 relative ${
                         isSelected
                           ? 'border-coral-500 bg-coral-50/50 ring-2 ring-coral-500/20 shadow-sm'
@@ -443,7 +460,7 @@ export default function OnboardingPage() {
                 })}
               </div>
 
-              {businessType === 'OTHER' && (
+              {businessTypes.includes('OTHER') && (
                 <div className="pt-2 animate-fadeIn">
                   <label className="block text-xs font-bold text-navy-800 uppercase tracking-wider mb-1.5">
                     Specify Your Business Type *
@@ -788,7 +805,13 @@ export default function OnboardingPage() {
                   <div>
                     <span className="text-navy-500 block">Category</span>
                     <strong className="text-navy-950 font-bold">
-                      {businessType === 'OTHER' ? customBusinessType || 'Custom' : selectedCategoryObj?.label}
+                      {businessTypes
+                        .map((t) => {
+                          if (t === 'OTHER') return customBusinessType.trim() || 'Custom';
+                          const opt = BUSINESS_TYPE_OPTIONS.find((b) => b.type === t);
+                          return opt ? opt.label : t;
+                        })
+                        .join(', ') || 'None'}
                     </strong>
                   </div>
 

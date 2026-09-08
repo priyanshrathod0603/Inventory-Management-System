@@ -93,6 +93,30 @@ describe('BusinessProfileService', () => {
       expect(result.profile.businessName).toBe('Royal Footwear');
       expect(mockPrismaService.warehouse.create).toHaveBeenCalled();
     });
+
+    it('should support multiple selected business types joined as comma-separated string', async () => {
+      const multiType = 'GROCERY,FOOTWEAR,CLOTHING';
+      const mockSavedProfile = {
+        id: 'bp-2',
+        userId: 'user-2',
+        businessName: 'Metro MegaMart',
+        businessType: multiType,
+        isOnboardingCompleted: true,
+        onboardingStep: 4,
+      };
+
+      mockPrismaService.businessProfile.upsert.mockResolvedValue(mockSavedProfile);
+      mockPrismaService.warehouse.findFirst.mockResolvedValue({ id: 'wh-1' });
+
+      const result = await service.completeOnboarding('user-2', {
+        businessName: 'Metro MegaMart',
+        businessType: multiType,
+        isGstRegistered: false,
+      });
+
+      expect(result.isOnboardingCompleted).toBe(true);
+      expect(result.profile.businessType).toBe('GROCERY,FOOTWEAR,CLOTHING');
+    });
   });
 
   describe('saveDraft', () => {

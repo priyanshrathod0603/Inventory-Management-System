@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Award, AlertCircle } from 'lucide-react';
+import { X, Award, AlertCircle, Loader2 } from 'lucide-react';
 import { Brand, useCreateBrand, useUpdateBrand } from '../../hooks/use-brands';
-import { Button } from '../ui/button';
 
 interface BrandFormModalProps {
   isOpen: boolean;
@@ -22,6 +21,17 @@ export function BrandFormModal({ isOpen, onClose, brandToEdit }: BrandFormModalP
 
   const isEditing = Boolean(brandToEdit);
   const isPending = createMutation.isPending || updateMutation.isPending;
+
+  // Escape key handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen && !isPending) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isPending, onClose]);
 
   useEffect(() => {
     if (brandToEdit) {
@@ -68,102 +78,113 @@ export function BrandFormModal({ isOpen, onClose, brandToEdit }: BrandFormModalP
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white border border-border rounded-[28px] w-full max-w-lg shadow-elevated overflow-hidden animate-scale-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
+      <div
+        className="bg-white border border-[#EAE5E0] rounded-[28px] w-full max-w-lg shadow-[0_25px_60px_-15px_rgba(17,23,34,0.15)] overflow-hidden flex flex-col max-h-[92vh] animate-scale-up"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-surface-subtle/50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-full bg-coral-50 border border-coral-200/80 flex items-center justify-center">
-              <Award className="w-4 h-4 text-coral-600" />
+        <div className="px-6 sm:px-8 py-5 border-b border-[#EAE5E0] flex items-center justify-between bg-white shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0 shadow-xs">
+              <Award className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-navy-950">
+              <h3 className="text-lg font-black text-[#111722] font-sans tracking-tight">
                 {isEditing ? 'Edit Brand' : 'Create New Brand'}
               </h3>
-              <p className="text-xs text-content-secondary">
-                {isEditing ? 'Update manufacturer or brand details' : 'Add a brand to product catalog'}
+              <p className="text-xs text-[#5F636B] mt-0.5">
+                {isEditing ? 'Update manufacturer or brand details' : 'Add a brand or manufacturer to product catalog'}
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full text-content-muted hover:text-navy-950 hover:bg-surface-subtle transition cursor-pointer"
+            disabled={isPending}
+            className="p-2 rounded-full text-[#8C9097] hover:text-[#111722] hover:bg-[#FAF7F4] border border-transparent hover:border-[#EAE5E0] transition cursor-pointer disabled:opacity-50"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {error && (
-            <div className="p-3 bg-danger-50 border border-danger-200 text-danger-700 rounded-xl text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col justify-between">
+          <div className="p-6 sm:p-8 space-y-4">
+            {error && (
+              <div className="p-3.5 bg-danger-50 border border-danger-200 text-danger-700 rounded-2xl text-xs flex items-center gap-2.5">
+                <AlertCircle className="w-4 h-4 shrink-0 text-danger-600" />
+                <span className="font-semibold">{error}</span>
+              </div>
+            )}
 
-          <div>
-            <label className="block text-xs font-semibold text-navy-950 mb-1">
-              Brand Name <span className="text-danger-600">*</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Nestlé, Apple, Unilever"
-              className="form-input-warm w-full text-xs text-navy-950 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-navy-950 mb-1">
-              Description <span className="text-content-muted font-normal">(Optional)</span>
-            </label>
-            <textarea
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief description or manufacturer notes..."
-              className="form-input-warm w-full text-xs text-navy-950 focus:outline-none resize-none"
-            />
-          </div>
-
-          {isEditing && (
-            <div className="flex items-center gap-2 pt-1">
-              <input
-                type="checkbox"
-                id="isActiveBrand"
-                checked={isActive}
-                onChange={(e) => setIsActive(e.target.checked)}
-                className="w-4 h-4 rounded text-coral-500 focus:ring-coral-500 cursor-pointer"
-              />
-              <label htmlFor="isActiveBrand" className="text-xs font-medium text-navy-950 cursor-pointer">
-                Brand is active and visible in product catalog
+            <div>
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Brand Name <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
               </label>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Nike, Nestlé, Sony, Samsung, Local Brand"
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition"
+              />
             </div>
-          )}
+
+            <div>
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Description / Manufacturer Notes <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
+              </label>
+              <textarea
+                rows={3}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Brief brand description, manufacturer warranty policies, or vendor details..."
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition resize-none"
+              />
+            </div>
+
+            {isEditing && (
+              <div className="flex items-center gap-2.5 pt-2">
+                <input
+                  type="checkbox"
+                  id="isActiveBrand"
+                  checked={isActive}
+                  onChange={(e) => setIsActive(e.target.checked)}
+                  className="w-4 h-4 rounded text-coral-500 focus:ring-coral-500 cursor-pointer accent-[#FF6B4A]"
+                />
+                <label htmlFor="isActiveBrand" className="text-xs font-bold text-[#111722] cursor-pointer">
+                  Brand is active and visible in product catalog
+                </label>
+              </div>
+            )}
+          </div>
 
           {/* Footer */}
-          <div className="pt-4 border-t border-border flex items-center justify-end gap-2.5">
-            <Button
+          <div className="px-6 sm:px-8 py-4 bg-white border-t border-[#EAE5E0] flex items-center justify-end gap-3 shrink-0">
+            <button
               type="button"
-              variant="secondary"
-              size="sm"
               onClick={onClose}
               disabled={isPending}
+              className="px-5 h-11 rounded-full border border-[#EAE5E0] bg-white hover:bg-[#FAF7F4] text-[#111722] text-xs font-bold transition cursor-pointer disabled:opacity-50"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
-              variant="default"
-              size="sm"
-              isLoading={isPending}
+              disabled={isPending}
+              className="pill-btn-coral px-6 h-11 rounded-full text-white text-xs font-bold shadow-coral transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              {isEditing ? 'Save Changes' : 'Create Brand'}
-            </Button>
+              {isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <span>{isEditing ? 'Save Changes' : 'Create Brand'}</span>
+              )}
+            </button>
           </div>
         </form>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Package, Tag, Warehouse as WarehouseIcon, Clock, Layers, DollarSign, Edit3, ArrowUpRight } from 'lucide-react';
 import { Product, useProduct } from '../../hooks/use-products';
 import { Badge } from '../ui/badge';
@@ -24,6 +24,17 @@ export function ProductDetailsDrawer({
   onAddBatch,
 }: ProductDetailsDrawerProps) {
   const { data: product, isLoading } = useProduct(productId || '');
+
+  // Handle Escape key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen || !productId) return null;
 

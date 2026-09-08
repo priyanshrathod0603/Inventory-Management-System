@@ -14,7 +14,8 @@ export type BusinessType =
   | 'HARDWARE'
   | 'PHARMACY'
   | 'RETAIL'
-  | 'OTHER';
+  | 'OTHER'
+  | (string & {});
 
 export interface BusinessProfile {
   id: string;

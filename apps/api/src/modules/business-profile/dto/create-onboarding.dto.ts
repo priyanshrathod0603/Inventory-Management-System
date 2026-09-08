@@ -19,7 +19,7 @@ export class CreateOnboardingDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MaxLength(50)
+  @MaxLength(255)
   businessType: string;
 
   @ApiPropertyOptional({

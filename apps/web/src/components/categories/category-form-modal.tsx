@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Layers, AlertCircle } from 'lucide-react';
+import { X, Layers, AlertCircle, Loader2 } from 'lucide-react';
 import { Category, useCreateCategory, useUpdateCategory, useCategories } from '../../hooks/use-categories';
-import { Button } from '../ui/button';
 
 interface CategoryFormModalProps {
   isOpen: boolean;
@@ -25,6 +24,17 @@ export function CategoryFormModal({ isOpen, onClose, categoryToEdit }: CategoryF
 
   const isEditing = Boolean(categoryToEdit);
   const isPending = createMutation.isPending || updateMutation.isPending;
+
+  // Escape key handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen && !isPending) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isPending, onClose]);
 
   useEffect(() => {
     if (categoryToEdit) {
@@ -83,133 +93,145 @@ export function CategoryFormModal({ isOpen, onClose, categoryToEdit }: CategoryF
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white border border-border rounded-[28px] w-full max-w-lg shadow-elevated overflow-hidden animate-scale-up">
-        {/* Modal Header */}
-        <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-surface-subtle/50">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-full bg-coral-50 border border-coral-200/80 flex items-center justify-center">
-              <Layers className="w-4 h-4 text-coral-600" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
+      <div
+        className="bg-white border border-[#EAE5E0] rounded-[28px] w-full max-w-lg shadow-[0_25px_60px_-15px_rgba(17,23,34,0.15)] overflow-hidden flex flex-col max-h-[92vh] animate-scale-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Form Header */}
+        <div className="px-6 sm:px-8 py-5 border-b border-[#EAE5E0] flex items-center justify-between bg-white shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0 shadow-xs">
+              <Layers className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-navy-950">
+              <h3 className="text-lg font-black text-[#111722] font-sans tracking-tight">
                 {isEditing ? 'Edit Category' : 'Create New Category'}
               </h3>
-              <p className="text-xs text-content-secondary">
-                {isEditing ? 'Update category details and hierarchy' : 'Add a product category to catalog'}
+              <p className="text-xs text-[#5F636B] mt-0.5">
+                {isEditing ? 'Update category classification and hierarchy' : 'Add a product category to your master catalog'}
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full text-content-muted hover:text-navy-950 hover:bg-surface-subtle transition cursor-pointer"
+            disabled={isPending}
+            className="p-2 rounded-full text-[#8C9097] hover:text-[#111722] hover:bg-[#FAF7F4] border border-transparent hover:border-[#EAE5E0] transition cursor-pointer disabled:opacity-50"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {error && (
-            <div className="p-3 bg-danger-50 border border-danger-200 text-danger-700 rounded-xl text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
+        {/* Form Body */}
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col justify-between">
+          <div className="p-6 sm:p-8 space-y-4">
+            {error && (
+              <div className="p-3.5 bg-danger-50 border border-danger-200 text-danger-700 rounded-2xl text-xs flex items-center gap-2.5">
+                <AlertCircle className="w-4 h-4 shrink-0 text-danger-600" />
+                <span className="font-semibold">{error}</span>
+              </div>
+            )}
 
-          <div>
-            <label className="block text-xs font-semibold text-navy-950 mb-1">
-              Category Name <span className="text-danger-600">*</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Beverages, Dairy, Snacks"
-              className="form-input-warm w-full text-xs text-navy-950 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-navy-950 mb-1">
-              Slug <span className="text-content-muted font-normal">(Optional - auto generated)</span>
-            </label>
-            <input
-              type="text"
-              value={slug}
-              onChange={(e) => setSlug(e.target.value)}
-              placeholder="e.g. beverages"
-              className="form-input-warm w-full text-xs text-navy-950 focus:outline-none font-mono"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-navy-950 mb-1">
-              Parent Category <span className="text-content-muted font-normal">(Optional)</span>
-            </label>
-            <select
-              value={parentId}
-              onChange={(e) => setParentId(e.target.value)}
-              className="form-input-warm w-full text-xs text-navy-950 focus:outline-none cursor-pointer"
-            >
-              <option value="">None (Top-Level Category)</option>
-              {availableParents.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-navy-950 mb-1">
-              Description <span className="text-content-muted font-normal">(Optional)</span>
-            </label>
-            <textarea
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief description of items under this category..."
-              className="form-input-warm w-full text-xs text-navy-950 focus:outline-none resize-none"
-            />
-          </div>
-
-          {isEditing && (
-            <div className="flex items-center gap-2 pt-1">
-              <input
-                type="checkbox"
-                id="isActiveCat"
-                checked={isActive}
-                onChange={(e) => setIsActive(e.target.checked)}
-                className="w-4 h-4 rounded text-coral-500 focus:ring-coral-500 cursor-pointer"
-              />
-              <label htmlFor="isActiveCat" className="text-xs font-medium text-navy-950 cursor-pointer">
-                Category is active and visible in product catalog
+            <div>
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Category Name <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
               </label>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Footwear, Beverages, Winter Wear"
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition"
+              />
             </div>
-          )}
 
-          {/* Modal Footer */}
-          <div className="pt-4 border-t border-border flex items-center justify-end gap-2.5">
-            <Button
+            <div>
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                URL / Reference Slug <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
+              </label>
+              <input
+                type="text"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'))}
+                placeholder="e.g. footwear (auto-generated if left blank)"
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] font-mono transition"
+              />
+              <p className="text-[11px] text-[#8C9097] mt-1">Leave empty to automatically generate from category name.</p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Parent Category <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
+              </label>
+              <select
+                value={parentId}
+                onChange={(e) => setParentId(e.target.value)}
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition cursor-pointer"
+              >
+                <option value="">None (Top-Level Category)</option>
+                {availableParents.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Description <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
+              </label>
+              <textarea
+                rows={3}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Brief description of product lines grouped under this category..."
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition resize-none"
+              />
+            </div>
+
+            {isEditing && (
+              <div className="flex items-center gap-2.5 pt-2">
+                <input
+                  type="checkbox"
+                  id="isActiveCat"
+                  checked={isActive}
+                  onChange={(e) => setIsActive(e.target.checked)}
+                  className="w-4 h-4 rounded text-coral-500 focus:ring-coral-500 cursor-pointer accent-[#FF6B4A]"
+                />
+                <label htmlFor="isActiveCat" className="text-xs font-bold text-[#111722] cursor-pointer">
+                  Category is active and visible in product catalog
+                </label>
+              </div>
+            )}
+          </div>
+
+          {/* Form Action Footer */}
+          <div className="px-6 sm:px-8 py-4 bg-white border-t border-[#EAE5E0] flex items-center justify-end gap-3 shrink-0">
+            <button
               type="button"
-              variant="secondary"
-              size="sm"
               onClick={onClose}
               disabled={isPending}
+              className="px-5 h-11 rounded-full border border-[#EAE5E0] bg-white hover:bg-[#FAF7F4] text-[#111722] text-xs font-bold transition cursor-pointer disabled:opacity-50"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
-              variant="default"
-              size="sm"
-              isLoading={isPending}
+              disabled={isPending}
+              className="pill-btn-coral px-6 h-11 rounded-full text-white text-xs font-bold shadow-coral transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              {isEditing ? 'Save Changes' : 'Create Category'}
-            </Button>
+              {isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <span>{isEditing ? 'Save Changes' : 'Create Category'}</span>
+              )}
+            </button>
           </div>
         </form>
       </div>

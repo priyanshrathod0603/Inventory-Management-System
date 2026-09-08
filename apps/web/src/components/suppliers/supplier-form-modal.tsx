@@ -1,28 +1,26 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Warehouse as WarehouseIcon, AlertCircle, Loader2 } from 'lucide-react';
-import { Warehouse, useCreateWarehouse, useUpdateWarehouse } from '../../hooks/use-warehouses';
+import { X, Building2, AlertCircle, Loader2 } from 'lucide-react';
+import { Supplier, useCreateSupplier } from '../../hooks/use-suppliers';
 
-interface WarehouseFormModalProps {
+interface SupplierFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  warehouseToEdit?: Warehouse | null;
+  onSupplierCreated?: (supplier: Supplier) => void;
 }
 
-export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: WarehouseFormModalProps) {
-  const [name, setName] = useState('');
-  const [code, setCode] = useState('');
+export function SupplierFormModal({ isOpen, onClose, onSupplierCreated }: SupplierFormModalProps) {
+  const [companyName, setCompanyName] = useState('');
+  const [contactPerson, setContactPerson] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
-  const [isDefault, setIsDefault] = useState(false);
-  const [isActive, setIsActive] = useState(true);
+  const [gstin, setGstin] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const createMutation = useCreateWarehouse();
-  const updateMutation = useUpdateWarehouse();
-
-  const isEditing = Boolean(warehouseToEdit);
-  const isPending = createMutation.isPending || updateMutation.isPending;
+  const createSupplierMutation = useCreateSupplier();
+  const isPending = createSupplierMutation.isPending;
 
   // Escape key handler
   useEffect(() => {
@@ -36,21 +34,16 @@ export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: Warehou
   }, [isOpen, isPending, onClose]);
 
   useEffect(() => {
-    if (warehouseToEdit) {
-      setName(warehouseToEdit.name);
-      setCode(warehouseToEdit.code);
-      setAddress(warehouseToEdit.address || '');
-      setIsDefault(warehouseToEdit.isDefault);
-      setIsActive(warehouseToEdit.isActive);
-    } else {
-      setName('');
-      setCode('');
+    if (isOpen) {
+      setCompanyName('');
+      setContactPerson('');
+      setPhone('');
+      setEmail('');
       setAddress('');
-      setIsDefault(false);
-      setIsActive(true);
+      setGstin('');
+      setError(null);
     }
-    setError(null);
-  }, [warehouseToEdit, isOpen]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -58,36 +51,31 @@ export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: Warehou
     e.preventDefault();
     setError(null);
 
-    if (!name.trim()) {
-      setError('Warehouse name is required.');
+    if (!companyName.trim()) {
+      setError('Supplier / Vendor company name is required.');
       return;
     }
-    if (!code.trim()) {
-      setError('Warehouse code is required.');
+    if (!phone.trim()) {
+      setError('Contact phone number is required.');
       return;
     }
 
     try {
-      if (isEditing && warehouseToEdit) {
-        await updateMutation.mutateAsync({
-          id: warehouseToEdit.id,
-          name: name.trim(),
-          code: code.trim().toUpperCase(),
-          address: address.trim() || undefined,
-          isDefault,
-          isActive,
-        });
-      } else {
-        await createMutation.mutateAsync({
-          name: name.trim(),
-          code: code.trim().toUpperCase(),
-          address: address.trim() || undefined,
-          isDefault,
-        });
+      const newSupplier = await createSupplierMutation.mutateAsync({
+        companyName: companyName.trim(),
+        contactPerson: contactPerson.trim() || undefined,
+        phone: phone.trim(),
+        email: email.trim() || undefined,
+        address: address.trim() || undefined,
+        gstin: gstin.trim() ? gstin.trim().toUpperCase() : undefined,
+      });
+
+      if (onSupplierCreated && newSupplier) {
+        onSupplierCreated(newSupplier);
       }
       onClose();
     } catch (err: any) {
-      setError(err?.message || 'Failed to save warehouse. Please try again.');
+      setError(err?.message || 'Failed to create supplier. Please try again.');
     }
   };
 
@@ -101,14 +89,14 @@ export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: Warehou
         <div className="px-6 sm:px-8 py-5 border-b border-[#EAE5E0] flex items-center justify-between bg-white shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0 shadow-xs">
-              <WarehouseIcon className="w-5 h-5" />
+              <Building2 className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#111722] font-sans tracking-tight">
-                {isEditing ? 'Edit Warehouse' : 'Create New Warehouse'}
+                Register New Supplier
               </h3>
               <p className="text-xs text-[#5F636B] mt-0.5">
-                {isEditing ? 'Update facility details, branch code, and location' : 'Add a storage location, retail branch, or central warehouse'}
+                Add vendor directory profile for purchase bills, POs, and payables
               </p>
             </div>
           </div>
@@ -122,7 +110,7 @@ export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: Warehou
           </button>
         </div>
 
-        {/* Form */}
+        {/* Form Body */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto flex flex-col justify-between">
           <div className="p-6 sm:p-8 space-y-4">
             {error && (
@@ -132,30 +120,73 @@ export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: Warehou
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="sm:col-span-2">
+            <div>
+              <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                Company / Vendor Name <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                autoFocus
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="e.g. Acme Wholesale Traders Pvt Ltd"
+                className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
                 <label className="block text-xs font-bold text-[#111722] mb-1.5">
-                  Warehouse / Facility Name <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
+                  Contact Person <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
                 </label>
                 <input
                   type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Main Distribution Center"
+                  value={contactPerson}
+                  onChange={(e) => setContactPerson(e.target.value)}
+                  placeholder="e.g. Suresh Patel"
                   className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition"
                 />
               </div>
+
               <div>
                 <label className="block text-xs font-bold text-[#111722] mb-1.5">
-                  Branch Code <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
+                  Phone / Mobile Number <span className="text-[#FF6B4A] font-bold ml-0.5">*</span>
+                </label>
+                <input
+                  type="tel"
+                  required
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="e.g. 9822012345"
+                  className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] font-mono transition"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                  Email Address <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="e.g. sales@acmetraders.com"
+                  className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#111722] mb-1.5">
+                  GSTIN / Tax ID <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
                 </label>
                 <input
                   type="text"
-                  required
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  placeholder="e.g. WH-01"
+                  value={gstin}
+                  onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                  placeholder="e.g. 27AAAAA0000A1Z5"
                   className="w-full h-11 px-3.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] font-mono uppercase transition"
                 />
               </div>
@@ -163,45 +194,15 @@ export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: Warehou
 
             <div>
               <label className="block text-xs font-bold text-[#111722] mb-1.5">
-                Location / Physical Address <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
+                Vendor Office / Warehouse Address <span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>
               </label>
               <textarea
-                rows={3}
+                rows={2}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="e.g. Plot 42, Industrial Area, Sector 5, Logistics Hub, Mumbai"
+                placeholder="Vendor registered billing or dispatch address..."
                 className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE5E0] bg-[#FAF7F4]/50 focus:bg-white text-xs text-[#111722] placeholder:text-[#8C9097] focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition resize-none"
               />
-            </div>
-
-            <div className="space-y-2.5 pt-2">
-              <div className="flex items-center gap-2.5">
-                <input
-                  type="checkbox"
-                  id="isDefaultWh"
-                  checked={isDefault}
-                  onChange={(e) => setIsDefault(e.target.checked)}
-                  className="w-4 h-4 rounded text-coral-500 focus:ring-coral-500 cursor-pointer accent-[#FF6B4A]"
-                />
-                <label htmlFor="isDefaultWh" className="text-xs font-bold text-[#111722] cursor-pointer">
-                  Set as Primary / Default Warehouse for new purchase receipts &amp; POS billing
-                </label>
-              </div>
-
-              {isEditing && (
-                <div className="flex items-center gap-2.5">
-                  <input
-                    type="checkbox"
-                    id="isActiveWh"
-                    checked={isActive}
-                    onChange={(e) => setIsActive(e.target.checked)}
-                    className="w-4 h-4 rounded text-coral-500 focus:ring-coral-500 cursor-pointer accent-[#FF6B4A]"
-                  />
-                  <label htmlFor="isActiveWh" className="text-xs font-bold text-[#111722] cursor-pointer">
-                    Warehouse is active and enabled for stock movements &amp; transfers
-                  </label>
-                </div>
-              )}
             </div>
           </div>
 
@@ -223,10 +224,10 @@ export function WarehouseFormModal({ isOpen, onClose, warehouseToEdit }: Warehou
               {isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin shrink-0" />
-                  <span>Saving...</span>
+                  <span>Registering...</span>
                 </>
               ) : (
-                <span>{isEditing ? 'Save Changes' : 'Create Warehouse'}</span>
+                <span>Register Supplier</span>
               )}
             </button>
           </div>

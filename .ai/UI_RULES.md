@@ -1052,3 +1052,47 @@ Per user approval in **DECISION-013**, the authenticated application header user
   3. Dropdown Chevron (`ChevronDown`)
 * **Menu Actions**: Full dropdown functionality remains intact (Profile & Account, Store Settings, Sign Out).
 * *Historical Note*: Earlier draft specifications in this document mentioning a 36×36px avatar in the header are superseded by DECISION-013.
+
+---
+
+## 40. Canonical Form UX/UI Design Standard (Master Audit)
+
+Following the Master Form UX/UI Audit and Redesign, all forms, modal dialogs, drawers, and data-entry experiences across the entire IMS application must adhere strictly to this canonical standard:
+
+### 1. Modal Dialog Anatomy & Shell
+* **Backdrop**: `fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in`
+* **Container**: `bg-white border border-[#EAE5E0] rounded-[28px] shadow-[0_25px_60px_-15px_rgba(17,23,34,0.15)] overflow-hidden flex flex-col max-h-[92vh] w-full animate-scale-in`
+* **Header**:
+  * Icon badge: `w-10 h-10 rounded-2xl bg-coral-50 border border-coral-200/80 text-coral-600 flex items-center justify-center shrink-0 shadow-xs`
+  * Title: `text-base font-extrabold text-[#111722] font-sans tracking-tight`
+  * Subtitle: `text-xs text-[#5F636B] mt-0.5`
+  * Dismiss Button: `p-2 rounded-full text-[#8C9097] hover:text-[#111722] hover:bg-[#FAF7F4] transition cursor-pointer`
+* **Body**: `p-6 sm:p-7 overflow-y-auto space-y-6`
+* **Footer**: `px-6 sm:px-7 py-4 bg-[#FAF7F4]/80 border-t border-[#EAE5E0] flex items-center justify-between gap-3 shrink-0`
+
+### 2. Form Field & Input Tokens
+* **Height & Radius**: Standard height `h-11` (44px) with `rounded-xl` (12px) corners.
+* **Colors & Surface**:
+  * Default state: `bg-[#FAF7F4]/50 border border-[#EAE5E0] text-xs text-[#111722] placeholder:text-[#8C9097]`
+  * Focus state: `focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/20 focus:border-[#FF6B4A] transition shadow-2xs`
+  * Error state: `border-rose-500 ring-2 ring-rose-500/20 bg-rose-50/30`
+* **Numeric Inputs**: Always formatted with `font-mono font-medium text-right tabular-nums`.
+
+### 3. Label & Typographic Conventions
+* **Label Typography**: `block text-xs font-bold text-[#111722] mb-1.5`
+* **Required Indicator**: `<span className="text-[#FF6B4A] font-bold ml-0.5">*</span>`
+* **Optional Indicator**: `<span className="text-[#8C9097] font-normal text-[11px] ml-1">(Optional)</span>`
+* **Prohibition**: Never use uppercase labels that reduce scannability.
+
+### 4. Section Card Containers
+* For complex forms (Product, Batch, Transfer, Store Settings), group related fields into section cards:
+  * Container: `p-5 bg-[#FAF7F4] border border-[#EAE5E0] rounded-2xl space-y-4`
+  * Section Header: `text-xs font-extrabold text-[#111722] uppercase tracking-wider flex items-center gap-2` with a 24×24px coral icon container.
+
+### 5. Interaction & Accessibility Standard
+* **Keyboard Dismissal**: Every modal and drawer MUST listen for the `Escape` key and close immediately when not saving.
+* **Backdrop Click**: Clicking outside the modal container dismisses the modal.
+* **Action Buttons**:
+  * Cancel: `px-5 h-11 rounded-full border border-[#EAE5E0] bg-white hover:bg-[#FAF7F4] text-[#111722] font-bold text-xs transition cursor-pointer`
+  * Primary CTA: `pill-btn-coral px-6 h-11 rounded-full text-white font-bold text-xs shadow-coral flex items-center gap-2 transition cursor-pointer disabled:opacity-50` with spinning `Loader2` during mutation.
+* **Zero Industry Hardcoding**: All form placeholders, category options, and unit pickers must remain universal across retail, footwear, electronics, FMCG, pharmacy, and apparel.

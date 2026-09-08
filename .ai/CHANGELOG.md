@@ -545,4 +545,33 @@ Removed the multi-role RBAC system (Admin / Manager / Cashier / Staff) and repla
   - TypeScript Typechecks: 0 errors across `@ims/api` and `@ims/web`.
   - Next.js Build: All 34 static routes generated and compiled with 0 errors.
 
+## Master Application-Wide Form UX/UI Audit & Redesign
+- **Date**: 2026-09-08
+- **Scope**: Completed application-wide audit and comprehensive redesign across all 10 forms, modals, drawers, and data-entry experiences in IMS. Established canonical standards in `.ai/UI_RULES.md` §40.
+- **Components & Screens Redesigned**:
+  1. `CategoryFormModal` (`apps/web/src/components/categories/category-form-modal.tsx`) — Canonical header, auto-slug helper, standardized `h-11` inputs, Escape key listener.
+  2. `BrandFormModal` (`apps/web/src/components/brands/brand-form-modal.tsx`) — Canonical header, `Award` icon badge, standardized `h-11` inputs, active status toggle.
+  3. `BatchFormModal` (`apps/web/src/components/inventory/batch-form-modal.tsx`) — 3 logical sections (Product & Warehouse, Batch Identification, Stock & Cost), dynamic currency symbol, date pickers.
+  4. `WarehouseFormModal` (`apps/web/src/components/warehouses/warehouse-form-modal.tsx`) — Canonical header (`Warehouse` icon), uppercase font-mono code, default warehouse toggle.
+  5. `StockAdjustmentModal` (`apps/web/src/components/inventory/stock-adjustment-modal.tsx`) — Stock In (+) vs Stock Out (-) toggle buttons, live balance math card with negative protection warning, mandatory audit justification.
+  6. `StockTransferModal` (`apps/web/src/components/inventory/stock-transfer-modal.tsx`) — Visual source-to-destination facility grid, multi-line item rows with live source warehouse stock pills, add/remove row mechanics.
+  7. `CustomerFormModal` (`apps/web/src/components/customers/customer-form-modal.tsx`) — High-speed POS customer creation modal with progressive disclosure for tax/credit details.
+  8. `SupplierFormModal` (`apps/web/src/components/suppliers/supplier-form-modal.tsx`) — Vendor procurement registration modal with GSTIN uppercase auto-formatting.
+  9. `ProductDetailsDrawer` (`apps/web/src/components/products/product-details-drawer.tsx`) — Escape key listener and smooth backdrop dismissal.
+  10. `StoreMasterDataTab` in `SettingsPage` (`apps/web/src/app/(app)/settings/page.tsx`) — 3 structured section cards with canonical `h-11` inputs, coral toggles, and currency selector.
+- **System Integration**:
+  - Integrated `CustomerFormModal` into POS (`/pos`) with `Alt+C` and `F4` hotkeys, real-time customer status card, and reset button.
+  - Wired customer directory table and modals in `/customers`.
+  - Wired supplier directory table and modals in `/suppliers`.
+- **Invariants & Safeguards Preserved**:
+  - Protected Login and Sign Up screens strictly untouched.
+  - Zero hardcoded industry assumptions.
+  - Universal Admin Access Model strictly preserved.
+  - No Git commits or pushes executed.
+- **Test Results**:
+  - TypeScript Typechecks: 0 errors across `@ims/api` and `@ims/web`.
+  - Backend Jest: 22 test suites, 120 tests passing (100% pass).
+  - Next.js Build: All 34 static routes compiled cleanly.
+
+
 

@@ -92,3 +92,19 @@ export const businessProfileKeys = {
   all: ['business-profile'] as const,
   profile: () => [...businessProfileKeys.all, 'detail'] as const,
 };
+
+export const customerKeys = {
+  all: ['customers'] as const,
+  lists: () => [...customerKeys.all, 'list'] as const,
+  list: (filters?: Record<string, any>) => [...customerKeys.lists(), filters ?? {}] as const,
+  details: () => [...customerKeys.all, 'detail'] as const,
+  detail: (id: string) => [...customerKeys.details(), id] as const,
+};
+
+export const supplierKeys = {
+  all: ['suppliers'] as const,
+  lists: () => [...supplierKeys.all, 'list'] as const,
+  list: (filters?: Record<string, any>) => [...supplierKeys.lists(), filters ?? {}] as const,
+  details: () => [...supplierKeys.all, 'detail'] as const,
+  detail: (id: string) => [...supplierKeys.details(), id] as const,
+};
